@@ -67,6 +67,7 @@ está desactualizada, manda console.x.ai — no se toca la BD de NEXUS):
 | **Exa Lite + Top Tools** | $0,0048 | 0,00 USD | **$0,0048** | Exa 19,013 → 19,012,952 USD |
 | Exa Auto + Top Tools | $0,0084 | 0,00 USD | **$0,0084** | Exa 19,013 → 19,012,916 USD |
 | Serper + Vercel Gateway gpt-4o-mini | 1,2 créditos | $0,00008 (estimado, ver §4) | **$0,00008 en efectivo** mientras duren los saldos gratis | Serper 2.370; Gateway 4,999 → 4,9982 USD |
+| Serper + Groq qwen3.8-27b | 1,2 créditos | ~$0,0005 (medido, ver §4.1) | **~$0,0005 en efectivo** mientras dure el saldo gratis de Serper | Serper 2.370 |
 
 Escala (mismo ratio 1,2 búsquedas/empresa):
 
@@ -94,6 +95,15 @@ Fase D 328,5 tokens/demo.
 | Top Tools AI Basic | **0,00 USD medido** (14 llamadas, 3.375 tokens acumulados; confirmado null: el proveedor no devuelve precio) | 0,00 USD medido |
 | Vercel AI Gateway gpt-4o-mini (estimado, NO medido en vivo) | 93,25 × $0,15/1M + 108 × $0,60/1M = **$0,00008** | ~87 × $0,15/1M + 150 × $0,60/1M ≈ **$0,00010** |
 | xAI grok | NO MEDIBLE: saldo $0,00 — **fuera definitivamente hasta nuevo aviso (decisión de Jon 2026-11-16 21:27: SIN recarga)** | — |
+| Groq qwen/qwen3.8-27b (**medido en vivo 2026-11-16 22:15**, conector custom.groq) | 93,25 × $0,80/1M + 108 × $4,00/1M = **$0,00051** | ~87 × $0,80/1M + 150 × $4,00/1M ≈ **$0,00067** |
+
+### 4.1 Groq — medición en vivo (2026-11-16 22:15)
+
+- Conexión `custom.groq` registrada por flujo seguro; helper `~/workspace/custom-connectors/custom.groq/bin/groq.py` (GET /v1/models + POST /chat/completions, OpenAI-compatible en `api.groq.com/openai/v1`).
+- Quirk: la primera llamada devolvió 403 Cloudflare (error 1010) con el User-Agent por defecto de urllib; con un User-Agent de navegador pasa. El helper ya lo lleva.
+- Modelos de texto activos en la cuenta: `qwen/qwen3.8-27b` (131K ctx, $0,80/M prompt, $4,00/M completion), `openai/gpt-oss-20b` y `openai/gpt-oss-120b` (131K ctx), `allam-2-7b` (4K ctx). `llama-3.1-8b-instant` ya no existe (404 model_not_found).
+- Medición real, resumen en una frase: qwen3.8-27b → **48 tokens (29 prompt + 19 completion), ~0,0001 USD**, `finish_reason: stop`, frase correcta en español. gpt-oss-20b → 288 tokens para la misma frase y contenido truncado: es modelo de razonamiento y gasta ~90% de los tokens en reasoning oculto (183/200) — no recomendado para tareas cortas de agente.
+- Estimación por expediente con qwen (201 tokens, mezcla prompt/completion de Fase A): **~0,0005 USD**; por tarea de agente (237 tokens): **~0,0007 USD**. Sigue siendo despreciable frente al discovery (Serper 1,2 créditos/empresa), pero Top Tools Basic (0,00 USD medido) sigue siendo el primario; Groq queda como alternativa medida, integración en el repo NO construida.
 
 Con el saldo Gateway de 4,999 USD caben ~63.000 resúmenes a
 $0,00008. **La búsqueda cuesta 15–100× más que el LLM por empresa**:
@@ -111,7 +121,7 @@ el LLM no es el factor limitante; el discovery sí (igual que en Fase A).
 | Generación de webs / auditoría LLM | Top Tools Basic | Borradores Fase D medidos (657 tokens / 2 demos, 0,00 USD) |
 | xAI / grok | NO USAR hasta recarga aprobada por Jon | Saldo $0,00 (console.x.ai 2026-11-16) |
 | Apify | NO USADO en esta fase — **crédito de 5 USD NO caduca (confirmado por Jon 2026-11-16 21:27)**; se puede evaluar sin prisa por la fecha | Google Maps Scraper descartado por base legal en Fase C; Search/Content Crawler solo con aprobación |
-| Groq | **PENDIENTE DE REGISTRO (2026-11-16 21:27)** — Jon tiene clave de inferencia; flujo seguro custom.groq enviado, sin registrar aún en esta VM (no existe `custom.groq`, verificado). Cuando exista la conexión: crear connector doc, verificar con GET /v1/models + chat corta, y añadir su modelo gratuito medido a esta comparativa. NO pedir la clave en chat. | Primer candidato (§3 instrucciones); sin conector aún |
+| Groq | **MEDIDO en vivo 2026-11-16 22:15** — conector `custom.groq` registrado por flujo seguro (api.groq.com, bearer); helper `~/workspace/custom-connectors/custom.groq/bin/groq.py`. Modelos de texto activos en la cuenta: `qwen/qwen3.8-27b`, `openai/gpt-oss-20b`, `openai/gpt-oss-120b`, `allam-2-7b` (llama-3.1-8b-instant retirado: 404 model_not_found). Medición real: resumen en una frase con qwen3.8-27b = **48 tokens (29 prompt + 19 completion), ~0,0001 USD** (lista: $0,80/M prompt, $4,00/M completion); gpt-oss-20b es modelo de razonamiento y gasta ~90% de los tokens en reasoning oculto (288 tokens para la misma frase, contenido truncado) — NO recomendado para tareas cortas de agente. Coste/empresa estimado con qwen (expediente ~200 tokens): **~0,0005 USD**. Integración en el repo NO construida: añadir como proveedor alternativo en la capa multiprovider cuando Jon lo pida. | Primer candidato (§3 instrucciones); conector verificado |
 | OpenRouter | NO USAR (sin claves) | Sin claves; saldo 0,91/10 USD |
 
 ## 6. Limitaciones (sin adornar)
@@ -135,8 +145,8 @@ el LLM no es el factor limitante; el discovery sí (igual que en Fase A).
    grok fuera definitivamente hasta nuevo aviso y excluido de todo
    fallback (el registro ya lo marcaba no operativo; verificado que
    `createOperationalFallback` solo encadena operativos); Groq
-   pendiente de registro (flujo seguro enviado, conector aún no
-   existe); **no contactar con Ferrer, Begoña Ruiz ni Hidrorioja
+   REGISTRADO Y MEDIDO en vivo 2026-11-16 22:15 (conector custom.groq,
+   qwen3.8-27b: 48 tokens / ~0,0001 USD por resumen corto; ver §4.1); **no contactar con Ferrer, Begoña Ruiz ni Hidrorioja
    hasta que Jon decida la base legal/canal** — las demos siguen
    APPROVED y Sales bloqueado por el gate LSSI.
 5. Vercel AI Gateway: precio estimado desde tokens medidos × lista
