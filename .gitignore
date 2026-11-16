@@ -26,3 +26,6 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Backups de Postgres (Fase F, Bloque 3) — los dumps NO van a git
+backups/

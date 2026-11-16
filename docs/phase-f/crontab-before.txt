@@ -1,0 +1,5 @@
+sin crontab
+Detalle: `crontab -l` devolvió "crontab: command not found" — el binario
+crontab no existe en esta VM (sin paquete cron instalado). No hay crontab
+que preservar; la instalación del cron propuesto requiere instalar cron
+primero o hacerlo en el equipo donde vaya a correr el backup.
