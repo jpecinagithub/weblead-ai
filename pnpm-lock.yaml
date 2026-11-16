@@ -17,9 +17,15 @@ importers:
 
   apps/api:
     dependencies:
+      '@weblead/agent-auditor':
+        specifier: workspace:*
+        version: link:../../packages/agent-auditor
       '@weblead/agent-core':
         specifier: workspace:*
         version: link:../../packages/agent-core
+      '@weblead/agent-designer':
+        specifier: workspace:*
+        version: link:../../packages/agent-designer
       '@weblead/agent-researcher':
         specifier: workspace:*
         version: link:../../packages/agent-researcher
@@ -35,6 +41,9 @@ importers:
       '@weblead/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@weblead/website-generator':
+        specifier: workspace:*
+        version: link:../../packages/website-generator
       dotenv:
         specifier: ^16.6.1
         version: 16.6.1
@@ -97,6 +106,12 @@ importers:
       '@weblead/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@weblead/website-generator':
+        specifier: workspace:*
+        version: link:../../packages/website-generator
+      '@weblead/website-templates':
+        specifier: workspace:*
+        version: link:../../packages/website-templates
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -128,10 +143,22 @@ importers:
       '@weblead/ai-engine':
         specifier: workspace:*
         version: link:../ai-engine
+      '@weblead/database':
+        specifier: workspace:*
+        version: link:../database
       '@weblead/shared':
         specifier: workspace:*
         version: link:../shared
+      '@weblead/website-generator':
+        specifier: workspace:*
+        version: link:../website-generator
+      playwright-core:
+        specifier: ^1.55.0
+        version: 1.65.1
     devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.20.5
       typescript:
         specifier: ^5.9.2
         version: 5.9.3
@@ -173,9 +200,18 @@ importers:
       '@weblead/ai-engine':
         specifier: workspace:*
         version: link:../ai-engine
+      '@weblead/database':
+        specifier: workspace:*
+        version: link:../database
       '@weblead/shared':
         specifier: workspace:*
         version: link:../shared
+      '@weblead/website-generator':
+        specifier: workspace:*
+        version: link:../website-generator
+      '@weblead/website-templates':
+        specifier: workspace:*
+        version: link:../website-templates
     devDependencies:
       typescript:
         specifier: ^5.9.2
@@ -310,6 +346,9 @@ importers:
       '@weblead/shared':
         specifier: workspace:*
         version: link:../shared
+      '@weblead/website-templates':
+        specifier: workspace:*
+        version: link:../website-templates
     devDependencies:
       typescript:
         specifier: ^5.9.2
@@ -1442,6 +1481,11 @@ packages:
 
   pkg-types@2.4.0:
     resolution: {integrity: sha512-07Fys7iVx0X6TcviMOgogM1Lk33ZyqOezMnU79S+kffWqwolG/5W9V8EgQSeYCIfFTYVgssRbnH630Oa2+soBA==}
+
+  playwright-core@1.65.1:
+    resolution: {integrity: sha512-hqPpz7blSMPxWVdoeE1yiBSzXsKiVOd2k+kjCvmUywD2GPO2Dd9HfcWnq9NN0GHbNZDFgZ9JfBFr+X5/BLo0qw==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   postcss@8.5.33:
     resolution: {integrity: sha512-RVHEU9/Pp1Fnjr/MpAJsZoADukCKhfIi15OunEYiGktIkYLkPVvC1sioWolGDS7XByMTx9m/IGbro0Js13zhnQ==}
@@ -2691,6 +2735,8 @@ snapshots:
       confbox: 0.3.2
       exsolve: 1.2.0
       pathe: 2.0.3
+
+  playwright-core@1.65.1: {}
 
   postcss@8.5.33:
     dependencies:

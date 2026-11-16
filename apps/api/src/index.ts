@@ -30,6 +30,16 @@ import {
   saveDossier,
   type ResearcherEvidenceInput,
 } from '@weblead/agent-researcher';
+import { designWebsite, type DesignerLlmUsage } from '@weblead/agent-designer';
+import {
+  auditWebsiteContent,
+  mergePlaywrightFindings,
+  PlaywrightUnavailableError,
+  runPlaywrightAudit,
+  saveAudit,
+  type AuditDossierFacts,
+} from '@weblead/agent-auditor';
+import type { GeneratedWebsiteContent, LlmDraft } from '@weblead/website-generator';
 import {
   BUSINESS_STATES,
   BUSINESS_TRANSITIONS,
@@ -94,6 +104,31 @@ for (const m of [
   });
 }
 
+// Fase D measurements (real, 2026-11-16, fase-d/llm-design-drafts.json):
+// 2 LLM design drafts with Top-Tools-Ai-Basic (Santiago Ferrer 232+84,
+// Begoña Ruiz 253+88 = 657 tokens total, latencies 7.39/6.61 s, both HTTP
+// 200) — 0.00 USD estimated, confirmed null (provider returns tokens
+// only, no price). Both drafts were accepted by the generator's
+// forbidden-claims validation (no rejections).
+for (const m of [
+  { businessId: '6', promptTokens: 232, completionTokens: 84 },
+  { businessId: '17', promptTokens: 253, completionTokens: 88 },
+]) {
+  usageStore.record({
+    provider: 'top-tools-ai',
+    service: 'fase-d-generation',
+    model: 'Top-Tools-Ai-Basic',
+    requests: 1,
+    promptTokens: m.promptTokens,
+    completionTokens: m.completionTokens,
+    imagesGenerated: 0,
+    estimatedCostCents: 0,
+    confirmedCostCents: null,
+    agentKind: 'designer',
+    businessId: m.businessId,
+    recordedAt: '2026-11-16T21:30:00.000Z',
+  });
+}
 // Fase C measurements (real, 2026-11-16, fase-c/llm-summaries-tta.json):
 // 3 LLM summaries with Top-Tools-Ai-Basic, one per verification dossier
 // (Santiago Ferrer 122+129, Hidrorioja 120+122, Fontanería Godoy 128+117
@@ -131,7 +166,7 @@ app.use(express.json());
 export const MAX_BUSINESSES_PER_RESEARCH_CALL = 10;
 
 app.get('/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', service: 'weblead-api', version: '0.1.0', phase: 'C-research' });
+  res.json({ status: 'ok', service: 'weblead-api', version: '0.1.0', phase: 'D-design-audit' });
 });
 
 /**
@@ -429,6 +464,266 @@ app.post('/api/businesses/:id/state', async (req: Request, res: Response) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// Fase D — Designer + Auditor
+// ---------------------------------------------------------------------------
+
+async function findProjectByIdParam(idParam: string) {
+  const bySlug = await prisma.websiteProject.findUnique({ where: { slug: idParam } }).catch(() => null);
+  if (bySlug) return bySlug;
+  return prisma.websiteProject.findUnique({ where: { id: idParam } }).catch(() => null);
+}
+
+function serializeProject(project: {
+  id: string;
+  businessId: string;
+  slug: string;
+  status: string;
+  templateId: string | null;
+  content: unknown;
+  createdAt: Date;
+  updatedAt: Date;
+}) {
+  return {
+    id: project.id,
+    businessId: project.businessId,
+    slug: project.slug,
+    status: project.status,
+    templateId: project.templateId,
+    demoUrl: `/demos/${project.slug}`,
+    content: project.content,
+    createdAt: project.createdAt,
+    updatedAt: project.updatedAt,
+  };
+}
+
+/**
+ * POST /api/websites/generate { businessId, templateId?, llmDraft?, llmUsage?, activitySignal? }
+ * Runs the Designer: QUALIFIED -> DESIGNING -> PREVIEW_READY (validated).
+ * businessId accepts a Postgres uuid or a pilot id (6 = Santiago Ferrer).
+ */
+app.post('/api/websites/generate', async (req: Request, res: Response) => {
+  const body = req.body as {
+    businessId?: string | number;
+    templateId?: string;
+    llmDraft?: LlmDraft | null;
+    llmUsage?: DesignerLlmUsage | null;
+    activitySignal?: string | null;
+  };
+  if (body.businessId === undefined || body.businessId === null || body.businessId === '') {
+    res.status(400).json({ error: 'businessId is required (uuid or pilot id).' });
+    return;
+  }
+  try {
+    const business = await findBusinessByIdParam(String(body.businessId));
+    if (!business) {
+      res.status(404).json({ error: `Business ${body.businessId} not found.` });
+      return;
+    }
+    const result = await designWebsite(prisma, {
+      businessId: business.id,
+      templateId: body.templateId,
+      llmDraft: body.llmDraft ?? null,
+      llmUsage: body.llmUsage ?? null,
+      activitySignal: body.activitySignal ?? getPilotLead(business.pilotId ?? -1)?.activitySignal ?? null,
+    });
+    if (body.llmUsage) {
+      usageStore.record({
+        provider: 'top-tools-ai',
+        service: 'fase-d-generation',
+        model: body.llmUsage.model,
+        requests: 1,
+        promptTokens: body.llmUsage.promptTokens,
+        completionTokens: body.llmUsage.completionTokens,
+        imagesGenerated: 0,
+        estimatedCostCents: body.llmUsage.estimatedCostCents,
+        confirmedCostCents: body.llmUsage.confirmedCostCents,
+        agentKind: 'designer',
+        businessId: business.id,
+        websiteProjectId: result.projectId,
+      });
+    }
+    const project = await prisma.websiteProject.findUnique({ where: { id: result.projectId } });
+    res.status(201).json({ ...serializeProject(project!), statePath: result.statePath });
+  } catch (err) {
+    const message = (err as Error).message;
+    if (message.includes('expected QUALIFIED')) {
+      res.status(409).json({ error: message });
+      return;
+    }
+    if (message.includes('not found')) {
+      res.status(404).json({ error: message });
+      return;
+    }
+    res.status(503).json({ error: `Database unavailable: ${message}` });
+  }
+});
+
+/** GET /api/websites/:id — project by id or slug, with its content. */
+app.get('/api/websites/:id', async (req: Request, res: Response) => {
+  try {
+    const project = await findProjectByIdParam(req.params.id);
+    if (!project) {
+      res.status(404).json({ error: `Website ${req.params.id} not found.` });
+      return;
+    }
+    res.json(serializeProject(project));
+  } catch (err) {
+    res.status(503).json({ error: `Database unavailable: ${(err as Error).message}` });
+  }
+});
+
+/** GET /api/websites — all generated projects (newest first). */
+app.get('/api/websites', async (_req: Request, res: Response) => {
+  try {
+    const projects = await prisma.websiteProject.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json(projects.map((p) => serializeProject(p)));
+  } catch (err) {
+    res.status(503).json({ error: `Database unavailable: ${(err as Error).message}` });
+  }
+});
+
+/**
+ * POST /api/audit/run { projectId, demoUrl? }
+ * Runs the Auditor: PREVIEW_READY -> AUDITING -> APPROVED | AUDIT_FAILED
+ * (validated). Content audit always runs; when demoUrl is given, the
+ * Playwright runner also runs against the live demo and its findings are
+ * merged. Screenshots land in docs/phase-d/screenshots/.
+ */
+app.post('/api/audit/run', async (req: Request, res: Response) => {
+  const body = req.body as { projectId?: string; demoUrl?: string };
+  if (!body.projectId) {
+    res.status(400).json({ error: 'projectId is required (project id or slug).' });
+    return;
+  }
+  try {
+    const project = await findProjectByIdParam(body.projectId);
+    if (!project) {
+      res.status(404).json({ error: `Website ${body.projectId} not found.` });
+      return;
+    }
+    const business = await prisma.business.findUnique({ where: { id: project.businessId } });
+    if (!business) {
+      res.status(404).json({ error: `Business for website ${body.projectId} not found.` });
+      return;
+    }
+    if (business.state !== 'PREVIEW_READY') {
+      res.status(409).json({
+        error: `Cannot audit a business in state ${business.state}: expected PREVIEW_READY.`,
+      });
+      return;
+    }
+    const content = project.content as unknown as GeneratedWebsiteContent;
+    if (!content || typeof content !== 'object' || !('businessName' in content)) {
+      res.status(409).json({ error: `Website ${body.projectId} has no generated content to audit.` });
+      return;
+    }
+    // PREVIEW_READY -> AUDITING (validated, persisted).
+    transitionBusiness({ businessId: business.id, from: business.state as BusinessState, to: 'AUDITING' });
+    await prisma.business.update({ where: { id: business.id }, data: { state: 'AUDITING' } });
+
+    const dossier: AuditDossierFacts = {
+      name: business.name,
+      address: business.address,
+      phone: business.phone,
+      email: business.email,
+      services: Array.isArray(business.services)
+        ? (business.services as unknown[]).filter((s): s is string => typeof s === 'string')
+        : [],
+      activity: business.activity ?? 'UNVERIFIED',
+      slug: business.slug,
+    };
+    let report = auditWebsiteContent(content, dossier);
+    let runner: 'playwright' | 'content-only' | 'playwright-unavailable' = 'content-only';
+    let screenshots: { desktop: string; mobile: string } | null = null;
+    if (body.demoUrl) {
+      const screenshotsDir = new URL(
+        '../../../docs/phase-d/screenshots',
+        import.meta.url,
+      ).pathname;
+      try {
+        const pw = await runPlaywrightAudit(body.demoUrl, screenshotsDir, business.slug);
+        report = mergePlaywrightFindings(report, pw.findings);
+        runner = 'playwright';
+        screenshots = {
+          desktop: `docs/phase-d/screenshots/${business.slug}-desktop.png`,
+          mobile: `docs/phase-d/screenshots/${business.slug}-mobile.png`,
+        };
+      } catch (err) {
+        if (err instanceof PlaywrightUnavailableError) {
+          runner = 'playwright-unavailable';
+          report = mergePlaywrightFindings(report, [
+            {
+              severity: 'RECOMMENDATION',
+              category: 'TECHNICAL',
+              message: `Playwright pendiente (no se pudo ejecutar en esta VM): ${err.message}`,
+              url: body.demoUrl,
+            },
+          ]);
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    const auditId = await saveAudit(prisma, {
+      projectId: project.id,
+      report,
+      runner,
+      demoUrl: body.demoUrl ?? null,
+      screenshots,
+    });
+    const nextState = report.result === 'PASSED' ? ('APPROVED' as const) : ('AUDIT_FAILED' as const);
+    transitionBusiness({ businessId: business.id, from: 'AUDITING', to: nextState });
+    await prisma.business.update({ where: { id: business.id }, data: { state: nextState } });
+    await prisma.websiteProject.update({
+      where: { id: project.id },
+      data: { status: report.result === 'PASSED' ? 'APPROVED' : 'PREVIEW_READY' },
+    });
+    res.status(201).json({
+      auditId,
+      projectId: project.id,
+      slug: business.slug,
+      businessState: nextState,
+      runner,
+      scores: report.scores,
+      findings: report.findings,
+      result: report.result,
+      summary: report.summary,
+      screenshots,
+    });
+  } catch (err) {
+    if (err instanceof IllegalTransitionError) {
+      res.status(400).json({ error: err.message, from: err.from, to: err.to });
+      return;
+    }
+    res.status(503).json({ error: `Audit failed: ${(err as Error).message}` });
+  }
+});
+
+/** GET /api/websites/:id/audit — latest audit with findings for a project. */
+app.get('/api/websites/:id/audit', async (req: Request, res: Response) => {
+  try {
+    const project = await findProjectByIdParam(req.params.id);
+    if (!project) {
+      res.status(404).json({ error: `Website ${req.params.id} not found.` });
+      return;
+    }
+    const audit = await prisma.audit.findFirst({
+      where: { projectId: project.id },
+      orderBy: { createdAt: 'desc' },
+      include: { findings: true },
+    });
+    if (!audit) {
+      res.status(404).json({ error: `Website ${req.params.id} has no audit yet.` });
+      return;
+    }
+    res.json(audit);
+  } catch (err) {
+    res.status(503).json({ error: `Database unavailable: ${(err as Error).message}` });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`weblead-api listening on http://localhost:${PORT} (phase C-research, Postgres-backed)`);
+  console.log(`weblead-api listening on http://localhost:${PORT} (phase D-design-audit, Postgres-backed)`);
 });

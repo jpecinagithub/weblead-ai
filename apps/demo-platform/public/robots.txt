@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /demos/
+Sitemap: http://localhost:5174/sitemap.xml
+# Demo platform local (Fase D): el host de producción está pendiente de decisión.

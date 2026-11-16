@@ -18,9 +18,13 @@
   "dependencies": {
     "@weblead/agent-core": "workspace:*",
     "@weblead/ai-engine": "workspace:*",
-    "@weblead/shared": "workspace:*"
+    "@weblead/shared": "workspace:*",
+    "@weblead/database": "workspace:*",
+    "@weblead/website-generator": "workspace:*",
+    "playwright-core": "^1.55.0"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "@types/node": "^22.0.0"
   }
 }

@@ -1,1 +1,35 @@
-{"dependencies":{"@weblead/agent-core":"workspace:*","@weblead/agent-researcher":"workspace:*","@weblead/ai-engine":"workspace:*","@weblead/cost-control":"workspace:*","@weblead/database":"workspace:*","@weblead/shared":"workspace:*","dotenv":"^16.6.1","express":"^4.21.2"},"devDependencies":{"@types/express":"^4.17.21","@types/node":"^22.0.0","tsx":"^4.19.0","typescript":"^5.9.2"},"name":"@weblead/api","private":true,"scripts":{"apply:llm-summaries":"tsx src/apply-llm-summaries.ts","build":"tsc -p tsconfig.json","dev":"tsx watch src/index.ts","seed:research":"tsx src/seed-research.ts","start":"node dist/index.js","typecheck":"tsc --noEmit -p tsconfig.json"},"type":"module","version":"0.1.0"}
+{
+  "dependencies": {
+    "@weblead/agent-core": "workspace:*",
+    "@weblead/agent-researcher": "workspace:*",
+    "@weblead/ai-engine": "workspace:*",
+    "@weblead/cost-control": "workspace:*",
+    "@weblead/database": "workspace:*",
+    "@weblead/shared": "workspace:*",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "@weblead/agent-auditor": "workspace:*",
+    "@weblead/agent-designer": "workspace:*",
+    "@weblead/website-generator": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.2"
+  },
+  "name": "@weblead/api",
+  "private": true,
+  "scripts": {
+    "apply:llm-summaries": "tsx src/apply-llm-summaries.ts",
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "seed:research": "tsx src/seed-research.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "generate:designs": "tsx src/generate-designs.ts",
+    "export:demos": "tsx src/export-demos.ts"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

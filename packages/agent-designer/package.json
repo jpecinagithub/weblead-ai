@@ -18,7 +18,10 @@
   "dependencies": {
     "@weblead/agent-core": "workspace:*",
     "@weblead/ai-engine": "workspace:*",
-    "@weblead/shared": "workspace:*"
+    "@weblead/shared": "workspace:*",
+    "@weblead/database": "workspace:*",
+    "@weblead/website-generator": "workspace:*",
+    "@weblead/website-templates": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

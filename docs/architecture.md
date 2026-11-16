@@ -323,8 +323,8 @@ E Comercial, F Optimización). Correspondencia:
 | Fase A — Viabilidad (piloto Logroño) | **Puerta de la Fase C** | ✅ Cerrada 2026-11-16: GO con alcance recortado (10 leads ≥ 70). Sin su veredicto no se construye el Researcher a escala |
 | **Fase 0 — Esqueleto (este repo)** | **Fase A — Infraestructura** | ✅ Este repo: monorepo, estados, schema, API mínima, multiprovider, costes, panel |
 | Fase 1 — Researcher | Fase C — Investigación | ✅ Cerrada 2026-11-16 (ver `docs/phase-c-report.md`): Researcher determinista (scoring 0-100, umbral 70, actividad CONFIRMED/PROBABLE/UNVERIFIED/INACTIVE), expediente con fuente por dato, persistencia Prisma real (10 leads sembradas QUALIFIED + Godoy REJECTED, 3 resúmenes LLM medidos, 738 tokens, 0,00 USD). Matriz de fuentes en `docs/search-providers.md`: sin discovery masivo conforme; Apify descartado por base legal. |
-| Fase 2 — Designer | Fase D — Generación y auditoría | ⏳ Pendiente |
-| Fase 3 — Auditor | Fase D — Generación y auditoría | ⏳ Pendiente |
+| Fase 2 — Designer | Fase D — Generación y auditoría | ✅ Cerrada 2026-11-16 (ver `docs/phase-d-report.md`): 2 plantillas sectoriales reales, generador determinista sin invenciones, 2 demos reales (Ferrer + Begoña Ruiz) QUALIFIED → APPROVED, auditoría Playwright real (Chromium 153 local) con capturas. |
+| Fase 3 — Auditor | Fase D — Generación y auditoría | ✅ Cerrada 2026-11-16 (ver `docs/phase-d-report.md`): auditor independiente, 100/100/100/100 en ambas demos, regla AUDIT_FAILED → DESIGNING verificada en vivo. |
 | Fase 4 — Sales | Fase E — Comercial | ⏳ Pendiente (borradores, sin envío, gate LSSI) |
 | Fase 5 — CRM | Fase E — Comercial | ⏳ Pendiente |
 | (verificación final) | Fase F — Optimización | ⏳ Pendiente (medir costes reales, comparar proveedores) |

@@ -227,6 +227,8 @@ model WebsiteProject {
   status      String   @default("DRAFT") // DRAFT | PREVIEW_READY | AUDITED | APPROVED | DEPLOYED
   templateId  String?
   brandConfig Json?
+  /** Contenido generado (JSON de GeneratedWebsiteContent, Fase D). */
+  content     Json?
   assets      WebsiteAsset[]
   deployments WebsiteDeployment[]
   audits      Audit[]
@@ -264,6 +266,11 @@ model Audit {
   scoreVisual    Int?
   scoreTechnical Int?
   scoreContent   Int?
+  /** Runner de auditoría: 'playwright' | 'content-only' | 'playwright-unavailable'. */
+  runner         String?
+  demoUrl        String?
+  /** Capturas { desktop, mobile } con rutas relativas, Fase D. */
+  screenshots    Json?
   summary        String?
   findings       AuditFinding[]
   createdAt      DateTime       @default(now())

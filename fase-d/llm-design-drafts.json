@@ -1,0 +1,34 @@
+[
+  {
+    "slug": "santiago-ferrer",
+    "pilot_id": 6,
+    "agent": "designer",
+    "task": "design-draft",
+    "model": "Top-Tools-Ai-Basic",
+    "provider": "top-tools-ai",
+    "http": 200,
+    "latency_seconds": 7.39,
+    "prompt_tokens": 232,
+    "completion_tokens": 84,
+    "total_tokens": 316,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "response": "SUBTITULO: Fontanería y climatización en Logroño; contacta directamente por teléfono.\nSOBRE: Santiago Ferrer Fontanería en General SL, con actividad verificada, atiende fontanería y climatización en C/ Gonzalo de Berceo, 8, 3-D, 26005 Logroño. El contacto directo es el teléfono 941227157.\n"
+  },
+  {
+    "slug": "begona-ruiz",
+    "pilot_id": 17,
+    "agent": "designer",
+    "task": "design-draft",
+    "model": "Top-Tools-Ai-Basic",
+    "provider": "top-tools-ai",
+    "http": 200,
+    "latency_seconds": 6.61,
+    "prompt_tokens": 253,
+    "completion_tokens": 88,
+    "total_tokens": 341,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "response": "SUBTITULO: Peluquería en Logroño con contacto directo por teléfono\nSOBRE: Begoña Ruiz Peluquería se encuentra en C/ Gral. Vara de Rey, 33, Logroño. Puedes llamar al 941235784. La actividad está verificada (05/05/2026) y cuenta con 33 reseñas valoradas en 4,9/5."
+  }
+]
