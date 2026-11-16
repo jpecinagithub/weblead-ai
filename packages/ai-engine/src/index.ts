@@ -21,10 +21,10 @@
  *   hace 6 días — la clave de NEXUS en Oracle EXISTE y está activa;
  *   nexus-credits (xai-...4mXW) sin gasto — management key (Billing:
  *   Read). La credencial registrada aquí que da 400 Incorrect API key
- *   (Fase A; re-confirmado Fase B) NO es la clave NEXUS. Si Jon recarga
- *   (pago, solo con su aprobación expresa), la clave NEXUS debería
- *   funcionar; sin recarga, grok sigue fuera y el primario es
- *   Top-Tools-Ai-Basic. Do not depend on it until recharged.
+ *   (Fase A; re-confirmado Fase B) NO es la clave NEXUS. Decisión de
+ *   Jon 2026-11-16 21:27: SIN recarga; grok fuera definitivamente hasta
+ *   nuevo aviso. No se presupone en ningún fallback; el primario es
+ *   Top-Tools-Ai-Basic.
  * - coarena: CONFIGURED, NOT OPERATIONAL. Registered key REVOKED
  *   (401 api_key_revoked, Fase A; re-confirmed 401 Fase B 2026-11-16).
  *   Do not depend on it until reconnected.
@@ -121,7 +121,7 @@ export const PROVIDERS: Readonly<Record<LlmProviderName, ProviderInfo>> = {
     envKey: 'XAI_API_KEY',
     defaultModel: 'grok-4.7',
     freeTier: false,
-    note: 'NOT OPERATIONAL — saldo de cuenta $0.00 (verificado por Jon, captura console.x.ai 2026-11-16 21:04, vista 30 días: uso $5.78, 7.088.187 tokens, 798 requests). 3 claves: hermes (xai-...8jb0) $4.84/30d, último uso hace 57 min, proyecto no identificado; NEXUS (xai-...IGKt) $0.15/30d, último uso hace 6 días — EXISTE y está activa; nexus-credits (xai-...4mXW) sin gasto, management key (Billing: Read). La credencial registrada aquí (400 Incorrect API key) NO es la clave NEXUS. Recarga de pago solo con aprobación expresa de Jon; si recarga, la clave NEXUS debería funcionar.',
+    note: 'NOT OPERATIONAL — saldo de cuenta $0.00 (verificado por Jon, captura console.x.ai 2026-11-16 21:04, vista 30 días: uso $5.78, 7.088.187 tokens, 798 requests). 3 claves: hermes (xai-...8jb0) $4.84/30d, último uso hace 57 min, proyecto no identificado; NEXUS (xai-...IGKt) $0.15/30d, último uso hace 6 días — EXISTE y está activa; nexus-credits (xai-...4mXW) sin gasto, management key (Billing: Read). La credencial registrada aquí (400 Incorrect API key) NO es la clave NEXUS. Decisión de Jon 2026-11-16 21:27: SIN recarga; grok fuera definitivamente hasta nuevo aviso.',
   },
   coarena: {
     name: 'coarena',

@@ -105,7 +105,7 @@ export const INTEGRATIONS: IntegrationStatus[] = [
     status: 'sin crédito ($0.00, uso $5.78, 7.088.187 tokens, 798 requests, verificado 2026-11-16)',
     function: 'Proveedor de inferencia (agente xAI, crédito NEXUS)',
     authType: 'API key registrada (env XAI_API_KEY)',
-    knownLimits: 'Saldo de cuenta $0.00 (captura console.x.ai 2026-11-16 21:04, vista 30 días). 3 claves: hermes (xai-...8jb0) $4.84/30d, último uso hace 57 min, proyecto no identificado; NEXUS (xai-...IGKt) $0.15/30d, último uso hace 6 días — EXISTE y está activa; nexus-credits (xai-...4mXW) sin gasto, management key (Billing: Read). La credencial registrada aquí (400 Incorrect API key) NO es la clave NEXUS. DISCREPANCIA: NEXUS dice 4,09/4,21 USD (usados 0,12) pero la consola dice $0,00 y uso $5,78 — manda la consola; la fila NEXUS está desactualizada (corregir en el hilo NEXUS, no desde WebLead). Grok no usable hasta recarga; si Jon recarga, la clave NEXUS debería funcionar. El fallback solo encadena operativos (Top Tools AI Basic), así que grok nunca bloquea el flujo.',
+    knownLimits: 'Saldo de cuenta $0.00 (captura console.x.ai 2026-11-16 21:04, vista 30 días). 3 claves: hermes (xai-...8jb0) $4.84/30d, último uso hace 57 min, proyecto no identificado; NEXUS (xai-...IGKt) $0.15/30d, último uso hace 6 días — EXISTE y está activa; nexus-credits (xai-...4mXW) sin gasto, management key (Billing: Read). La credencial registrada aquí (400 Incorrect API key) NO es la clave NEXUS. DISCREPANCIA: NEXUS dice 4,09/4,21 USD (usados 0,12) pero la consola dice $0,00 y uso $5,78 — manda la consola; la fila NEXUS está desactualizada (corregir en el hilo NEXUS, no desde WebLead). Decisión de Jon 2026-11-16 21:27: SIN recarga; grok fuera definitivamente hasta nuevo aviso. El fallback solo encadena operativos (Top Tools AI Basic), así que grok nunca bloquea el flujo.',
     potentialCost: 'recarga de pago solo con aprobación expresa de Jon',
     lastCheckedAt: '2026-11-16',
   },
@@ -166,7 +166,7 @@ export const INTEGRATIONS: IntegrationStatus[] = [
     function: 'Proveedor de búsqueda candidato (Fase C): actores de scraping bajo demanda',
     authType: 'API key (env APIFY_API_KEY, vacía; sin llamadas en Fase 0)',
     knownLimits: 'Google Maps Scraper 4 USD/1.000 lugares en plan Free (+2 detalles/contactos); ~120 listados máx. por consulta de Maps; crédito no usado no se acumula',
-    potentialCost: '5 USD de crédito disponible (caducidad desconocida — pregunta abierta para Jon); sin consumo hasta que la Fase C lo apruebe y con límite efectivo cero',
+    potentialCost: '5 USD de crédito disponible (NO caduca, confirmado por Jon 2026-11-16 21:27); sin consumo hasta que la Fase C lo apruebe y con límite efectivo cero',
     lastCheckedAt: '2026-11-16',
   },
   {

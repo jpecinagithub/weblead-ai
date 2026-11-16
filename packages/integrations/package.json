@@ -15,11 +15,6 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
-  "dependencies": {
-    "@weblead/agent-core": "workspace:*",
-    "@weblead/ai-engine": "workspace:*",
-    "@weblead/shared": "workspace:*"
-  },
   "devDependencies": {
     "typescript": "^5.9.2"
   }

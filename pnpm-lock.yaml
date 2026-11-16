@@ -112,9 +112,6 @@ importers:
       '@weblead/agent-designer':
         specifier: workspace:*
         version: link:../../packages/agent-designer
-      '@weblead/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
       '@weblead/website-generator':
         specifier: workspace:*
         version: link:../../packages/website-generator
@@ -149,9 +146,6 @@ importers:
       '@weblead/agent-core':
         specifier: workspace:*
         version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
       '@weblead/database':
         specifier: workspace:*
         version: link:../database
@@ -190,9 +184,6 @@ importers:
       '@weblead/agent-core':
         specifier: workspace:*
         version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
       '@weblead/database':
         specifier: workspace:*
         version: link:../database
@@ -209,9 +200,6 @@ importers:
       '@weblead/agent-core':
         specifier: workspace:*
         version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
       '@weblead/database':
         specifier: workspace:*
         version: link:../database
@@ -234,9 +222,6 @@ importers:
       '@weblead/agent-core':
         specifier: workspace:*
         version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
       '@weblead/database':
         specifier: workspace:*
         version: link:../database
@@ -253,9 +238,6 @@ importers:
       '@weblead/agent-core':
         specifier: workspace:*
         version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
       '@weblead/database':
         specifier: workspace:*
         version: link:../database
@@ -268,10 +250,6 @@ importers:
         version: 5.9.3
 
   packages/ai-engine:
-    dependencies:
-      '@weblead/shared':
-        specifier: workspace:*
-        version: link:../shared
     devDependencies:
       typescript:
         specifier: ^5.9.2
@@ -310,16 +288,6 @@ importers:
         version: 5.9.3
 
   packages/integrations:
-    dependencies:
-      '@weblead/agent-core':
-        specifier: workspace:*
-        version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
-      '@weblead/shared':
-        specifier: workspace:*
-        version: link:../shared
     devDependencies:
       typescript:
         specifier: ^5.9.2
@@ -336,9 +304,6 @@ importers:
 
   packages/testing:
     dependencies:
-      '@weblead/agent-core':
-        specifier: workspace:*
-        version: link:../agent-core
       '@weblead/ai-engine':
         specifier: workspace:*
         version: link:../ai-engine
@@ -352,15 +317,6 @@ importers:
 
   packages/website-generator:
     dependencies:
-      '@weblead/agent-core':
-        specifier: workspace:*
-        version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
-      '@weblead/shared':
-        specifier: workspace:*
-        version: link:../shared
       '@weblead/website-templates':
         specifier: workspace:*
         version: link:../website-templates
@@ -370,16 +326,6 @@ importers:
         version: 5.9.3
 
   packages/website-templates:
-    dependencies:
-      '@weblead/agent-core':
-        specifier: workspace:*
-        version: link:../agent-core
-      '@weblead/ai-engine':
-        specifier: workspace:*
-        version: link:../ai-engine
-      '@weblead/shared':
-        specifier: workspace:*
-        version: link:../shared
     devDependencies:
       typescript:
         specifier: ^5.9.2

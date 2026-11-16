@@ -1,7 +1,7 @@
 /**
  * Generated demos (Fase D) — WRITTEN BY apps/api/src/export-demos.ts.
  * Do not edit by hand: regenerated from the WebsiteProject rows in Postgres.
- * Generated at 2026-11-16T20:28:22.513Z (12 demos).
+ * Generated at 2026-11-16T20:38:43.164Z (10 demos).
  */
 import type { GeneratedWebsiteContent } from '@weblead/website-generator';
 
@@ -628,26 +628,6 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
     "businessState": "APPROVED",
     "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/expert-fontaneros-logrono-logrono"
-  },
-  {
-    "content": {
-      "demo": true,
-      "fixture": true,
-      "businessName": "VERIFICACIÓN FASE E — Empresa de prueba (ficticia, no contactar)"
-    },
-    "businessState": "SALES_APPROVED",
-    "auditStatus": null,
-    "demoUrl": "/demos/verificacion-fase-e-empresa-de-prueba"
-  },
-  {
-    "content": {
-      "demo": true,
-      "fixture": true,
-      "businessName": "VERIFICACIÓN FASE E — Baja de prueba (ficticia, no contactar)"
-    },
-    "businessState": "APPROVED",
-    "auditStatus": null,
-    "demoUrl": "/demos/verificacion-fase-e-baja-de-prueba"
   },
   {
     "content": {
@@ -1557,8 +1537,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
       "businessSlug": "peluqueria-nuria-logrono",
       "municipality": "Logroño"
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": "FAILED (playwright)",
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/peluqueria-nuria-logrono"
   }
 ];

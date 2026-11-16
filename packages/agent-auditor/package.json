@@ -17,9 +17,8 @@
   },
   "dependencies": {
     "@weblead/agent-core": "workspace:*",
-    "@weblead/ai-engine": "workspace:*",
-    "@weblead/shared": "workspace:*",
     "@weblead/database": "workspace:*",
+    "@weblead/shared": "workspace:*",
     "@weblead/website-generator": "workspace:*",
     "playwright-core": "^1.55.0"
   },

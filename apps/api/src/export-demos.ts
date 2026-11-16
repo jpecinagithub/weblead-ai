@@ -6,6 +6,13 @@
  * plus the demo sitemap. No design, no LLM call, no state change — safe to
  * run after an audit to refresh the states shown in the demos dashboard.
  *
+ * Excludes Fase E verification fixtures (content.fixture === true):
+ * their content is a stub ({ businessName, demo: true, fixture: true },
+ * see seed-verification-e.ts) without templateId/brand/seo/gallery, so
+ * the demo-platform would crash rendering them — and the export typed
+ * as GeneratedWebsiteContent failed typecheck (TS2353 'demo', preexisting
+ * in HEAD e6b0547). Fixtures are test data for the sales flow, not demos.
+ *
  * Usage: pnpm --filter @weblead/api export:demos
  */
 import { writeFileSync } from 'node:fs';
@@ -25,6 +32,10 @@ export async function exportDemos(): Promise<number> {
     demoUrl: string;
   }[] = [];
   for (const project of projects) {
+    // Fase E fixtures are not demos: stub content, no template. Skip them
+    // (see header comment). Real demos always have a templateId.
+    const rawContent = project.content as unknown as Record<string, unknown>;
+    if (rawContent?.fixture === true) continue;
     const business = await prisma.business.findUnique({ where: { id: project.businessId } });
     const audit = await prisma.audit.findFirst({
       where: { projectId: project.id },

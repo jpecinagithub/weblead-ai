@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import type { CostsSummary } from '@weblead/cost-control';
 import { INTEGRATIONS } from '@weblead/integrations';
-import { BUSINESS_STATES, type BusinessState, type PilotLead } from '@weblead/shared';
+import { BUSINESS_STATES } from '@weblead/shared';
+import { businessNameForKey, normalizeLead, type ApiBusinessRow, type DashboardLead } from './leads';
 
-type LeadWithState = PilotLead & { state: BusinessState };
+type LeadWithState = DashboardLead;
 
 type PipelineRowView = {
   businessId: string;
@@ -44,9 +45,9 @@ export default function App() {
     fetch('/api/businesses')
       .then((res) => {
         if (!res.ok) throw new Error(`API ${res.status}`);
-        return res.json() as Promise<LeadWithState[]>;
+        return res.json() as Promise<ApiBusinessRow[]>;
       })
-      .then(setLeads)
+      .then((rows) => setLeads(rows.map(normalizeLead)))
       .catch((err: unknown) => setError(err instanceof Error ? err.message : 'API no disponible'));
     fetch('/api/costs/summary')
       .then((res) => {
@@ -64,7 +65,7 @@ export default function App() {
       .catch((err: unknown) => setPipelineError(err instanceof Error ? err.message : 'API no disponible'));
   }, []);
 
-  const qualified = leads.filter((l) => l.score.total >= 70).length;
+  const qualified = leads.filter((l) => (l.scoreTotal ?? 0) >= 70).length;
 
   return (
     <main>
@@ -105,11 +106,11 @@ export default function App() {
             </thead>
             <tbody>
               {leads.map((l) => (
-                <tr key={l.id}>
+                <tr key={l.key}>
                   <td>{l.name}</td>
                   <td>{l.sector}</td>
                   <td>{l.activity}</td>
-                  <td>{l.score.total}</td>
+                  <td>{l.scoreTotal ?? '—'}</td>
                   <td>{l.state}</td>
                   <td>{[l.phone, l.email].filter(Boolean).join(' · ') || '—'}</td>
                 </tr>
@@ -218,7 +219,7 @@ export default function App() {
                 {Object.keys(costs.byBusiness).length === 0
                   ? 'sin datos'
                   : Object.entries(costs.byBusiness)
-                      .map(([b, v]) => `${b}: ${eur(v.estimatedCostCents)} est.`)
+                      .map(([b, v]) => `${businessNameForKey(leads, b)}: ${eur(v.estimatedCostCents)} est.`)
                       .join(' · ')}
               </li>
               <li>
