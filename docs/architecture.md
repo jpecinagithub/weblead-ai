@@ -230,8 +230,10 @@ escalable, gratuita y legal lista para usar.
 
 ### Matriz comparativa de proveedores de búsqueda/datos (Fase C)
 
-A evaluar en la Fase C antes de elegir fuente de discovery. Precios
-verificados el 2026-11-16 en roundups de precios (Katteb, Mapsharvest,
+Evaluada y cerrada en Fase C — ver `docs/search-providers.md` (veredicto:
+sin fuente de discovery masivo conforme; Apify Maps Scraper descartado
+por base legal; discovery operativo: búsqueda web + directorios).
+Precios verificados el 2026-11-16 en roundups de precios (Katteb, Mapsharvest,
 oct 2026) y en la preparación de Fase A — **no verificados en la página
 del propio proveedor**: re-confirmar en la página del actor/servicio
 antes de presupuestar.
@@ -320,7 +322,7 @@ E Comercial, F Optimización). Correspondencia:
 |---|---|---|
 | Fase A — Viabilidad (piloto Logroño) | **Puerta de la Fase C** | ✅ Cerrada 2026-11-16: GO con alcance recortado (10 leads ≥ 70). Sin su veredicto no se construye el Researcher a escala |
 | **Fase 0 — Esqueleto (este repo)** | **Fase A — Infraestructura** | ✅ Este repo: monorepo, estados, schema, API mínima, multiprovider, costes, panel |
-| Fase 1 — Researcher | Fase C — Investigación | ⏳ Pendiente (discovery provisional: búsqueda web) |
+| Fase 1 — Researcher | Fase C — Investigación | ✅ Cerrada 2026-11-16 (ver `docs/phase-c-report.md`): Researcher determinista (scoring 0-100, umbral 70, actividad CONFIRMED/PROBABLE/UNVERIFIED/INACTIVE), expediente con fuente por dato, persistencia Prisma real (10 leads sembradas QUALIFIED + Godoy REJECTED, 3 resúmenes LLM medidos, 738 tokens, 0,00 USD). Matriz de fuentes en `docs/search-providers.md`: sin discovery masivo conforme; Apify descartado por base legal. |
 | Fase 2 — Designer | Fase D — Generación y auditoría | ⏳ Pendiente |
 | Fase 3 — Auditor | Fase D — Generación y auditoría | ⏳ Pendiente |
 | Fase 4 — Sales | Fase E — Comercial | ⏳ Pendiente (borradores, sin envío, gate LSSI) |

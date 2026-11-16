@@ -1,0 +1,44 @@
+[
+  {
+    "pilotId": 6,
+    "business": "Santiago Ferrer Fontanería en General SL",
+    "provider": "top-tools-ai",
+    "model": "Top-Tools-Ai-Basic",
+    "http": 200,
+    "latency_seconds": 5.84,
+    "prompt_tokens": 122,
+    "completion_tokens": 129,
+    "total_tokens": 251,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "summary": "Santiago Ferrer Fontanería en General SL es una empresa de fontanería en Logroño (constituida en 1994, 10 empleados) que actualmente no dispone de web propia, verificado el 16/11/2026. Los datos de contacto disponibles son el teléfono 941 227 157 y el email sanfefo@terra.com; su actividad está confirmada con una puntuación de 100/100 según la ficha de eInforma (consulta del 14/10/2026). La recomendación es crearle una web propia para cubrir la visibilidad digital que hoy le falta."
+  },
+  {
+    "pilotId": 8,
+    "business": "Hidrorioja SC",
+    "provider": "top-tools-ai",
+    "model": "Top-Tools-Ai-Basic",
+    "http": 200,
+    "latency_seconds": 7.44,
+    "prompt_tokens": 120,
+    "completion_tokens": 122,
+    "total_tokens": 242,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "summary": "Hidrorioja SC es una empresa de fontanería y climatización en Logroño que, a fecha de 16/11/2026, carece de web propia, lo que limita su visibilidad online. La actividad del negocio está confirmada (Cylex actualizado en julio de 2026, 3 reseñas con 3,7/5) y su contacto actual es el 941255266 / hidrorioja@telefonica.net. Con un score de 90/100, la recomendación clara es crearle una web profesional para captar clientes locales."
+  },
+  {
+    "pilotId": 1,
+    "business": "Fontanería Godoy",
+    "provider": "top-tools-ai",
+    "model": "Top-Tools-Ai-Basic",
+    "http": 200,
+    "latency_seconds": 5.28,
+    "prompt_tokens": 128,
+    "completion_tokens": 117,
+    "total_tokens": 245,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "summary": "Fontanería Godoy, fontanero en Logroño con actividad probable, ya cuenta con web activa (fontaneria-godoy.com), teléfono (941212833) y email, y mantiene 51 reseñas con 4,3/5. Su score es de 45/100, por debajo del umbral de 70, por lo que queda **rechazada** como lead y no es candidata a una web nueva. No cualifica porque ya posee presencia web funcional y su puntuación de oportunidad no alcanza el mínimo exigido para justificar una venta."
+  }
+]

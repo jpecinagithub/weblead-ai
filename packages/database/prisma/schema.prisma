@@ -65,11 +65,25 @@ model Business {
   name            String
   slug            String   @unique
   sector          String?
+  subsector       String?
+  legalName       String?
   address         String?
+  municipality    String?
+  province        String?
+  postalCode      String?
   phone           String?
   email           String?
   websiteUrl      String?
   hasOwnWebsite   Boolean  @default(false)
+  websiteStatus   String?  // none | social-only | obsolete | current-simple | current-elaborate
+  socialProfiles  Json?
+  services        Json?
+  targetAudience  String?
+  opportunity     String?
+  confidence      String?  // high | medium | low
+  rejectionReason String?
+  consultedAt     DateTime?
+  pilotId         Int?     @unique // id in docs/feasibility-data.csv (1-26), when seeded from the pilot
   activity        String?  // CONFIRMED | PROBABLE | UNVERIFIED | INACTIVE
   state           String   @default("DISCOVERED") // orchestrator state, see @weblead/shared
   sources         BusinessSource[]
@@ -110,15 +124,20 @@ model BusinessEvidence {
 }
 
 model ResearchReport {
-  id          String   @id @default(uuid())
-  businessId  String
-  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  executionId String?
-  execution   AgentExecution? @relation(fields: [executionId], references: [id])
-  summary     String
-  activity    String?  // CONFIRMED | PROBABLE | UNVERIFIED | INACTIVE
-  scoreTotal  Int?
-  createdAt   DateTime @default(now())
+  id             String   @id @default(uuid())
+  businessId     String
+  business       Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  executionId    String?
+  execution      AgentExecution? @relation(fields: [executionId], references: [id])
+  summary        String
+  activity       String?  // CONFIRMED | PROBABLE | UNVERIFIED | INACTIVE
+  scoreTotal     Int?
+  scoreBreakdown Json?    // OpportunityScore components (Fase C)
+  confidence     String?  // high | medium | low
+  sourcesVerified Int?
+  rejectionReason String?
+  llmSummary     String?  // LLM-written summary, if any (facts stay in `summary`)
+  createdAt      DateTime @default(now())
 }
 
 model OpportunityScore {
@@ -354,10 +373,16 @@ model PriceConfiguration {
 model UsageRecord {
   id               String          @id @default(uuid())
   provider         String          // top-tools-ai | xai | coarena | ...
+  service          String?         // e.g. fase-c-llm-summary (Fase C)
+  agentKind        String?         // researcher | designer | ...
   model            String?
   tokensPrompt     Int             @default(0)
   tokensCompletion Int             @default(0)
   costCents        Int?
+  /** Estimated cost in cents. Always separate from confirmed cost (§8). */
+  estimatedCostCents Int?
+  /** Confirmed cost in cents; null when the provider reports no price. */
+  confirmedCostCents Int?
   businessId       String?
   business         Business?       @relation(fields: [businessId], references: [id])
   executionId      String?
