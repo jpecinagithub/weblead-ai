@@ -12,9 +12,19 @@
  *   949 tokens, 0.00 USD. `models` lists exactly 3 ids (Basic/Pro/Max);
  *   old names (Top-Tools-Ai, Kimi-K2.6) return 400 model_not_found.
  *   Pro/Max free-tier inclusion is NOT confirmed — never called.
- * - xai: CONFIGURED, NOT OPERATIONAL. Registered credential INVALID
- *   (400 Incorrect API key, Fase A; re-confirmed Fase B 2026-11-16).
- *   Do not depend on it until reconnected.
+ * - xai: CONFIGURED, NOT OPERATIONAL — saldo de cuenta AGOTADO ($0.00,
+ *   verificado por Jon con captura de console.x.ai, 2026-11-16 21:04,
+ *   vista 30 días: uso $5.78, 7.088.187 tokens, 798 requests; el crédito
+ *   inicial de 5 USD está gastado entero). Desglose por clave (solo
+ *   sufijos): hermes (xai-...8jb0) $4.84/30d, último uso hace 57 min,
+ *   proyecto no identificado; NEXUS (xai-...IGKt) $0.15/30d, último uso
+ *   hace 6 días — la clave de NEXUS en Oracle EXISTE y está activa;
+ *   nexus-credits (xai-...4mXW) sin gasto — management key (Billing:
+ *   Read). La credencial registrada aquí que da 400 Incorrect API key
+ *   (Fase A; re-confirmado Fase B) NO es la clave NEXUS. Si Jon recarga
+ *   (pago, solo con su aprobación expresa), la clave NEXUS debería
+ *   funcionar; sin recarga, grok sigue fuera y el primario es
+ *   Top-Tools-Ai-Basic. Do not depend on it until recharged.
  * - coarena: CONFIGURED, NOT OPERATIONAL. Registered key REVOKED
  *   (401 api_key_revoked, Fase A; re-confirmed 401 Fase B 2026-11-16).
  *   Do not depend on it until reconnected.
@@ -111,7 +121,7 @@ export const PROVIDERS: Readonly<Record<LlmProviderName, ProviderInfo>> = {
     envKey: 'XAI_API_KEY',
     defaultModel: 'grok-4.7',
     freeTier: false,
-    note: 'NOT OPERATIONAL: registered credential invalid (400 Incorrect API key, Fase A; re-confirmed Fase B 2026-11-16). Reconnect before any use.',
+    note: 'NOT OPERATIONAL — saldo de cuenta $0.00 (verificado por Jon, captura console.x.ai 2026-11-16 21:04, vista 30 días: uso $5.78, 7.088.187 tokens, 798 requests). 3 claves: hermes (xai-...8jb0) $4.84/30d, último uso hace 57 min, proyecto no identificado; NEXUS (xai-...IGKt) $0.15/30d, último uso hace 6 días — EXISTE y está activa; nexus-credits (xai-...4mXW) sin gasto, management key (Billing: Read). La credencial registrada aquí (400 Incorrect API key) NO es la clave NEXUS. Recarga de pago solo con aprobación expresa de Jon; si recarga, la clave NEXUS debería funcionar.',
   },
   coarena: {
     name: 'coarena',

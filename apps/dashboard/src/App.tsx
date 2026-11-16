@@ -5,6 +5,29 @@ import { BUSINESS_STATES, type BusinessState, type PilotLead } from '@weblead/sh
 
 type LeadWithState = PilotLead & { state: BusinessState };
 
+type PipelineRowView = {
+  businessId: string;
+  name: string;
+  sector: string | null;
+  orchestratorState: string;
+  crmState: string;
+  email: string | null;
+  suppressed: boolean;
+  suppressionReason: string | null;
+  proposalModality: string | null;
+  proposalTotalCents: number | null;
+  draftId: string | null;
+  draftStatus: string | null;
+  legalReasonCode: string | null;
+  legalAllowed: boolean | null;
+};
+
+type PipelineView = {
+  rows: PipelineRowView[];
+  stats: { total: number; byState: Record<string, number>; conversion: Record<string, number>; suppressed: number; awaitingApproval: number; remindersDue: number };
+  reminders: { businessId: string; businessName: string; draftId: string | null; dueAt: string; note: string }[];
+};
+
 function eur(cents: number | null): string {
   if (cents === null) return 'sin confirmar';
   return `${(cents / 100).toFixed(2)} €`;
@@ -13,6 +36,8 @@ function eur(cents: number | null): string {
 export default function App() {
   const [leads, setLeads] = useState<LeadWithState[]>([]);
   const [costs, setCosts] = useState<CostsSummary | null>(null);
+  const [pipeline, setPipeline] = useState<PipelineView | null>(null);
+  const [pipelineError, setPipelineError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,6 +55,13 @@ export default function App() {
       })
       .then(setCosts)
       .catch(() => undefined);
+    fetch('/api/crm/pipeline')
+      .then((res) => {
+        if (!res.ok) throw new Error(`API ${res.status}`);
+        return res.json() as Promise<PipelineView>;
+      })
+      .then(setPipeline)
+      .catch((err: unknown) => setPipelineError(err instanceof Error ? err.message : 'API no disponible'));
   }, []);
 
   const qualified = leads.filter((l) => l.score.total >= 70).length;
@@ -38,7 +70,7 @@ export default function App() {
     <main>
       <header>
         <h1>WebLead AI — Dashboard</h1>
-        <p className="sub">Fase B — Inteligencia artificial · Piloto Logroño · sin DB aún (seed de solo lectura)</p>
+        <p className="sub">Fase E — Comercial · Piloto Logroño · borradores locales, sin envío</p>
       </header>
 
       <section>
@@ -89,6 +121,79 @@ export default function App() {
           Datos del piloto Fase A (<code>docs/feasibility-data.csv</code>, 2026-11-16). Solo lectura: ningún
           lead se ha contactado ni se contactará sin aprobación y base legal.
         </p>
+      </section>
+
+      <section>
+        <h2>Comercial — pipeline CRM (13 estados) y estado legal</h2>
+        {pipelineError ? (
+          <p className="error">No se pudo cargar el pipeline ({pipelineError}).</p>
+        ) : !pipeline ? (
+          <p>Cargando pipeline…</p>
+        ) : (
+          <>
+            <ul>
+              <li>
+                <strong>Empresas en pipeline:</strong> {pipeline.stats.total} · Bajas: {pipeline.stats.suppressed} ·
+                Pendientes de aprobación: {pipeline.stats.awaitingApproval} · Recordatorios: {pipeline.stats.remindersDue}
+              </li>
+              <li>
+                <strong>Conversión:</strong>{' '}
+                {Object.entries(pipeline.stats.conversion)
+                  .map(([k, v]) => `${k}: ${v}%`)
+                  .join(' · ')}
+              </li>
+            </ul>
+            <table>
+              <thead>
+                <tr>
+                  <th>Empresa</th>
+                  <th>Estado CRM</th>
+                  <th>Estado legal (LSSI)</th>
+                  <th>Propuesta</th>
+                  <th>Borrador</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pipeline.rows.map((r) => (
+                  <tr key={r.businessId}>
+                    <td>{r.name}</td>
+                    <td>{r.crmState}</td>
+                    <td>
+                      {r.suppressed
+                        ? `SUPPRESSED (${r.suppressionReason ?? 'baja'})`
+                        : r.legalAllowed
+                          ? 'Permitido'
+                          : (r.legalReasonCode ?? '—')}
+                    </td>
+                    <td>
+                      {r.proposalModality
+                        ? `${r.proposalModality} · ${eur(r.proposalTotalCents)} (orientativo)`
+                        : '—'}
+                    </td>
+                    <td>{r.draftId ? `${r.draftStatus ?? 'DRAFT'} (local, sin envío)` : '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {pipeline.reminders.length > 0 && (
+              <>
+                <h3>Recordatorios</h3>
+                <ul>
+                  {pipeline.reminders.map((rem) => (
+                    <li key={rem.businessId}>
+                      {rem.businessName}: {rem.note} (vence {new Date(rem.dueAt).toLocaleDateString('es-ES')})
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            <p className="note">
+              CONTACTED es inalcanzable en esta fase: implica un envío real y no se envía nada. Los borradores son
+              locales (Postgres); Gmail está sin conectar (ver docs/gmail-setup.md). Un correo público NO equivale a
+              autorización: sin base legal no hay borrador.
+            </p>
+          </>
+        )}
       </section>
 
       <section>
@@ -188,7 +293,7 @@ export default function App() {
       </section>
 
       <footer>
-        <p>WebLead AI · Fase B — Inteligencia artificial · Autor: jpecina</p>
+        <p>WebLead AI · Fase E — Comercial · Autor: jpecina</p>
       </footer>
     </main>
   );

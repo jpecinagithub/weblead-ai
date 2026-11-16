@@ -1,0 +1,19 @@
+[
+  {
+    "slug": "verificacion-fase-e-empresa-de-prueba",
+    "agent": "sales",
+    "task": "sales-draft",
+    "model": "Top-Tools-Ai-Basic",
+    "provider": "top-tools-ai",
+    "http": 200,
+    "latency_seconds": 8.65,
+    "prompt_tokens": 127,
+    "completion_tokens": 99,
+    "total_tokens": 226,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "response": "Estimados,\n\nDesde WebLead AI les compartimos una propuesta conceptual de su futura página web, diseñada para ayudar a los clientes de Logroño a encontrarlos con facilidad. Esta propuesta es no oficial y pendiente de su autorización; no incluye servicios ni condiciones definitivas.\n\nEl objetivo es presentar una primera idea visual y funcional de cómo podría verse su presencia online.\n\nLes gustaría ofrecerles una demostración sin compromiso, para que evalúen el concepto y decidan si quieren avanzar.\n\nUn saludo.",
+    "forbidden_violations": [],
+    "accepted": true
+  }
+]

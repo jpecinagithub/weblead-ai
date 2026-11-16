@@ -230,3 +230,28 @@ describe('fallback provider, Fase B: operational chain, quota loss, limits (§3-
     );
   });
 });
+
+describe('xAI Fase E: saldo agotado, clave NEXUS válida, grok fuera del fallback', () => {
+  it('xAI is not operational and is excluded from the operational chain', () => {
+    expect(isProviderOperational('xai')).toBe(false);
+    expect(isProviderAvailable('xai')).toBe(false);
+    expect(operationalProviderNames()).not.toContain('xai');
+    expect(operationalProviderNames()).toEqual(['top-tools-ai']);
+  });
+
+  it('the xAI registry note records the $0.00 balance and the per-key breakdown', () => {
+    const note = getProviderInfo('xai').note;
+    expect(note).toContain('$0.00');
+    expect(note).toContain('IGKt');
+    expect(note).toContain('8jb0');
+    expect(note).toContain('4mXW');
+    expect(note).toContain('NO es la clave NEXUS');
+  });
+
+  it('no agent defaults to grok: every agent uses Top-Tools-Ai-Basic', () => {
+    for (const cfg of Object.values(AGENT_LLM_CONFIG)) {
+      expect(cfg.provider).toBe('top-tools-ai');
+      expect(cfg.model).toBe('Top-Tools-Ai-Basic');
+    }
+  });
+});

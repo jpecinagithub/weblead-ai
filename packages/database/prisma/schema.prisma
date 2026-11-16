@@ -330,6 +330,10 @@ model EmailDraft {
   status      String    @default("DRAFT") // DRAFT | APPROVED | SENT | DISCARDED
   createdById String?
   approvedById String?
+  /** Base jurídica LSSI que autorizó preparar este borrador (Fase E); null si el gate lo bloqueó (entonces no hay borrador). */
+  legalBasis  String?
+  /** Motivo del gate legal cuando el borrador se bloqueó o la base aplicada. */
+  legalReason String?
   createdAt   DateTime  @default(now())
 }
 
@@ -362,9 +366,11 @@ model CRMActivity {
   id         String   @id @default(uuid())
   businessId String
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  type       String   // NOTE | CALL | EMAIL | MEETING | STATUS_CHANGE | ...
+  type       String   // NOTE | CALL | EMAIL | MEETING | STATUS_CHANGE | PROPOSAL | DRAFT | APPROVAL | SUPPRESSION | REMINDER | ...
   note       String?
   actorId    String?
+  /** Fecha en la que vence un recordatorio (Fase E); null si no es un recordatorio. */
+  dueAt      DateTime?
   createdAt  DateTime @default(now())
 }
 

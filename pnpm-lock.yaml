@@ -23,12 +23,18 @@ importers:
       '@weblead/agent-core':
         specifier: workspace:*
         version: link:../../packages/agent-core
+      '@weblead/agent-crm':
+        specifier: workspace:*
+        version: link:../../packages/agent-crm
       '@weblead/agent-designer':
         specifier: workspace:*
         version: link:../../packages/agent-designer
       '@weblead/agent-researcher':
         specifier: workspace:*
         version: link:../../packages/agent-researcher
+      '@weblead/agent-sales':
+        specifier: workspace:*
+        version: link:../../packages/agent-sales
       '@weblead/ai-engine':
         specifier: workspace:*
         version: link:../../packages/ai-engine
@@ -38,6 +44,9 @@ importers:
       '@weblead/database':
         specifier: workspace:*
         version: link:../../packages/database
+      '@weblead/integrations':
+        specifier: workspace:*
+        version: link:../../packages/integrations
       '@weblead/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -184,6 +193,9 @@ importers:
       '@weblead/ai-engine':
         specifier: workspace:*
         version: link:../ai-engine
+      '@weblead/database':
+        specifier: workspace:*
+        version: link:../database
       '@weblead/shared':
         specifier: workspace:*
         version: link:../shared
@@ -244,6 +256,9 @@ importers:
       '@weblead/ai-engine':
         specifier: workspace:*
         version: link:../ai-engine
+      '@weblead/database':
+        specifier: workspace:*
+        version: link:../database
       '@weblead/shared':
         specifier: workspace:*
         version: link:../shared

@@ -7,6 +7,8 @@
  * Initial states are honest, from what is verified (Fase A 2026-11-16,
  * MEMORY): nothing is claimed connected/operational without evidence.
  */
+export * from './gmail.js';
+
 export type IntegrationId =
   | 'oracle'
   | 'vercel'
@@ -16,6 +18,10 @@ export type IntegrationId =
   | 'top-tools-ai'
   | 'xai'
   | 'coarena'
+  | 'serper'
+  | 'exa'
+  | 'vercel-ai-gateway'
+  | 'google-ai-studio'
   | 'apify'
   | 'search-provider'
   | 'image-generator'
@@ -56,10 +62,10 @@ export const INTEGRATIONS: IntegrationStatus[] = [
   {
     id: 'gmail',
     name: 'Gmail',
-    status: 'no conectado',
+    status: 'no conectado (stub Fase E)',
     function: 'Borradores comerciales, lectura de respuestas, seguimiento CRM',
-    authType: 'OAuth (permisos mínimos, Fase E)',
-    knownLimits: 'Sin envío automático; aprobación humana + base legal (LSSI) siempre',
+    authType: 'OAuth (permisos mínimos: gmail.readonly + gmail.compose para borradores; SIN gmail.send)',
+    knownLimits: 'Sin cuenta real conectada y sin credenciales: ver docs/gmail-setup.md. Sin envío automático; aprobación humana + base legal (LSSI) siempre. Los borradores son locales (Postgres) hasta conectar.',
     potentialCost: '0 €',
     lastCheckedAt: '2026-11-16',
   },
@@ -76,10 +82,10 @@ export const INTEGRATIONS: IntegrationStatus[] = [
   {
     id: 'openrouter',
     name: 'OpenRouter',
-    status: 'sin claves (eliminadas 2026-11-14)',
+    status: 'sin claves (eliminadas 2026-11-14) · saldo 0,91/10 USD (casi agotado)',
     function: 'Proveedor alternativo, selección dinámica por tarea (§3)',
     authType: 'API key (env OPENROUTER_API_KEY, vacía)',
-    knownLimits: 'Fase B 2026-11-16: sigue sin claves; queda saldo 1,09 USD sin clave utilizable y no hay conector/helper. Pendiente de Jon.',
+    knownLimits: 'Fase B 2026-11-16: sigue sin claves; saldo 0,91/10 USD según NEXUS (2026-11-16, usados 9,09) — casi agotado, no fiable como proveedor principal — y sin clave utilizable ni conector/helper. Pendiente de Jon.',
     potentialCost: 'Sin clave no hay coste ni uso; priorizar modelos gratuitos o de bajo coste cuando la haya',
     lastCheckedAt: '2026-11-16',
   },
@@ -89,18 +95,18 @@ export const INTEGRATIONS: IntegrationStatus[] = [
     status: 'operativo (Basic verificado)',
     function: 'Proveedor de inferencia por defecto (§3): resúmenes, generación de secciones web, revisión de contenido, borradores comerciales',
     authType: 'API key registrada (env TOP_TOOLS_API_KEY)',
-    knownLimits: 'Modelos vigentes: Top-Tools-Ai-Basic / Pro / Max (lista verificada 2026-11-16). Basic medido: 949 tokens / 4 tareas Fase B, 0,00 USD. Pro/Max: inclusión en tier gratuito NO confirmada — no se usan.',
+    knownLimits: 'Modelos vigentes: Top-Tools-Ai-Basic / Pro / Max (lista verificada 2026-11-16). Basic medido: 949 tokens / 4 tareas Fase B, 0,00 USD. Pro/Max: inclusión en tier gratuito NO confirmada — no se usan. Discrepancia de seguimiento (2026-11-16): NEXUS muestra Free 10M/10M + Welcome 10M/10M con 0 usados (filas manuales, no sincronizadas), pero la Fase A ya gastó 805 tokens reales por otra vía: los 10M no se presentan como intactos.',
     potentialCost: '0 € con Basic (tier gratuito, 10M tokens/día según el conector); nunca llamar a modelos PAYG (gpt-5.6-sol, claude-opus-5)',
     lastCheckedAt: '2026-11-16',
   },
   {
     id: 'xai',
     name: 'xAI (Grok)',
-    status: 'no operativo — credencial inválida',
+    status: 'sin crédito ($0.00, uso $5.78, 7.088.187 tokens, 798 requests, verificado 2026-11-16)',
     function: 'Proveedor de inferencia (agente xAI, crédito NEXUS)',
     authType: 'API key registrada (env XAI_API_KEY)',
-    knownLimits: 'Fase B 2026-11-16: re-verificado, sigue 400 "Incorrect API key provided" en una lectura de modelos. Sin uso hasta reconectar.',
-    potentialCost: '0 € (sin uso: la clave es rechazada antes de generar nada)',
+    knownLimits: 'Saldo de cuenta $0.00 (captura console.x.ai 2026-11-16 21:04, vista 30 días). 3 claves: hermes (xai-...8jb0) $4.84/30d, último uso hace 57 min, proyecto no identificado; NEXUS (xai-...IGKt) $0.15/30d, último uso hace 6 días — EXISTE y está activa; nexus-credits (xai-...4mXW) sin gasto, management key (Billing: Read). La credencial registrada aquí (400 Incorrect API key) NO es la clave NEXUS. DISCREPANCIA: NEXUS dice 4,09/4,21 USD (usados 0,12) pero la consola dice $0,00 y uso $5,78 — manda la consola; la fila NEXUS está desactualizada (corregir en el hilo NEXUS, no desde WebLead). Grok no usable hasta recarga; si Jon recarga, la clave NEXUS debería funcionar. El fallback solo encadena operativos (Top Tools AI Basic), así que grok nunca bloquea el flujo.',
+    potentialCost: 'recarga de pago solo con aprobación expresa de Jon',
     lastCheckedAt: '2026-11-16',
   },
   {
@@ -111,6 +117,46 @@ export const INTEGRATIONS: IntegrationStatus[] = [
     authType: 'API key registrada (env COARENA_API_KEY)',
     knownLimits: 'Fase B 2026-11-16: re-verificado, sigue 401 en una lectura de límites (clave revocada). Sin uso hasta reconectar con una clave nueva.',
     potentialCost: '0 € (sin uso: la clave es rechazada antes de generar nada)',
+    lastCheckedAt: '2026-11-16',
+  },
+  {
+    id: 'serper',
+    name: 'Serper (búsqueda Google)',
+    status: 'candidato principal Researcher · saldo 2.382/2.500 créditos (2026-11-16)',
+    function: 'API de búsqueda Google: discovery + verificación del Researcher',
+    authType: 'API key (en el servidor, laptop-radar/NEXUS, según Jon; no se copia aquí)',
+    knownLimits: 'Saldo NEXUS 2026-11-16: 2.382/2.500 (usados 118). Sin medición aún: pendiente medir el coste por empresa (trabajo futuro). Sin llamadas desde WebLead AI todavía.',
+    potentialCost: '0 € hasta agotar los 2.382 créditos; medir coste/empresa antes de escalar',
+    lastCheckedAt: '2026-11-16',
+  },
+  {
+    id: 'exa',
+    name: 'Exa (búsqueda + Places)',
+    status: 'candidato discovery · saldo 19,013/20 USD (2026-11-16)',
+    function: 'Búsqueda web + Places para discovery del Researcher',
+    authType: 'API key (env EXA_API_KEY, vacía en este repo)',
+    knownLimits: 'Saldo NEXUS 2026-11-16: 19,013/20 USD (usados 0,987). Ya se usó Exa Places en Fase A como fuente.',
+    potentialCost: 'Dentro del saldo existente; sin llamadas nuevas sin medir coste/empresa',
+    lastCheckedAt: '2026-11-16',
+  },
+  {
+    id: 'vercel-ai-gateway',
+    name: 'Vercel AI Gateway',
+    status: 'candidato LLM alternativo · saldo 4,999/5 USD (2026-11-16)',
+    function: 'Proveedor LLM alternativo viable (gateway multi-modelo)',
+    authType: 'API key (sin configurar en este repo)',
+    knownLimits: 'Saldo NEXUS 2026-11-16: 4,999/5 USD (usados 0,001), ciclo mensual gratuito. Sin probar desde WebLead AI.',
+    potentialCost: '0 € dentro del ciclo gratuito mensual; verificar modelos y límites antes de usar',
+    lastCheckedAt: '2026-11-16',
+  },
+  {
+    id: 'google-ai-studio',
+    name: 'Google AI Studio (Gemini)',
+    status: 'pendiente (fecha desconocida)',
+    function: 'Proveedor LLM alternativo (Gemini, free tier)',
+    authType: 'API key (sin configurar en este repo)',
+    knownLimits: 'Saldo NEXUS: "Pendiente", fecha desconocida (2026-11-16). Free tier a verificar.',
+    potentialCost: '0 € si el free tier lo cubre; verificar antes de usar',
     lastCheckedAt: '2026-11-16',
   },
   {

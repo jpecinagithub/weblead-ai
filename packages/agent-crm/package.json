@@ -18,6 +18,7 @@
   "dependencies": {
     "@weblead/agent-core": "workspace:*",
     "@weblead/ai-engine": "workspace:*",
+    "@weblead/database": "workspace:*",
     "@weblead/shared": "workspace:*"
   },
   "devDependencies": {

@@ -8,7 +8,7 @@ Investigar empresas españolas, detectar sin web propia o con presencia deficien
 ## Arquitectura propuesta (ajustable con razón técnica documentada)
 Monorepo pnpm: apps/dashboard (Vite+React+TS), apps/api (Node+Express), apps/demo-platform (multiempresa /demos/{business-slug}); packages/database, shared, ai-engine, agent-core, agent-researcher, agent-designer, agent-auditor, agent-sales, agent-crm, integrations, website-generator, website-templates, testing; workers/research, website, audit, crm; docs/architecture, agents, database, integrations, security, legal-compliance, deployment; scripts, .env.example, pnpm-workspace.yaml.
 
-NOTA: el prompt original llegó TRUNCADO al final de la §8 (Base de datos, en "UUID"). Falta el resto del modelo de datos y las secciones posteriores. No inventarlas: documentar como pendiente y completar con el modelo de entidades listado en §8.
+NOTA: el prompt original llegó TRUNCADO al final de la §8 (Base de datos, en "UUID"). CERRADO 2026-11-16 por Jon: ese resto NO existe. Se construye con las 30 entidades listadas en §8 + el segundo documento (instrucciones-equipo-agentes.md). No volver a pedirlo.
 
 ## Agentes (6 lógicos, contrato estructurado común)
 - 0 ORCHESTRATOR: campañas, trabajos, asignación, dependencias, errores/reintentos, presupuestos, estados, decisiones, parada. Máquina de estados persistente, transiciones validadas en backend, sin saltos arbitrarios. Estados: DISCOVERED, RESEARCHING, RESEARCHED, QUALIFIED, REJECTED, DESIGNING, PREVIEW_READY, AUDITING, AUDIT_FAILED, APPROVED, SALES_PENDING, SALES_APPROVED, CONTACTED, REPLIED, NEGOTIATION, WON, LOST, ARCHIVED. Admin puede detener campaña y cancelar pendientes.
@@ -19,7 +19,10 @@ NOTA: el prompt original llegó TRUNCADO al final de la §8 (Base de datos, en "
 - 5 CRM / CUSTOMER SUCCESS: pipeline, seguimiento, clasificación, recordatorios, histórico, conversión, estadísticas, informes. Estados: NEW, QUALIFIED, DEMO_CREATED, AUDITED, PROPOSAL_READY, AWAITING_APPROVAL, CONTACTED, RESPONDED, INTERESTED, NEGOTIATION, CUSTOMER, LOST, SUPPRESSED. Histórico de interacciones. Gestionar bajas/oposición. No volver a contactar a quien pidió no recibir comunicaciones.
 
 ## Base de datos
-PostgreSQL + Prisma. Entidades: User, Role, Campaign, CampaignSector, Business, BusinessSource, BusinessEvidence, ResearchReport, OpportunityScore, Agent, AgentExecution, AgentMessage, Task, TaskLog, WebsiteProject, WebsiteAsset, WebsiteDeployment, Audit, AuditFinding, CommercialProposal, ContactPermission, ContactSuppression, EmailDraft, EmailMessage, EmailThread, CRMActivity, PriceConfiguration, UsageRecord, BudgetLimit, Integration, SystemSetting. (Resto truncado en el original.)
+PostgreSQL + Prisma. Entidades: User, Role, Campaign, CampaignSector, Business, BusinessSource, BusinessEvidence, ResearchReport, OpportunityScore, Agent, AgentExecution, AgentMessage, Task, TaskLog, WebsiteProject, WebsiteAsset, WebsiteDeployment, Audit, AuditFinding, CommercialProposal, ContactPermission, ContactSuppression, EmailDraft, EmailMessage, EmailThread, CRMActivity, PriceConfiguration, UsageRecord, BudgetLimit, Integration, SystemSetting. (CERRADO 2026-11-16 por Jon: no existe resto
+literal tras "UUID". Matiz de conteo: el encargo cita 30 entidades, pero
+los nombres listados son 31 — 30 citadas / 31 nombres contados — y las 31
+están implementadas en Prisma.)
 
 ## Decisiones del usuario 2026-11-16
 - "hasta el final": construir hasta el final, no quedarse solo en viabilidad. Orden: Fase A viabilidad (piloto real) PRIMERO como evidencia, y seguir con Fase 0 + agentes + verificación sin volver a pedir permiso por cada fase, salvo decisiones de gasto/despliegue/envío.

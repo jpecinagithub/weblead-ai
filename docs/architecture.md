@@ -78,7 +78,7 @@ cambio de estado en backend debe pasar por `assertTransition`.
   El servicio estaba inactivo en esta VM y se arrancó con
   `pg_ctlcluster 16 main start` (sudo). **No hubo desviación a SQLite.**
 - Provider Prisma: `postgresql`. Schema en
-  `packages/database/prisma/schema.prisma` con las **31 entidades de §8**
+  `packages/database/prisma/schema.prisma` con las entidades de §8
   (User, Role, Campaign, CampaignSector, Business, BusinessSource,
   BusinessEvidence, ResearchReport, OpportunityScore, Agent, AgentExecution,
   AgentMessage, Task, TaskLog, WebsiteProject, WebsiteAsset,
@@ -86,10 +86,15 @@ cambio de estado en backend debe pasar por `assertTransition`.
   ContactPermission, ContactSuppression, EmailDraft, EmailMessage,
   EmailThread, CRMActivity, PriceConfiguration, UsageRecord, BudgetLimit,
   Integration, SystemSetting).
-- **Salvedad:** el prompt original llegó truncado al final de §8 ("UUID").
-  Los campos de cada entidad se infirieron de los contratos de §§0–5; el
-  detalle de campos es decisión de Fase 1, no una afirmación sobre el
-  documento original.
+- **Pendiente §8 CERRADO 2026-11-16 por Jon:** el resto literal del prompt
+  maestro tras "UUID" NO existe. La BD se construye con las entidades
+  listadas en §8 + el segundo documento (instrucciones-equipo-agentes.md).
+  No volver a pedirlo. Matiz de conteo, con honestidad: el encargo cita
+  "30 entidades", pero contando los nombres listados en §8 son **31
+  (30 citadas / 31 nombres contados) y las 31 están implementadas en
+  Prisma** (Fase 0 las contó). Los campos de cada entidad se infirieron de
+  los contratos de §§0–5; el detalle de campos es decisión de Fase 1, no
+  una afirmación sobre el documento original.
 - En Fase 0 la API **no usa la BD todavía** (estado en memoria + seed de solo
   lectura). La persistencia llega en Fase 1 (`pnpm db:push` ya aplica el
   schema; migraciones con `pnpm db:migrate`).
@@ -143,9 +148,26 @@ el prompt maestro.
   - **openrouter: sin claves.** Las 4 claves se eliminaron el 2026-11-14;
     queda un saldo de 1,09 USD sin clave utilizable y no hay
     conector/helper. Pendiente de Jon.
-  - **xai: credencial inválida** (400 Incorrect API key, Fase A;
-    re-confirmado Fase B 2026-11-16). Configurado pero NO operativo hasta
-    reconectar.
+  - **xai: NO operativo por saldo agotado (no por la clave NEXUS).** Saldo de
+    cuenta **$0.00** (verificado por Jon con captura de console.x.ai,
+    2026-11-16 21:04, vista 30 días: uso $5.78, 7.088.187 tokens, 798
+    requests; el crédito inicial de 5 USD — 4,95 restantes el 2026-10-20 —
+    está gastado entero). Desglose por clave (misma captura, solo sufijos):
+    `hermes` (xai-...8jb0) gasto 30 días $4.84, último uso hace 57 min —
+    la que más ha gastado, proyecto asociado NO identificado (no inventarlo);
+    `NEXUS` (xai-...IGKt) gasto 30 días $0.15, último uso hace 6 días — la
+    clave de NEXUS en Oracle EXISTE y está activa, gasta poco;
+    `nexus-credits` (xai-...4mXW) sin gasto ni uso — management key
+    (Billing: Read), correcto que no gaste. La credencial registrada en
+    esta VM que devuelve 400 `Incorrect API key provided` (Fase A,
+    re-confirmado Fase B) NO es la clave NEXUS; es otra credencial
+    inválida/revocada. Consecuencia: grok no es usable para ningún agente
+    hasta que Jon decida recargar (gasto de pago, solo con su aprobación
+    expresa); si recarga, la clave NEXUS debería funcionar. Sin recarga,
+    el primario es Top Tools AI Basic y ningún agente depende de grok: el
+    fallback (`createOperationalFallback`) solo encadena proveedores
+    operativos y xAI queda marcado no operativo, así que un fallo de grok
+    nunca bloquea el flujo.
   - **coarena: clave revocada** (401 api_key_revoked, Fase A;
     re-confirmado 401 Fase B 2026-11-16). Configurado pero NO operativo
     hasta reconectar.
@@ -214,6 +236,24 @@ el prompt maestro.
   Groq, OpenRouter, proveedor de búsqueda, generador de imágenes y
   Playwright (estado, función, auth, límites, coste potencial, última
   comprobación; nunca claves completas en frontend).
+
+### Inventario de créditos de Jon (captura tabla Créditos de NEXUS, 2026-11-16)
+
+Saldos conocidos, no verificados en vivo desde WebLead AI (salvo donde se
+indica). No se buscó ni se copió ninguna clave: de Serper solo se anota
+que su clave ya está en el servidor (laptop-radar/NEXUS), según Jon.
+
+| Servicio | Saldo (2026-11-16) | Uso en WebLead AI |
+|---|---|---|
+| Serper (búsqueda Google) | 2.382 / 2.500 créditos (usados 118) | **Candidato principal para el Researcher** (discovery + verificación). Pendiente: medir el coste por empresa con estos créditos (trabajo futuro, sin inventar cifras). |
+| Exa (búsqueda + Places) | 19,013 / 20 USD (usados 0,987) | Candidato para discovery. Ya se usó Exa Places en Fase A como fuente. |
+| Top Tools AI | Free 10M/10M tokens + Welcome 10M/10M, 0 usados según NEXUS (filas manuales, no sincronizadas) | Proveedor LLM primario (Basic, medido 0,00 USD). **Discrepancia:** la Fase A ya gastó 805 tokens reales por otra vía, así que los 10M no se presentan como intactos. |
+| Vercel AI Gateway | 4,999 / 5 USD (usados 0,001), ciclo mensual gratuito | Proveedor LLM alternativo viable (candidato, sin probar). |
+| Google AI Studio (Gemini) | Pendiente, fecha desconocida | Free tier a verificar. Estado pendiente. |
+| OpenRouter | 0,91 / 10 USD (usados 9,09) | Casi agotado: no fiable como proveedor principal. |
+| xAI | NEXUS dice 4,09 / 4,21 USD (usados 0,12) **pero console.x.ai dice saldo $0,00 y uso $5,78** | **Discrepancia: manda la consola; la fila de NEXUS está desactualizada/errónea.** NO se corrige la BD de NEXUS desde WebLead (trabajo del hilo NEXUS). Grok sigue fuera hasta recarga aprobada por Jon. |
+| Puter | 991,99 / 1.000 créditos | Chatbot básico, no para agentes: no aplicable a WebLead AI. |
+| Google Flow (1.050 puntos), Magic Hour (956 créditos vídeo) | — | No relevantes para WebLead AI: excluidos del panel y sin uso en el proyecto. |
 
 ## 8. Discovery provisional (Researcher, Fase C)
 
@@ -325,8 +365,8 @@ E Comercial, F Optimización). Correspondencia:
 | Fase 1 — Researcher | Fase C — Investigación | ✅ Cerrada 2026-11-16 (ver `docs/phase-c-report.md`): Researcher determinista (scoring 0-100, umbral 70, actividad CONFIRMED/PROBABLE/UNVERIFIED/INACTIVE), expediente con fuente por dato, persistencia Prisma real (10 leads sembradas QUALIFIED + Godoy REJECTED, 3 resúmenes LLM medidos, 738 tokens, 0,00 USD). Matriz de fuentes en `docs/search-providers.md`: sin discovery masivo conforme; Apify descartado por base legal. |
 | Fase 2 — Designer | Fase D — Generación y auditoría | ✅ Cerrada 2026-11-16 (ver `docs/phase-d-report.md`): 2 plantillas sectoriales reales, generador determinista sin invenciones, 2 demos reales (Ferrer + Begoña Ruiz) QUALIFIED → APPROVED, auditoría Playwright real (Chromium 153 local) con capturas. |
 | Fase 3 — Auditor | Fase D — Generación y auditoría | ✅ Cerrada 2026-11-16 (ver `docs/phase-d-report.md`): auditor independiente, 100/100/100/100 en ambas demos, regla AUDIT_FAILED → DESIGNING verificada en vivo. |
-| Fase 4 — Sales | Fase E — Comercial | ⏳ Pendiente (borradores, sin envío, gate LSSI) |
-| Fase 5 — CRM | Fase E — Comercial | ⏳ Pendiente |
+| Fase 4 — Sales | Fase E — Comercial | ✅ Cerrada 2026-11-16 (ver `docs/phase-e-report.md`): pricing configurable (BASIC/PRO/PREMIUM, precios de ejemplo no definitivos), propuestas internas, gate legal LSSI (correo público ≠ autorización; bloqueo documentado sin borrador), borradores SOLO locales, aprobación humana SALES_PENDING → SALES_APPROVED, clasificador 8 categorías, Gmail stub not_connected (docs/gmail-setup.md). CONTACTED inalcanzable sin envío real. |
+| Fase 5 — CRM | Fase E — Comercial | ✅ Cerrada 2026-11-16 (ver `docs/phase-e-report.md`): pipeline 13 estados exactos, histórico CRMActivity, recordatorios, estadísticas de conversión, bajas SUPPRESSED que bloquean borradores futuros. |
 | (verificación final) | Fase F — Optimización | ⏳ Pendiente (medir costes reales, comparar proveedores) |
 | — | Fase B — Inteligencia artificial | ✅ Cerrada 2026-11-16 (ver `docs/phase-b-measurements.md`): 1 proveedor operativo (Top Tools AI Basic, 4 tareas medidas, 949 tokens, 0,00 USD), fallback entre operativos, detección de pérdida de cuota, límites por agente/empresa/web. Groq/OpenRouter pendientes de credencial de Jon; xAI/CoArena no operativos. |
 

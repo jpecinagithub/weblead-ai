@@ -1,4 +1,3 @@
 # @weblead/agent-sales
 
-Skeleton (Phase 4). Drafts Gmail proposals; never sends. Human approval
-+ legal basis (LSSI) required before any send.
+Fase E (cerrada 2026-11-16). Pricing configurable (PriceConfiguration "default-v1", modalidades BASIC/PRO/PREMIUM con precios de ejemplo NO definitivos), CommercialProposal interna por empresa APPROVED, gate legal LSSI (correo público NO equivale a autorización; sin base válida: bloqueo documentado, sin borrador), borradores SOLO locales (EmailDraft en Postgres, nunca envío), aprobación humana SALES_PENDING -> SALES_APPROVED, clasificador de respuestas en 8 categorías con respuestas sugeridas (sin compromisos económicos automáticos). CONTACTED inalcanzable sin envío real. Ver docs/phase-e-report.md.

@@ -32,6 +32,23 @@ import {
 } from '@weblead/agent-researcher';
 import { designWebsite, type DesignerLlmUsage } from '@weblead/agent-designer';
 import {
+  approveDraft,
+  checkLegalBasis,
+  classifyReply,
+  prepareSales,
+  suggestedReply,
+  type LlmUsageInput,
+  type ProposalModality,
+} from '@weblead/agent-sales';
+import {
+  buildPipelineRow,
+  dueReminders,
+  pipelineStats,
+  suppressContact,
+  type PipelineRow,
+} from '@weblead/agent-crm';
+import { getGmailStatus } from '@weblead/integrations';
+import {
   auditWebsiteContent,
   mergePlaywrightFindings,
   PlaywrightUnavailableError,
@@ -166,7 +183,7 @@ app.use(express.json());
 export const MAX_BUSINESSES_PER_RESEARCH_CALL = 10;
 
 app.get('/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', service: 'weblead-api', version: '0.1.0', phase: 'D-design-audit' });
+  res.json({ status: 'ok', service: 'weblead-api', version: '0.1.0', phase: 'E-commercial' });
 });
 
 /**
@@ -724,6 +741,235 @@ app.get('/api/websites/:id/audit', async (req: Request, res: Response) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// Fase E — Comercial: Sales + CRM (borradores locales, sin envío)
+// ---------------------------------------------------------------------------
+
+/**
+ * POST /api/sales/prepare { businessId, modality?, addonKeys?, llmBody?, llmUsage? }
+ * APPROVED -> SALES_PENDING when the LSSI gate allows a local draft;
+ * when it blocks, returns the documented block (internal proposal only,
+ * NO draft) and the business stays APPROVED. Never sends anything.
+ * businessId accepts a Postgres uuid or a pilot id.
+ */
+app.post('/api/sales/prepare', async (req: Request, res: Response) => {
+  const body = req.body as {
+    businessId?: string | number;
+    modality?: ProposalModality;
+    addonKeys?: string[];
+    llmBody?: string | null;
+    llmUsage?: LlmUsageInput | null;
+  };
+  if (body.businessId === undefined || body.businessId === null || body.businessId === '') {
+    res.status(400).json({ error: 'businessId is required (uuid or pilot id).' });
+    return;
+  }
+  try {
+    const business = await findBusinessByIdParam(String(body.businessId));
+    if (!business) {
+      res.status(404).json({ error: `Business ${body.businessId} not found.` });
+      return;
+    }
+    const result = await prepareSales(prisma, {
+      businessId: business.id,
+      modality: body.modality,
+      addonKeys: body.addonKeys,
+      llmBody: body.llmBody ?? null,
+      llmUsage: body.llmUsage ?? null,
+    });
+    if (body.llmUsage) {
+      usageStore.record({
+        provider: 'top-tools-ai',
+        service: 'fase-e-sales-draft',
+        model: body.llmUsage.model,
+        requests: 1,
+        promptTokens: body.llmUsage.promptTokens,
+        completionTokens: body.llmUsage.completionTokens,
+        imagesGenerated: 0,
+        estimatedCostCents: body.llmUsage.estimatedCostCents,
+        confirmedCostCents: body.llmUsage.confirmedCostCents,
+        agentKind: 'sales',
+        businessId: business.id,
+      });
+    }
+    res.status(result.blocked ? 200 : 201).json(result);
+  } catch (err) {
+    const message = (err as Error).message;
+    if (message.includes('expected APPROVED') || message.includes('no website demo')) {
+      res.status(409).json({ error: message });
+      return;
+    }
+    if (message.includes('not found')) {
+      res.status(404).json({ error: message });
+      return;
+    }
+    res.status(503).json({ error: `Database unavailable: ${message}` });
+  }
+});
+
+/**
+ * POST /api/sales/approve { draftId, approvedBy? }
+ * Human approval of a local draft: DRAFT -> APPROVED, business
+ * SALES_PENDING -> SALES_APPROVED. NOT a send: the draft stays local and
+ * a follow-up reminder is logged. CONTACTED stays unreachable.
+ */
+app.post('/api/sales/approve', async (req: Request, res: Response) => {
+  const body = req.body as { draftId?: string; approvedBy?: string };
+  if (!body.draftId) {
+    res.status(400).json({ error: 'draftId is required.' });
+    return;
+  }
+  try {
+    const result = await approveDraft(prisma, { draftId: body.draftId, approvedBy: body.approvedBy ?? null });
+    res.json(result);
+  } catch (err) {
+    const message = (err as Error).message;
+    if (message.includes('expected DRAFT') || message.includes('expected SALES_PENDING')) {
+      res.status(409).json({ error: message });
+      return;
+    }
+    if (message.includes('not found')) {
+      res.status(404).json({ error: message });
+      return;
+    }
+    res.status(503).json({ error: `Database unavailable: ${message}` });
+  }
+});
+
+/** GET /api/drafts/:id — a local draft (never sent) with its legal basis. */
+app.get('/api/drafts/:id', async (req: Request, res: Response) => {
+  try {
+    const draft = await prisma.emailDraft.findUnique({ where: { id: req.params.id } });
+    if (!draft) {
+      res.status(404).json({ error: `Draft ${req.params.id} not found.` });
+      return;
+    }
+    res.json(draft);
+  } catch (err) {
+    res.status(503).json({ error: `Database unavailable: ${(err as Error).message}` });
+  }
+});
+
+/** GET /api/gmail/status — honest Gmail state: not_connected until Jon does the OAuth (docs/gmail-setup.md). */
+app.get('/api/gmail/status', (_req: Request, res: Response) => {
+  res.json(getGmailStatus());
+});
+
+/**
+ * POST /api/sales/classify { text, businessName? }
+ * Classifies a reply into the 8 master-prompt categories and returns the
+ * suggested reply (never an economic commitment). No send, no Gmail call.
+ */
+app.post('/api/sales/classify', (req: Request, res: Response) => {
+  const body = req.body as { text?: string; businessName?: string };
+  if (!body.text) {
+    res.status(400).json({ error: 'text is required.' });
+    return;
+  }
+  const type = classifyReply(body.text);
+  res.json({ type, suggestedReply: suggestedReply(type, body.businessName ?? 'la empresa') });
+});
+
+/**
+ * GET /api/crm/pipeline — every business with its CRM state (13 states),
+ * legal status, latest internal proposal and latest local draft, plus
+ * conversion stats and due reminders.
+ */
+app.get('/api/crm/pipeline', async (_req: Request, res: Response) => {
+  try {
+    const [businesses, proposals, drafts, suppressions, activities, permissions] = await Promise.all([
+      prisma.business.findMany({ orderBy: { name: 'asc' } }),
+      prisma.commercialProposal.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.emailDraft.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.contactSuppression.findMany(),
+      prisma.cRMActivity.findMany({ where: { type: 'REMINDER' }, orderBy: { createdAt: 'desc' } }),
+      prisma.contactPermission.findMany(),
+    ]);
+    const rows: PipelineRow[] = businesses.map((b) => {
+      const proposal = proposals.find((p) => p.businessId === b.id) ?? null;
+      const draft = drafts.find((d) => d.businessId === b.id) ?? null;
+      const suppression = suppressions.find((s) => s.businessId === b.id || (b.email && s.email === b.email)) ?? null;
+      const legal = checkLegalBasis({
+        businessId: b.id,
+        businessName: b.name,
+        email: b.email,
+        suppressed: Boolean(suppression),
+        suppressionReason: suppression?.reason ?? null,
+        permissions: permissions
+          .filter((p) => p.businessId === b.id)
+          .map((p) => ({ basis: p.basis, source: p.source, notes: p.notes })),
+      });
+      return buildPipelineRow({
+        businessId: b.id,
+        name: b.name,
+        sector: b.sector,
+        orchestratorState: b.state as BusinessState,
+        email: b.email,
+        suppressed: Boolean(suppression),
+        suppressionReason: suppression?.reason ?? null,
+        proposalModality: proposal?.modality ?? null,
+        proposalTotalCents: proposal?.priceCents ?? null,
+        draftId: draft?.id ?? null,
+        draftStatus: draft?.status ?? null,
+        legalReasonCode: legal.reasonCode,
+        legalAllowed: legal.allowed,
+      });
+    });
+    const stats = pipelineStats(rows);
+    res.json({ rows, stats, reminders: dueReminders(rows, activities) });
+  } catch (err) {
+    res.status(503).json({ error: `Database unavailable: ${(err as Error).message}` });
+  }
+});
+
+/**
+ * POST /api/crm/suppress { businessId?, email?, reason }
+ * Registers an opt-out/objection. SUPPRESSED blocks any future draft
+ * (the sales gate checks it first). No contact is made.
+ */
+app.post('/api/crm/suppress', async (req: Request, res: Response) => {
+  const body = req.body as { businessId?: string; email?: string; reason?: string };
+  if (!body.reason) {
+    res.status(400).json({ error: 'reason is required (UNSUBSCRIBE, COMPLAINT, OBJECTION, ...).' });
+    return;
+  }
+  try {
+    const result = await suppressContact(prisma, {
+      businessId: body.businessId ?? null,
+      email: body.email ?? null,
+      reason: body.reason,
+    });
+    res.status(201).json(result);
+  } catch (err) {
+    const message = (err as Error).message;
+    if (message.includes('not found') || message.includes('needs')) {
+      res.status(400).json({ error: message });
+      return;
+    }
+    res.status(503).json({ error: `Database unavailable: ${message}` });
+  }
+});
+
+/** GET /api/crm/business/:id — full interaction history for one business. */
+app.get('/api/crm/business/:id', async (req: Request, res: Response) => {
+  try {
+    const business = await findBusinessByIdParam(req.params.id);
+    if (!business) {
+      res.status(404).json({ error: `Business ${req.params.id} not found.` });
+      return;
+    }
+    const [activities, proposals, drafts, suppressions] = await Promise.all([
+      prisma.cRMActivity.findMany({ where: { businessId: business.id }, orderBy: { createdAt: 'asc' } }),
+      prisma.commercialProposal.findMany({ where: { businessId: business.id }, orderBy: { createdAt: 'desc' } }),
+      prisma.emailDraft.findMany({ where: { businessId: business.id }, orderBy: { createdAt: 'desc' } }),
+      prisma.contactSuppression.findMany({ where: { businessId: business.id } }),
+    ]);
+    res.json({ business: serializeBusiness({ ...business, scores: [] }), activities, proposals, drafts, suppressions });
+  } catch (err) {
+    res.status(503).json({ error: `Database unavailable: ${(err as Error).message}` });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`weblead-api listening on http://localhost:${PORT} (phase D-design-audit, Postgres-backed)`);
+  console.log(`weblead-api listening on http://localhost:${PORT} (phase E-commercial, Postgres-backed)`);
 });

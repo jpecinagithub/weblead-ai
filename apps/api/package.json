@@ -9,7 +9,10 @@
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "@weblead/agent-auditor": "workspace:*",
+    "@weblead/agent-crm": "workspace:*",
     "@weblead/agent-designer": "workspace:*",
+    "@weblead/agent-sales": "workspace:*",
+    "@weblead/integrations": "workspace:*",
     "@weblead/website-generator": "workspace:*"
   },
   "devDependencies": {
@@ -25,6 +28,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx watch src/index.ts",
     "seed:research": "tsx src/seed-research.ts",
+    "seed:verification-e": "tsx src/seed-verification-e.ts",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "generate:designs": "tsx src/generate-designs.ts",
