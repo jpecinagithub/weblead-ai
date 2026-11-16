@@ -1,0 +1,38 @@
+[
+  {
+    "negocio": "Fontanería la Moderna",
+    "modelo": "Top-Tools-Ai-Basic",
+    "http": 200,
+    "prompt_tokens": 87,
+    "completion_tokens": 70,
+    "total_tokens": 157,
+    "resumen": "Fontanería la Moderna, en Logroño, carece de web propia (verificado el 16/11/2026). Aun así, goza de una excelente reputación con 4,8/5 en 5 reseñas y un score de 85/100. Recomendación: crearle una web propia."
+  },
+  {
+    "negocio": "Santiago Ferrer Fontanería en General SL",
+    "modelo": "Top-Tools-Ai-Basic",
+    "http": 200,
+    "prompt_tokens": 95,
+    "completion_tokens": 133,
+    "total_tokens": 228,
+    "resumen": "Santiago Ferrer Fontanería en General SL es una empresa de fontanería con sede en Logroño, constituida en 1994 y con 10 empleados, que actualmente no dispone de sitio web propio (verificado el 16/11/2026), solo teléfono (941 22 71 57) y email (sanfefo@terra.com). Su score de oportunidad es 100/100, lo que la convierte en un prospecto prioritario para la venta de una web. La recomendación es contactar de inmediato y proponerle la creación de su web propia para cerrar el hueco de presencia digital que hoy tiene."
+  },
+  {
+    "negocio": "Lumberjack Barbershop",
+    "modelo": "Top-Tools-Ai-Basic",
+    "http": 200,
+    "prompt_tokens": 99,
+    "completion_tokens": 121,
+    "total_tokens": 220,
+    "resumen": "Lumberjack Barbershop, de Logroño, hoy no tiene web propia y su presencia digital se limita a Instagram y a las plataformas de reserva Booksy/Yeasy (verificado el 16/11/2026), con teléfono 941760684. Aun así, goza de una prueba social muy sólida: 335 reseñas en Booksy con valoración 5,0/5 y un score global de 85/100. La recomendación es crearle una web propia para capitalizar esa reputación y captar clientes que hoy no llegan a verla en buscadores."
+  },
+  {
+    "negocio": "Star Barber Shop",
+    "modelo": "Top-Tools-Ai-Basic",
+    "http": 200,
+    "prompt_tokens": 92,
+    "completion_tokens": 108,
+    "total_tokens": 200,
+    "resumen": "Star Barber Shop, barbería en Logroño, no cuenta con página web propia (verificado el 16/11/2026), aunque dispone de teléfono de contacto (641 21 67 48) y reseñas recientes fechadas en noviembre y enero de 2025-2026. El expediente obtiene un score de 90/100, lo que indica alta viabilidad para cerrar la venta de un sitio web. La recomendación es crearle una web propia para captar clientes online y profesionalizar su presencia digital."
+  }
+]

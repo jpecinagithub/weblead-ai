@@ -1,0 +1,28 @@
+{
+  "name": "@weblead/database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "prisma generate",
+    "db:push": "prisma db push",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.0",
+    "typescript": "^5.9.2"
+  }
+}

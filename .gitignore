@@ -1,0 +1,28 @@
+# Node / build
+node_modules
+dist
+dist-ssr
+*.local
+
+# Env / secrets — NEVER commit real keys
+.env
+.env.*
+!.env.example
+
+# Coverage / test output
+coverage
+*.tsbuildinfo
+
+# Prisma
+packages/database/prisma/migrations/**/migration.sql.lock
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Logs
+*.log
+logs/

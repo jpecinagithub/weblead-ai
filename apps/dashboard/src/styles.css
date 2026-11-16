@@ -1,0 +1,13 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; }
+body { margin: 0; background: #f6f7f9; color: #1a1d21; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+h1 { margin-bottom: 0.25rem; }
+.sub { color: #5b6470; margin-top: 0; }
+.states { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.state { background: #e3eaf3; border-radius: 999px; padding: 0.25rem 0.7rem; font-size: 0.8rem; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid #e5e8ec; }
+th { background: #eef1f5; }
+.error { color: #a11; }
+.note { color: #5b6470; font-size: 0.9rem; }
+footer { margin-top: 2rem; color: #5b6470; font-size: 0.85rem; }

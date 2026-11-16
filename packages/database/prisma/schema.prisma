@@ -1,0 +1,392 @@
+// Prisma schema — WebLead AI, master prompt §8 (30 entities).
+// The prompt's original §8 was TRUNCATED after "UUID"; this schema is the
+// entity list as given in §8, with fields inferred from the agent contracts
+// in §§0-5. Field-level detail beyond §8 is a Phase 1 decision, not a
+// claim about the original document.
+// State fields are Strings on purpose: the TS state machine in
+// @weblead/shared is the single source of truth for transitions; the DB
+// stores the current value, the backend validates every change.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String?
+  roleId       String
+  role         Role     @relation(fields: [roleId], references: [id])
+  campaigns    Campaign[] @relation("CampaignOwner")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Role {
+  id          String @id @default(uuid())
+  name        String @unique
+  description String?
+  users       User[]
+}
+
+model Campaign {
+  id        String          @id @default(uuid())
+  name      String
+  status    String          @default("ACTIVE") // ACTIVE | PAUSED | COMPLETED | CANCELLED
+  ownerId   String
+  owner     User            @relation("CampaignOwner", fields: [ownerId], references: [id])
+  sectors   CampaignSector[]
+  businesses Business[]
+  tasks     Task[]
+  executions AgentExecution[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model CampaignSector {
+  id           String   @id @default(uuid())
+  campaignId   String
+  campaign     Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  sector       String
+  province     String
+  municipality String?
+}
+
+model Business {
+  id              String   @id @default(uuid())
+  campaignId      String?
+  campaign        Campaign? @relation(fields: [campaignId], references: [id])
+  name            String
+  slug            String   @unique
+  sector          String?
+  address         String?
+  phone           String?
+  email           String?
+  websiteUrl      String?
+  hasOwnWebsite   Boolean  @default(false)
+  activity        String?  // CONFIRMED | PROBABLE | UNVERIFIED | INACTIVE
+  state           String   @default("DISCOVERED") // orchestrator state, see @weblead/shared
+  sources         BusinessSource[]
+  evidence        BusinessEvidence[]
+  researchReports ResearchReport[]
+  scores          OpportunityScore[]
+  websiteProjects WebsiteProject[]
+  proposals       CommercialProposal[]
+  permissions     ContactPermission[]
+  suppressions    ContactSuppression[]
+  drafts          EmailDraft[]
+  threads         EmailThread[]
+  activities      CRMActivity[]
+  usage           UsageRecord[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model BusinessSource {
+  id         String   @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  sourceType String   // SEARCH | DIRECTORY | PLACES_API | OVERPASS | OFFICIAL_REGISTER | ...
+  url        String?
+  fetchedAt  DateTime @default(now())
+  rawData    Json?
+}
+
+model BusinessEvidence {
+  id         String   @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  field      String   // e.g. "phone", "websiteUrl", "activity"
+  value      String?
+  source     String
+  sourceUrl  String?
+  observedAt DateTime @default(now())
+}
+
+model ResearchReport {
+  id          String   @id @default(uuid())
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  executionId String?
+  execution   AgentExecution? @relation(fields: [executionId], references: [id])
+  summary     String
+  activity    String?  // CONFIRMED | PROBABLE | UNVERIFIED | INACTIVE
+  scoreTotal  Int?
+  createdAt   DateTime @default(now())
+}
+
+model OpportunityScore {
+  id                 String   @id @default(uuid())
+  businessId         String
+  business           Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  noWebsite          Int
+  activity           Int
+  digitalNeed        Int
+  contactability     Int
+  economicPotential  Int
+  total              Int
+  computedAt         DateTime @default(now())
+}
+
+model Agent {
+  id          String   @id @default(uuid())
+  name        String   @unique // orchestrator | researcher | designer | auditor | sales | crm
+  kind        String   // ORCHESTRATOR | RESEARCHER | DESIGNER | AUDITOR | SALES | CRM
+  description String?
+  enabled     Boolean  @default(true)
+  config      Json?
+  executions  AgentExecution[]
+  tasks       Task[]
+}
+
+model AgentExecution {
+  id         String   @id @default(uuid())
+  agentId    String
+  agent      Agent    @relation(fields: [agentId], references: [id])
+  businessId String?
+  campaignId String?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  status     String   @default("PENDING") // PENDING | RUNNING | SUCCEEDED | FAILED | RETRYING
+  input      Json?
+  output     Json?
+  error      String?
+  startedAt  DateTime?
+  finishedAt DateTime?
+  messages   AgentMessage[]
+  reports    ResearchReport[]
+  usage      UsageRecord[]
+  createdAt  DateTime @default(now())
+}
+
+model AgentMessage {
+  id          String         @id @default(uuid())
+  executionId String
+  execution   AgentExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  role        String         // system | user | assistant | tool
+  content     String
+  createdAt   DateTime       @default(now())
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  campaignId  String?
+  campaign    Campaign? @relation(fields: [campaignId], references: [id])
+  businessId  String?
+  agentId     String?
+  agent       Agent?   @relation(fields: [agentId], references: [id])
+  type        String   // RESEARCH | DESIGN | AUDIT | SALES_DRAFT | CRM_FOLLOWUP | ...
+  status      String   @default("PENDING") // PENDING | RUNNING | DONE | FAILED | CANCELLED
+  payload     Json?
+  attempts    Int      @default(0)
+  maxAttempts Int      @default(3)
+  scheduledAt DateTime?
+  logs        TaskLog[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TaskLog {
+  id        String   @id @default(uuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  level     String   @default("INFO") // INFO | WARN | ERROR
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model WebsiteProject {
+  id          String   @id @default(uuid())
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  slug        String   @unique
+  status      String   @default("DRAFT") // DRAFT | PREVIEW_READY | AUDITED | APPROVED | DEPLOYED
+  templateId  String?
+  brandConfig Json?
+  assets      WebsiteAsset[]
+  deployments WebsiteDeployment[]
+  audits      Audit[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WebsiteAsset {
+  id        String         @id @default(uuid())
+  projectId String
+  project   WebsiteProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  kind      String         // LOGO | IMAGE | FONT | OTHER
+  url       String
+  license   String?
+  source    String?
+  createdAt DateTime       @default(now())
+}
+
+model WebsiteDeployment {
+  id         String         @id @default(uuid())
+  projectId  String
+  project    WebsiteProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  platform   String         // VERCEL | ORACLE | ...
+  url        String
+  status     String         @default("PENDING") // PENDING | LIVE | FAILED
+  deployedAt DateTime?
+}
+
+model Audit {
+  id             String         @id @default(uuid())
+  projectId      String
+  project        WebsiteProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status         String         @default("PENDING") // PENDING | PASSED | FAILED
+  scoreBusiness  Int?
+  scoreVisual    Int?
+  scoreTechnical Int?
+  scoreContent   Int?
+  summary        String?
+  findings       AuditFinding[]
+  createdAt      DateTime       @default(now())
+}
+
+model AuditFinding {
+  id       String @id @default(uuid())
+  auditId  String
+  audit    Audit  @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  severity String // CRITICAL | MINOR | RECOMMENDATION
+  category String // BUSINESS | CONTENT | VISUAL | TECHNICAL
+  message  String
+  url      String?
+  fixed    Boolean @default(false)
+}
+
+model CommercialProposal {
+  id         String   @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  modality   String   // BASIC | PRO | PREMIUM
+  priceCents Int?
+  currency   String   @default("EUR")
+  status     String   @default("DRAFT") // DRAFT | APPROVED | SENT | ACCEPTED | REJECTED
+  content    Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model ContactPermission {
+  id         String   @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  basis      String   // CONSENT | LEGITIMATE_INTEREST | EXISTING_RELATIONSHIP | ...
+  grantedAt  DateTime?
+  source     String?
+  notes      String?
+}
+
+model ContactSuppression {
+  id         String    @id @default(uuid())
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  email      String?   @unique
+  reason     String    // UNSUBSCRIBE | COMPLAINT | OBJECTION | ...
+  createdAt  DateTime  @default(now())
+}
+
+model EmailDraft {
+  id          String    @id @default(uuid())
+  businessId  String?
+  business    Business? @relation(fields: [businessId], references: [id])
+  threadId    String?
+  thread      EmailThread? @relation(fields: [threadId], references: [id])
+  subject     String
+  body        String
+  status      String    @default("DRAFT") // DRAFT | APPROVED | SENT | DISCARDED
+  createdById String?
+  approvedById String?
+  createdAt   DateTime  @default(now())
+}
+
+model EmailMessage {
+  id             String      @id @default(uuid())
+  threadId       String
+  thread         EmailThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  direction      String      // INBOUND | OUTBOUND
+  subject        String?
+  body           String?
+  gmailMessageId String?     @unique
+  sentAt         DateTime?
+  createdAt      DateTime    @default(now())
+}
+
+model EmailThread {
+  id            String   @id @default(uuid())
+  businessId    String
+  business      Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  subject       String?
+  gmailThreadId String?  @unique
+  status        String   @default("OPEN") // OPEN | CLOSED
+  messages      EmailMessage[]
+  drafts        EmailDraft[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CRMActivity {
+  id         String   @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  type       String   // NOTE | CALL | EMAIL | MEETING | STATUS_CHANGE | ...
+  note       String?
+  actorId    String?
+  createdAt  DateTime @default(now())
+}
+
+model PriceConfiguration {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  config    Json
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UsageRecord {
+  id               String          @id @default(uuid())
+  provider         String          // top-tools-ai | xai | coarena | ...
+  model            String?
+  tokensPrompt     Int             @default(0)
+  tokensCompletion Int             @default(0)
+  costCents        Int?
+  businessId       String?
+  business         Business?       @relation(fields: [businessId], references: [id])
+  executionId      String?
+  execution        AgentExecution? @relation(fields: [executionId], references: [id])
+  createdAt        DateTime        @default(now())
+}
+
+model BudgetLimit {
+  id         String   @id @default(uuid())
+  scope      String   // GLOBAL | CAMPAIGN | AGENT | PROVIDER
+  provider   String?
+  limitCents Int
+  period     String   @default("DAILY") // DAILY | MONTHLY
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Integration {
+  id        String   @id @default(uuid())
+  provider  String   @unique // gmail | google-places | overpass | vercel | ...
+  enabled   Boolean  @default(false)
+  config    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
