@@ -12,10 +12,12 @@
  *    Free-tier calls that are verified free (Top-Tools-Ai-Basic, measured
  *    0.00 USD in Fase A; mock) are allowed.
  *
- * Persistence: Prisma has UsageRecord + BudgetLimit (§8 entities) for the
- * durable store. The store is still in-memory after Fase B (the API seeds
- * the real Fase A + Fase B measurements at startup); Prisma-backed
- * recording is still pending. The summary shape is final:
+ * Persistence: UsageRecord (Prisma) is the source of truth since Fase F
+ * (packages/cost-control/src/persistent-store.ts). The API seeds the real
+ * Fase A–E measurements into Postgres at startup (idempotent) and records
+ * runtime consumption there; InMemoryUsageStore stays as a best-effort
+ * mirror/fallback so a DB outage never breaks an LLM call nor the
+ * /api/costs/summary endpoint. The summary shape is final:
  * GET /api/costs/summary returns exactly these 8 indicators.
  */
 import {
@@ -109,6 +111,100 @@ function emptyBucket() {
   return { estimatedCostCents: 0, confirmedCostCents: null as number | null, requests: 0 };
 }
 
+/**
+ * Pure aggregation over usage entries: the 8 cost indicators (§8).
+ * Shared by InMemoryUsageStore and the Prisma-backed store (Fase F),
+ * so both sources produce the identical shape and totals.
+ * Estimated and confirmed costs are always separate: confirmed stays
+ * null while no provider has confirmed a charge (never 0-as-fact).
+ */
+export function summarizeUsageEntries(
+  entries: readonly UsageEntry[],
+  effectiveSpendLimitEurCents: number = DEFAULT_EFFECTIVE_SPEND_LIMIT_EUR_CENTS,
+): CostsSummary {
+  const byAgent: CostsSummary['byAgent'] = {};
+  const byBusiness: CostsSummary['byBusiness'] = {};
+  const byWebsite: CostsSummary['byWebsite'] = {};
+  const byOpportunity: CostsSummary['byOpportunity'] = {};
+  const byProviderMap = new Map<ServiceProvider, ProviderConsumption>();
+  let totalEstimated = 0;
+  let totalConfirmed: number | null = null;
+
+  for (const e of entries) {
+    totalEstimated += e.estimatedCostCents;
+    if (e.confirmedCostCents !== null) {
+      totalConfirmed = (totalConfirmed ?? 0) + e.confirmedCostCents;
+    }
+    const addTo = (bucket: { estimatedCostCents: number; confirmedCostCents: number | null; requests: number }) => {
+      bucket.estimatedCostCents += e.estimatedCostCents;
+      bucket.requests += e.requests;
+      if (e.confirmedCostCents !== null) {
+        bucket.confirmedCostCents = (bucket.confirmedCostCents ?? 0) + e.confirmedCostCents;
+      }
+    };
+    if (e.agentKind) addTo((byAgent[e.agentKind] ??= emptyBucket()));
+    if (e.businessId) addTo((byBusiness[e.businessId] ??= emptyBucket()));
+    if (e.websiteProjectId) addTo((byWebsite[e.websiteProjectId] ??= emptyBucket()));
+    // Opportunity = business that has any sales-stage cost; in Phase 0 the
+    // bucket is filled by the caller tagging entries, so reuse businessId
+    // only when the agent is sales/crm.
+    if (e.businessId && (e.agentKind === 'sales' || e.agentKind === 'crm')) {
+      addTo((byOpportunity[e.businessId] ??= emptyBucket()));
+    }
+    const p = byProviderMap.get(e.provider) ?? {
+      provider: e.provider,
+      requests: 0,
+      promptTokens: 0,
+      completionTokens: 0,
+      estimatedCostCents: 0,
+      confirmedCostCents: null,
+    };
+    p.requests += e.requests;
+    p.promptTokens += e.promptTokens;
+    p.completionTokens += e.completionTokens;
+    p.estimatedCostCents += e.estimatedCostCents;
+    if (e.confirmedCostCents !== null) p.confirmedCostCents = (p.confirmedCostCents ?? 0) + e.confirmedCostCents;
+    byProviderMap.set(e.provider, p);
+  }
+
+  const alerts: CostAlert[] = [];
+  if (effectiveSpendLimitEurCents === 0) {
+    alerts.push({
+      level: 'blocked',
+      message:
+        'Effective spend limit is 0 EUR: paid LLM calls are blocked until Jon expressly approves a spend. Only verified free-tier calls are allowed.',
+    });
+  }
+  if (totalEstimated > 0 && totalConfirmed === null) {
+    alerts.push({
+      level: 'info',
+      message: 'Costs so far are estimates only — no provider has confirmed a charge.',
+    });
+  }
+
+  return {
+    totalEstimatedCostCents: totalEstimated,
+    totalConfirmedCostCents: totalConfirmed,
+    byAgent,
+    byBusiness,
+    byWebsite,
+    byOpportunity,
+    byProvider: [...byProviderMap.values()],
+    freeQuotas: [
+      { provider: 'top-tools-ai', label: 'Top Tools AI Basic — 10M tokens/day (free tier)', remaining: null, known: false },
+      { provider: 'coarena', label: 'CoArena Model API — 5 USD/day (free tier)', remaining: null, known: false },
+      // Apify: existing 5 USD credit (Jon, 2026-11-16), NOT a free tier.
+      // Expiry UNKNOWN — open question for Jon. No runs made, nothing consumed.
+      { provider: 'apify', label: 'Apify — 5 USD credit available (no expiry)', remaining: '5 USD (NO caduca, Jon 2026-11-16)', known: true },
+    ],
+    alerts,
+    budget: {
+      referenceMonthlyBudgetEurCents: REFERENCE_MONTHLY_BUDGET_EUR_CENTS,
+      effectiveSpendLimitEurCents,
+    },
+  };
+}
+
 export class InMemoryUsageStore {
   private readonly entries: UsageEntry[] = [];
 
@@ -127,87 +223,7 @@ export class InMemoryUsageStore {
   }
 
   summary(effectiveSpendLimitEurCents: number = DEFAULT_EFFECTIVE_SPEND_LIMIT_EUR_CENTS): CostsSummary {
-    const byAgent: CostsSummary['byAgent'] = {};
-    const byBusiness: CostsSummary['byBusiness'] = {};
-    const byWebsite: CostsSummary['byWebsite'] = {};
-    const byOpportunity: CostsSummary['byOpportunity'] = {};
-    const byProviderMap = new Map<ServiceProvider, ProviderConsumption>();
-    let totalEstimated = 0;
-    let totalConfirmed: number | null = null;
-
-    for (const e of this.entries) {
-      totalEstimated += e.estimatedCostCents;
-      if (e.confirmedCostCents !== null) {
-        totalConfirmed = (totalConfirmed ?? 0) + e.confirmedCostCents;
-      }
-      const addTo = (bucket: { estimatedCostCents: number; confirmedCostCents: number | null; requests: number }) => {
-        bucket.estimatedCostCents += e.estimatedCostCents;
-        bucket.requests += e.requests;
-        if (e.confirmedCostCents !== null) {
-          bucket.confirmedCostCents = (bucket.confirmedCostCents ?? 0) + e.confirmedCostCents;
-        }
-      };
-      if (e.agentKind) addTo((byAgent[e.agentKind] ??= emptyBucket()));
-      if (e.businessId) addTo((byBusiness[e.businessId] ??= emptyBucket()));
-      if (e.websiteProjectId) addTo((byWebsite[e.websiteProjectId] ??= emptyBucket()));
-      // Opportunity = business that has any sales-stage cost; in Phase 0 the
-      // bucket is filled by the caller tagging entries, so reuse businessId
-      // only when the agent is sales/crm.
-      if (e.businessId && (e.agentKind === 'sales' || e.agentKind === 'crm')) {
-        addTo((byOpportunity[e.businessId] ??= emptyBucket()));
-      }
-      const p = byProviderMap.get(e.provider) ?? {
-        provider: e.provider,
-        requests: 0,
-        promptTokens: 0,
-        completionTokens: 0,
-        estimatedCostCents: 0,
-        confirmedCostCents: null,
-      };
-      p.requests += e.requests;
-      p.promptTokens += e.promptTokens;
-      p.completionTokens += e.completionTokens;
-      p.estimatedCostCents += e.estimatedCostCents;
-      if (e.confirmedCostCents !== null) p.confirmedCostCents = (p.confirmedCostCents ?? 0) + e.confirmedCostCents;
-      byProviderMap.set(e.provider, p);
-    }
-
-    const alerts: CostAlert[] = [];
-    if (effectiveSpendLimitEurCents === 0) {
-      alerts.push({
-        level: 'blocked',
-        message:
-          'Effective spend limit is 0 EUR: paid LLM calls are blocked until Jon expressly approves a spend. Only verified free-tier calls are allowed.',
-      });
-    }
-    if (totalEstimated > 0 && totalConfirmed === null) {
-      alerts.push({
-        level: 'info',
-        message: 'Costs so far are estimates only — no provider has confirmed a charge.',
-      });
-    }
-
-    return {
-      totalEstimatedCostCents: totalEstimated,
-      totalConfirmedCostCents: totalConfirmed,
-      byAgent,
-      byBusiness,
-      byWebsite,
-      byOpportunity,
-      byProvider: [...byProviderMap.values()],
-      freeQuotas: [
-        { provider: 'top-tools-ai', label: 'Top Tools AI Basic — 10M tokens/day (free tier)', remaining: null, known: false },
-        { provider: 'coarena', label: 'CoArena Model API — 5 USD/day (free tier)', remaining: null, known: false },
-        // Apify: existing 5 USD credit (Jon, 2026-11-16), NOT a free tier.
-        // Expiry UNKNOWN — open question for Jon. No runs made, nothing consumed.
-        { provider: 'apify', label: 'Apify — 5 USD credit available (expiry unknown)', remaining: '5 USD (caducidad desconocida)', known: false },
-      ],
-      alerts,
-      budget: {
-        referenceMonthlyBudgetEurCents: REFERENCE_MONTHLY_BUDGET_EUR_CENTS,
-        effectiveSpendLimitEurCents,
-      },
-    };
+    return summarizeUsageEntries(this.entries, effectiveSpendLimitEurCents);
   }
 }
 
@@ -324,7 +340,9 @@ export class TokenBudgetTracker {
   }
 }
 
-/** The single Phase 0 store (replaced by Prisma-backed recording in Fase B). */
+/** The in-memory store: since Fase F it is the mirror/fallback of the
+ * Prisma-backed store (see persistent-store.ts), not the source of truth.
+ * Kept so cost recording and the summary survive a DB outage. */
 export const usageStore = new InMemoryUsageStore();
 
 /**
@@ -352,3 +370,14 @@ export function createSpendGate(
     },
   };
 }
+
+export { HISTORICAL_MEASUREMENTS, historicalTotals, type HistoricalMeasurement } from './history.js';
+export {
+  PrismaUsageStore,
+  usageRecordRowToEntry,
+  type BusinessResolver,
+  type SeedResult,
+  type UsageRecordClient,
+  type UsageRecordCreateData,
+  type UsageRecordRow,
+} from './persistent-store.js';

@@ -21,7 +21,10 @@ import {
 import {
   createSpendGate,
   DEFAULT_EFFECTIVE_SPEND_LIMIT_EUR_CENTS,
+  HISTORICAL_MEASUREMENTS,
+  PrismaUsageStore,
   usageStore,
+  type UsageEntry,
 } from '@weblead/cost-control';
 import { prisma } from '@weblead/database';
 import {
@@ -78,98 +81,87 @@ const EFFECTIVE_SPEND_LIMIT_EUR_CENTS = Number(
 );
 export const spendGate = createSpendGate(EFFECTIVE_SPEND_LIMIT_EUR_CENTS);
 
-// Historical Fase A measurement (real, 2026-11-16): 4 dossiers summarised
-// with Top-Tools-Ai-Basic — 805 tokens total, 0.00 USD. The provider
-// returns token usage only, no price, so confirmed cost stays null.
-usageStore.record({
-  provider: 'top-tools-ai',
-  service: 'fase-a-measurement',
-  model: 'Top-Tools-Ai-Basic',
-  requests: 4,
-  promptTokens: 373,
-  completionTokens: 432,
-  imagesGenerated: 0,
-  estimatedCostCents: 0,
-  confirmedCostCents: null,
-  agentKind: 'researcher',
-  recordedAt: '2026-11-16T00:00:00.000Z',
-});
+// ---------------------------------------------------------------------------
+// Fase F, Bloque 1 — cost persistence: UsageRecord (Postgres) is the source
+// of truth; usageStore (in-memory) is the mirror/fallback. The historical
+// Fase A–E measurements (14 calls, 3.375 tokens — see
+// packages/cost-control/src/history.ts for the reconciliation of the
+// 13-call / 3.149-token in-memory seeds vs the 14-call / 3.375-token
+// validation total) are seeded into Postgres at startup, idempotently.
+// ---------------------------------------------------------------------------
 
-// Fase B measurements (real, 2026-11-16, docs/phase-b-measurements.md +
-// fase-b/measurements-tta.json): 4 real agent tasks with Top-Tools-Ai-Basic
-// on pilot lead 4 (Fontanería la Moderna) — 949 tokens total, 0.00 USD
-// estimated, confirmed null (provider returns tokens only, no price).
-for (const m of [
-  { agentKind: 'researcher' as const, promptTokens: 87, completionTokens: 143 },
-  { agentKind: 'designer' as const, promptTokens: 86, completionTokens: 209 },
-  { agentKind: 'auditor' as const, promptTokens: 95, completionTokens: 146 },
-  { agentKind: 'sales' as const, promptTokens: 80, completionTokens: 103 },
-]) {
-  usageStore.record({
-    provider: 'top-tools-ai',
-    service: 'fase-b-measurement',
-    model: 'Top-Tools-Ai-Basic',
-    requests: 1,
-    promptTokens: m.promptTokens,
-    completionTokens: m.completionTokens,
-    imagesGenerated: 0,
-    estimatedCostCents: 0,
-    confirmedCostCents: null,
-    agentKind: m.agentKind,
-    businessId: '4',
-    recordedAt: '2026-11-16T20:00:00.000Z',
-  });
+/** Prisma-backed cost store, adapted from prisma.usageRecord. */
+export const persistentUsageStore = new PrismaUsageStore(
+  {
+    create: (data) => prisma.usageRecord.create({ data }),
+    findMany: () => prisma.usageRecord.findMany({ orderBy: { createdAt: 'asc' } }),
+  },
+  usageStore,
+);
+
+/**
+ * Records runtime consumption in Postgres (best-effort) and mirrors it
+ * to memory. Never throws (the store logs a DB failure and keeps the
+ * entry in memory), so cost recording can never break the LLM call
+ * that produced the consumption.
+ */
+async function recordUsage(entry: Omit<UsageEntry, 'recordedAt'> & { recordedAt?: string }): Promise<void> {
+  await persistentUsageStore.record(entry);
 }
 
-// Fase D measurements (real, 2026-11-16, fase-d/llm-design-drafts.json):
-// 2 LLM design drafts with Top-Tools-Ai-Basic (Santiago Ferrer 232+84,
-// Begoña Ruiz 253+88 = 657 tokens total, latencies 7.39/6.61 s, both HTTP
-// 200) — 0.00 USD estimated, confirmed null (provider returns tokens
-// only, no price). Both drafts were accepted by the generator's
-// forbidden-claims validation (no rejections).
-for (const m of [
-  { businessId: '6', promptTokens: 232, completionTokens: 84 },
-  { businessId: '17', promptTokens: 253, completionTokens: 88 },
-]) {
-  usageStore.record({
-    provider: 'top-tools-ai',
-    service: 'fase-d-generation',
-    model: 'Top-Tools-Ai-Basic',
-    requests: 1,
-    promptTokens: m.promptTokens,
-    completionTokens: m.completionTokens,
-    imagesGenerated: 0,
-    estimatedCostCents: 0,
-    confirmedCostCents: null,
-    agentKind: 'designer',
-    businessId: m.businessId,
-    recordedAt: '2026-11-16T21:30:00.000Z',
-  });
-}
-// Fase C measurements (real, 2026-11-16, fase-c/llm-summaries-tta.json):
-// 3 LLM summaries with Top-Tools-Ai-Basic, one per verification dossier
-// (Santiago Ferrer 122+129, Hidrorioja 120+122, Fontanería Godoy 128+117
-// = 738 tokens total, latencies 5.84/7.44/5.28 s, all HTTP 200) — 0.00 USD
-// estimated, confirmed null (provider returns tokens only, no price).
-for (const m of [
-  { businessId: '6', promptTokens: 122, completionTokens: 129 },
-  { businessId: '8', promptTokens: 120, completionTokens: 122 },
-  { businessId: '1', promptTokens: 128, completionTokens: 117 },
-]) {
-  usageStore.record({
-    provider: 'top-tools-ai',
-    service: 'fase-c-llm-summary',
-    model: 'Top-Tools-Ai-Basic',
-    requests: 1,
-    promptTokens: m.promptTokens,
-    completionTokens: m.completionTokens,
-    imagesGenerated: 0,
-    estimatedCostCents: 0,
-    confirmedCostCents: null,
-    agentKind: 'researcher',
-    businessId: m.businessId,
-    recordedAt: '2026-11-16T21:00:00.000Z',
-  });
+/**
+ * Seeds the historical measurements into Postgres (idempotent) and
+ * loads the in-memory mirror from the DB, so the fallback summary
+ * matches the DB exactly. If the DB is unavailable at startup, seeds
+ * the mirror directly from the historical measurements (pilot-id keys)
+ * and keeps serving from memory; a later restart seeds the DB. Never
+ * blocks server start.
+ */
+async function initCostPersistence(): Promise<void> {
+  try {
+    const { inserted, skipped } = await persistentUsageStore.seedHistorical(
+      HISTORICAL_MEASUREMENTS,
+      async ({ pilotId, slug }) => {
+        if (pilotId !== undefined) {
+          const b = await prisma.business.findUnique({ where: { pilotId } });
+          return b?.id ?? null;
+        }
+        if (slug) {
+          const b = await prisma.business.findUnique({ where: { slug } });
+          return b?.id ?? null;
+        }
+        return null;
+      },
+    );
+    const mirrored = await persistentUsageStore.loadMirrorFromDb();
+    console.log(
+      `[costs] UsageRecord seeded: ${inserted} inserted, ${skipped} already present; ` +
+        `mirror loaded with ${mirrored} rows.`,
+    );
+  } catch (err) {
+    console.warn(
+      `[costs] Postgres cost seeding failed (${(err as Error).message}); ` +
+        'serving costs from the in-memory historical seed.',
+    );
+    usageStore.clear();
+    for (const m of HISTORICAL_MEASUREMENTS) {
+      usageStore.record({
+        provider: m.provider,
+        service: `historic:${m.service}`,
+        model: m.model,
+        requests: m.requests,
+        promptTokens: m.promptTokens,
+        completionTokens: m.completionTokens,
+        imagesGenerated: 0,
+        estimatedCostCents: m.estimatedCostCents,
+        confirmedCostCents: m.confirmedCostCents,
+        agentKind: m.agentKind,
+        ...(m.businessPilotId !== undefined ? { businessId: String(m.businessPilotId) } : {}),
+        ...(m.businessSlug ? { businessId: m.businessSlug } : {}),
+        recordedAt: m.recordedAt,
+      });
+    }
+  }
 }
 
 // In-memory orchestrator state, seeded DISCOVERED for every pilot lead.
@@ -357,10 +349,12 @@ app.get('/api/pipeline', (_req: Request, res: Response) => {
 /**
  * GET /api/costs/summary — the 8 cost indicators (§8): total, per agent,
  * per business, per website, per opportunity, per provider, free quotas,
- * alerts. Estimated and confirmed costs are always separate.
+ * alerts. Estimated and confirmed costs are always separate. Read from
+ * Postgres (Fase F); falls back to the in-memory mirror when the DB is
+ * unavailable (handled inside the store).
  */
-app.get('/api/costs/summary', (_req: Request, res: Response) => {
-  res.json(usageStore.summary(EFFECTIVE_SPEND_LIMIT_EUR_CENTS));
+app.get('/api/costs/summary', async (_req: Request, res: Response) => {
+  res.json(await persistentUsageStore.summary(EFFECTIVE_SPEND_LIMIT_EUR_CENTS));
 });
 
 export type ResearchRequestItem = {
@@ -545,6 +539,10 @@ app.post('/api/websites/generate', async (req: Request, res: Response) => {
       activitySignal: body.activitySignal ?? getPilotLead(business.pilotId ?? -1)?.activitySignal ?? null,
     });
     if (body.llmUsage) {
+      // designWebsite already wrote this call as a UsageRecord (its
+      // internal `if (opts.llmUsage)` write); mirror it to the
+      // in-memory fallback ONLY. A second DB write here would count
+      // the same LLM call twice in the summary.
       usageStore.record({
         provider: 'top-tools-ai',
         service: 'fase-d-generation',
@@ -605,7 +603,8 @@ app.get('/api/websites', async (_req: Request, res: Response) => {
  * Runs the Auditor: PREVIEW_READY -> AUDITING -> APPROVED | AUDIT_FAILED
  * (validated). Content audit always runs; when demoUrl is given, the
  * Playwright runner also runs against the live demo and its findings are
- * merged. Screenshots land in docs/phase-d/screenshots/.
+ * merged. Screenshots land in docs/phase-f/screenshots/ (Fase F; las de la
+ * Fase D quedan en docs/phase-d/screenshots/).
  */
 app.post('/api/audit/run', async (req: Request, res: Response) => {
   const body = req.body as { projectId?: string; demoUrl?: string };
@@ -655,7 +654,7 @@ app.post('/api/audit/run', async (req: Request, res: Response) => {
     let screenshots: { desktop: string; mobile: string } | null = null;
     if (body.demoUrl) {
       const screenshotsDir = new URL(
-        '../../../docs/phase-d/screenshots',
+        '../../../docs/phase-f/screenshots',
         import.meta.url,
       ).pathname;
       try {
@@ -663,8 +662,8 @@ app.post('/api/audit/run', async (req: Request, res: Response) => {
         report = mergePlaywrightFindings(report, pw.findings);
         runner = 'playwright';
         screenshots = {
-          desktop: `docs/phase-d/screenshots/${business.slug}-desktop.png`,
-          mobile: `docs/phase-d/screenshots/${business.slug}-mobile.png`,
+          desktop: `docs/phase-f/screenshots/${business.slug}-desktop.png`,
+          mobile: `docs/phase-f/screenshots/${business.slug}-mobile.png`,
         };
       } catch (err) {
         if (err instanceof PlaywrightUnavailableError) {
@@ -778,8 +777,12 @@ app.post('/api/sales/prepare', async (req: Request, res: Response) => {
       llmUsage: body.llmUsage ?? null,
     });
     if (body.llmUsage) {
-      usageStore.record({
-        provider: 'top-tools-ai',
+      // prepareSales writes the UsageRecord itself when the gate allows
+      // the draft; when it blocks, it writes nothing — but the LLM call
+      // still happened, so record it here (DB + memory mirror). Either
+      // way the call is stored exactly once: never mirror AND write.
+      const entry = {
+        provider: 'top-tools-ai' as const,
         service: 'fase-e-sales-draft',
         model: body.llmUsage.model,
         requests: 1,
@@ -788,9 +791,14 @@ app.post('/api/sales/prepare', async (req: Request, res: Response) => {
         imagesGenerated: 0,
         estimatedCostCents: body.llmUsage.estimatedCostCents,
         confirmedCostCents: body.llmUsage.confirmedCostCents,
-        agentKind: 'sales',
+        agentKind: 'sales' as const,
         businessId: business.id,
-      });
+      };
+      if (result.blocked) {
+        await recordUsage(entry);
+      } else {
+        usageStore.record(entry);
+      }
     }
     res.status(result.blocked ? 200 : 201).json(result);
   } catch (err) {
@@ -969,6 +977,8 @@ app.get('/api/crm/business/:id', async (req: Request, res: Response) => {
     res.status(503).json({ error: `Database unavailable: ${(err as Error).message}` });
   }
 });
+
+await initCostPersistence();
 
 app.listen(PORT, () => {
   console.log(`weblead-api listening on http://localhost:${PORT} (phase E-commercial, Postgres-backed)`);

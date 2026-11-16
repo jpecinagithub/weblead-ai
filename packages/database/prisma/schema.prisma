@@ -391,6 +391,15 @@ model UsageRecord {
   model            String?
   tokensPrompt     Int             @default(0)
   tokensCompletion Int             @default(0)
+  /** LLM calls aggregated in this row (1 = one call). Fase F: added so a
+      row keeps the per-call granularity of the source measurements. */
+  requests         Int             @default(1)
+  /** Images generated in this consumption event (0 for all LLM calls so far). */
+  imagesGenerated  Int             @default(0)
+  /** Website project this consumption belongs to (designer/auditor calls).
+      No FK: WebsiteProject ids are referenced loosely, like the in-memory
+      store's websiteProjectId. Null when not applicable. */
+  websiteProjectId String?
   costCents        Int?
   /** Estimated cost in cents. Always separate from confirmed cost (§8). */
   estimatedCostCents Int?
