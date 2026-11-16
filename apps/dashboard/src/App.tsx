@@ -38,7 +38,7 @@ export default function App() {
     <main>
       <header>
         <h1>WebLead AI — Dashboard</h1>
-        <p className="sub">Fase 0 — esqueleto · Piloto Logroño · sin DB aún (seed de solo lectura)</p>
+        <p className="sub">Fase B — Inteligencia artificial · Piloto Logroño · sin DB aún (seed de solo lectura)</p>
       </header>
 
       <section>
@@ -188,7 +188,7 @@ export default function App() {
       </section>
 
       <footer>
-        <p>WebLead AI · Fase 0 — esqueleto · Autor: jpecina</p>
+        <p>WebLead AI · Fase B — Inteligencia artificial · Autor: jpecina</p>
       </footer>
     </main>
   );

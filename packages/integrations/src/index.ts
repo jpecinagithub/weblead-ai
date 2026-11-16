@@ -13,6 +13,9 @@ export type IntegrationId =
   | 'gmail'
   | 'groq'
   | 'openrouter'
+  | 'top-tools-ai'
+  | 'xai'
+  | 'coarena'
   | 'apify'
   | 'search-provider'
   | 'image-generator'
@@ -66,8 +69,8 @@ export const INTEGRATIONS: IntegrationStatus[] = [
     status: 'pendiente de credencial',
     function: 'Primer proveedor candidato de inferencia (§3)',
     authType: 'API key (env GROQ_API_KEY, vacía)',
-    knownLimits: 'Sin clave asumida: solo queda la clave "Audio to Text" en NEXUS; comprobar en Fase B',
-    potentialCost: 'A verificar en Fase B (límites free tier por modelo)',
+    knownLimits: 'Fase B 2026-11-16: no existe clave de inferencia — en NEXUS solo queda la clave "Audio to Text - Text to Audio" y no hay conector/helper de Groq. Pendiente de Jon.',
+    potentialCost: 'Sin clave no hay coste ni uso; verificar free tier cuando Jon aporte la credencial',
     lastCheckedAt: '2026-11-16',
   },
   {
@@ -76,9 +79,39 @@ export const INTEGRATIONS: IntegrationStatus[] = [
     status: 'sin claves (eliminadas 2026-11-14)',
     function: 'Proveedor alternativo, selección dinámica por tarea (§3)',
     authType: 'API key (env OPENROUTER_API_KEY, vacía)',
-    knownLimits: 'Las 4 claves fueron eliminadas 2026-11-14; queda saldo 1,09 USD sin clave utilizable',
-    potentialCost: 'A verificar en Fase B; priorizar modelos gratuitos o de bajo coste',
-    lastCheckedAt: '2026-11-14',
+    knownLimits: 'Fase B 2026-11-16: sigue sin claves; queda saldo 1,09 USD sin clave utilizable y no hay conector/helper. Pendiente de Jon.',
+    potentialCost: 'Sin clave no hay coste ni uso; priorizar modelos gratuitos o de bajo coste cuando la haya',
+    lastCheckedAt: '2026-11-16',
+  },
+  {
+    id: 'top-tools-ai',
+    name: 'Top Tools AI',
+    status: 'operativo (Basic verificado)',
+    function: 'Proveedor de inferencia por defecto (§3): resúmenes, generación de secciones web, revisión de contenido, borradores comerciales',
+    authType: 'API key registrada (env TOP_TOOLS_API_KEY)',
+    knownLimits: 'Modelos vigentes: Top-Tools-Ai-Basic / Pro / Max (lista verificada 2026-11-16). Basic medido: 949 tokens / 4 tareas Fase B, 0,00 USD. Pro/Max: inclusión en tier gratuito NO confirmada — no se usan.',
+    potentialCost: '0 € con Basic (tier gratuito, 10M tokens/día según el conector); nunca llamar a modelos PAYG (gpt-5.6-sol, claude-opus-5)',
+    lastCheckedAt: '2026-11-16',
+  },
+  {
+    id: 'xai',
+    name: 'xAI (Grok)',
+    status: 'no operativo — credencial inválida',
+    function: 'Proveedor de inferencia (agente xAI, crédito NEXUS)',
+    authType: 'API key registrada (env XAI_API_KEY)',
+    knownLimits: 'Fase B 2026-11-16: re-verificado, sigue 400 "Incorrect API key provided" en una lectura de modelos. Sin uso hasta reconectar.',
+    potentialCost: '0 € (sin uso: la clave es rechazada antes de generar nada)',
+    lastCheckedAt: '2026-11-16',
+  },
+  {
+    id: 'coarena',
+    name: 'CoArena Model API',
+    status: 'no operativo — clave revocada',
+    function: 'Proveedor de inferencia alternativo (5 USD/día gratis)',
+    authType: 'API key registrada (env COARENA_API_KEY)',
+    knownLimits: 'Fase B 2026-11-16: re-verificado, sigue 401 en una lectura de límites (clave revocada). Sin uso hasta reconectar con una clave nueva.',
+    potentialCost: '0 € (sin uso: la clave es rechazada antes de generar nada)',
+    lastCheckedAt: '2026-11-16',
   },
   {
     id: 'apify',

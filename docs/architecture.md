@@ -128,27 +128,56 @@ el prompt maestro.
 
 - Interfaz `LlmProvider` en `packages/ai-engine` (compatible OpenAI chat
   completions; los cinco proveedores reales la hablan).
-- `PROVIDERS` — registro central con estado honesto por proveedor:
+- `PROVIDERS` — registro central con estado honesto por proveedor
+  (re-verificado Fase B 2026-11-16, detalle en
+  `docs/phase-b-measurements.md`):
   - **top-tools-ai: OPERATIVO (por defecto).** Modelo `Top-Tools-Ai-Basic`,
-    medido en Fase A: 4 expedientes, 805 tokens, 0,00 USD.
+    medido en Fase A: 4 expedientes, 805 tokens, 0,00 USD; y en Fase B:
+    4 tareas de agente, 949 tokens, 0,00 USD. `models` lista exactamente
+    3 ids (Basic/Pro/Max); los viejos devuelven 400 `model_not_found`.
+    **Pro/Max no probados: su inclusión en el tier gratuito no está
+    confirmada, así que no se llaman.**
   - **groq: pendiente de credencial.** Primer candidato (§3), pero sin
-    clave asumida: solo queda la clave "Audio to Text" en NEXUS. La
-    comprobación real de claves es trabajo de la Fase B, no de la Fase 0.
+    clave: en NEXUS solo queda la clave "Audio to Text" (verificado Fase B)
+    y no hay conector/helper de Groq. Pendiente de Jon.
   - **openrouter: sin claves.** Las 4 claves se eliminaron el 2026-11-14;
-    queda un saldo de 1,09 USD sin clave utilizable. Fase B.
-  - **xai: credencial inválida** (400 Incorrect API key, Fase A 2026-11-16).
-    Configurado pero NO operativo hasta reconectar.
-  - **coarena: clave revocada** (401 api_key_revoked). Configurado pero NO
-    operativo hasta reconectar.
+    queda un saldo de 1,09 USD sin clave utilizable y no hay
+    conector/helper. Pendiente de Jon.
+  - **xai: credencial inválida** (400 Incorrect API key, Fase A;
+    re-confirmado Fase B 2026-11-16). Configurado pero NO operativo hasta
+    reconectar.
+  - **coarena: clave revocada** (401 api_key_revoked, Fase A;
+    re-confirmado 401 Fase B 2026-11-16). Configurado pero NO operativo
+    hasta reconectar.
   - **mock:** determinista, para tests.
 - **Selección por agente:** `DEFAULT_AGENT_MODELS` centraliza qué modelo usa
   cada agente (orquestador = razonamiento, researcher = económico, etc.).
-  Los valores actuales son marcadores sobre Top Tools AI Basic: la Fase B
-  debe verificar que cada modelo funciona para su cometido antes de
-  fijarlo — ningún modelo se elige solo por ser gratuito.
+  En Fase B los cuatro agentes medidos (researcher, designer, auditor,
+  sales) usan Top-Tools-Ai-Basic con resultado verificado
+  (`docs/phase-b-measurements.md`); orchestrator y CRM lo reutilizan sin
+  medición propia de un modelo de razonamiento (pendiente). Caps por
+  llamada en `DEFAULT_AGENT_TOKEN_LIMITS` (designer 800, researcher/sales/
+  crm 300, orchestrator 500, auditor 400) y config combinada en
+  `AGENT_LLM_CONFIG`.
 - **Fallback:** `FallbackProvider` prueba los proveedores en orden
-  (`LLM_FALLBACK_PROVIDERS`); un `SpendBlockedError` nunca se reintenta en
-  el siguiente proveedor: un gasto bloqueado sigue bloqueado.
+  (`FALLBACK_PRIORITY`: top-tools-ai → groq → openrouter → xai → coarena);
+  `createOperationalFallback()` construye la cadena solo con los operativos
+  (en Fase B: solo top-tools-ai) y salta los no operativos sin llamarlos.
+  Un `SpendBlockedError` nunca se reintenta en el siguiente proveedor: un
+  gasto bloqueado sigue bloqueado. El `TokenBudgetTracker` de cost-control
+  (presupuestos por agente/empresa/web) se consulta ANTES de llamar y
+  bloquea sin tocar ningún proveedor.
+- **Detección de pérdida de cuota gratuita (Fase B, §4):** toda respuesta
+  no-OK se convierte en `LlmProviderError` (status + código). El
+  clasificador `classifyProviderFailure` marca como pérdida de cuota
+  401/403 (clave rechazada/revocada), 429 (cuota agotada) y
+  `model_not_found` (modelo retirado); el fallback marca ese proveedor
+  como no operativo en tiempo de ejecución (`markProviderUnavailable`,
+  consultable con `getProviderHealth` / `isProviderAvailable`) y no lo
+  vuelve a intentar — nunca se generan cargos por reintentar un tier
+  perdido. Los 5xx y errores de red se clasifican como transitorios y sí
+  prueban el siguiente proveedor. `resetProviderHealth` restaura un
+  proveedor tras reconectar (p. ej. Jon aporta una clave nueva).
 - **Control de tokens:** `LlmRequestOptions.maxTokens` por llamada; cada
   llamada lleva `agentKind` / `businessId` / `websiteProjectId` para el
   registro de consumo y los límites por agente / empresa / web.
@@ -157,8 +186,8 @@ el prompt maestro.
 - **Hallazgo Top Tools AI:** el proveedor renombró sus modelos a
   `Top-Tools-Ai-Basic` / `Pro` / `Max`. Los nombres viejos (`Top-Tools-Ai`,
   `Kimi-K2.6`) devuelven 400 `model_not_found`. El `CONNECTOR.md` del
-  proveedor sigue desactualizado — actualizarlo queda pendiente y fuera de
-  esta fase. `Pro`/`Max` no se probaron (podrían ser de pago).
+  proveedor se actualizó en Fase B con los nombres vigentes. `Pro`/`Max`
+  no se probaron (podrían ser de pago).
 
 ## 7. Control de costes (módulo `packages/cost-control`, §8)
 
@@ -169,9 +198,11 @@ el prompt maestro.
   indicadores del dashboard §8 (total, por agente, por empresa, por web,
   por oportunidad, por proveedor, cuotas gratuitas, alertas). La API expone
   `GET /api/costs/summary`. Persistencia Prisma (`UsageRecord` /
-  `BudgetLimit`) en Fase B; en Fase 0 el store es en memoria y la API
-  registra la medición real de Fase A (4 expedientes, 805 tokens, 0,00 USD
-  estimados, confirmado = null: el proveedor no devuelve precio).
+  `BudgetLimit`) sigue pendiente tras la Fase B: el store sigue siendo en
+  memoria y la API registra al arrancar la medición real de Fase A (4
+  expedientes, 805 tokens) más las 4 mediciones reales de Fase B (4 tareas,
+  949 tokens), todas 0,00 USD estimados, confirmado = null: el proveedor
+  no devuelve precio.
 - **Presupuesto de referencia: 30 €/mes adicionales máx. Límite efectivo
   autorizado: 0 €** hasta aprobación expresa de Jon. `createSpendGate()`
   bloquea las llamadas LLM de pago (`SpendBlockedError`) mientras el
@@ -295,7 +326,7 @@ E Comercial, F Optimización). Correspondencia:
 | Fase 4 — Sales | Fase E — Comercial | ⏳ Pendiente (borradores, sin envío, gate LSSI) |
 | Fase 5 — CRM | Fase E — Comercial | ⏳ Pendiente |
 | (verificación final) | Fase F — Optimización | ⏳ Pendiente (medir costes reales, comparar proveedores) |
-| — | Fase B — Inteligencia artificial | ⏳ Pendiente (integrar Groq/OpenRouter, fallback, medir calidad y consumo) |
+| — | Fase B — Inteligencia artificial | ✅ Cerrada 2026-11-16 (ver `docs/phase-b-measurements.md`): 1 proveedor operativo (Top Tools AI Basic, 4 tareas medidas, 949 tokens, 0,00 USD), fallback entre operativos, detección de pérdida de cuota, límites por agente/empresa/web. Groq/OpenRouter pendientes de credencial de Jon; xAI/CoArena no operativos. |
 
 ## 12. Qué NO hace la Fase 0 (explícito)
 

@@ -1,0 +1,58 @@
+[
+  {
+    "agent": "researcher",
+    "task": "resumen-expediente",
+    "model": "Top-Tools-Ai-Basic",
+    "provider": "top-tools-ai",
+    "http": 200,
+    "latency_seconds": 5.72,
+    "prompt_tokens": 87,
+    "completion_tokens": 143,
+    "total_tokens": 230,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "response": "Fontanería la Moderna, instalada en Logroño, opera hoy sin presencia web propia (verificado el 16/11/2026) y solo es reachable por teléfono (941 25 13 17), lo que limita su visibilidad ante clientes que buscan fontaneros online. Aun así, su reputación es sólida: 4,8/5 en reseñas y un score comercial de 85/100, lo que indica que el negocio está listo para captar más clientes si se le da una ventana digital. Recomendación interna: proponer la creación de una web propia orientada a SEO local y conversión por llamada, aprovechando el buen rating como argumento de venta."
+  },
+  {
+    "agent": "designer",
+    "task": "generacion-seccion-web",
+    "model": "Top-Tools-Ai-Basic",
+    "provider": "top-tools-ai",
+    "http": 200,
+    "latency_seconds": 5.31,
+    "prompt_tokens": 86,
+    "completion_tokens": 209,
+    "total_tokens": 295,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "response": "```html\n<section class=\"hero\">\n  <div class=\"hero__content\">\n    <h1 class=\"hero__title\">Fontanería La Moderna</h1>\n    <p class=\"hero__subtitle\">\n      Fontanería en Logroño con una valoración de <strong>4,8/5</strong> en reseñas.\n    </p>\n    <a class=\"hero__cta\" href=\"tel:941251317\">\n      Llámanos: 941 251 317\n    </a>\n  </div>\n</section>\n```\n\n**Qué incluye (10 líneas):**\n\n- **Título** → \"Fontanería La Moderna\"\n- **Subtítulo** → zona (Logroño) + valoración 4,8/5 en reseñas\n- **Botón CTA** → `tel:941251317`, formato legible `941 251 317`\n\nNo se inventan servicios, testimonios ni datos de contacto. Solo el teléfono que me has dado."
+  },
+  {
+    "agent": "auditor",
+    "task": "revision-contenido",
+    "model": "Top-Tools-Ai-Basic",
+    "provider": "top-tools-ai",
+    "http": 200,
+    "latency_seconds": 6.15,
+    "prompt_tokens": 95,
+    "completion_tokens": 146,
+    "total_tokens": 241,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "response": "- \"la mejor fontanería de España\": superlativo sin respaldo ni contexto verificable; puede considerarse publicidad engañosa (Ley 3/1991 de Competencia Desleal).\n- \"50 años de experiencia\": afirmación concreta sin fecha de origen ni soporte; si no se documenta, es un dato incoherente o inviable.\n- \"miles de clientes satisfechos\": cifra vaga y sin fuente; \"satisfechos\" no es medible y el dato queda sin respaldo.\n- \"Precios desde 10 €\": precio de entrada irrealmente bajo para un servicio de fontanería; sin aclarar qué incluye, puede entenderse como reclamo engañoso y"
+  },
+  {
+    "agent": "sales",
+    "task": "borrador-comercial-corto",
+    "model": "Top-Tools-Ai-Basic",
+    "provider": "top-tools-ai",
+    "http": 200,
+    "latency_seconds": 6.56,
+    "prompt_tokens": 80,
+    "completion_tokens": 103,
+    "total_tokens": 183,
+    "estimated_cost_usd": 0.0,
+    "confirmed_cost_usd": null,
+    "response": "Asunto: Potencie la presencia digital de Fontanería la Moderna\n\nEstimados:\n\nSoy [Nombre] de [Empresa]. He visto que cuentan con una excelente reputación (4,8/5), pero carecen de una web propia que refleje ese nivel de servicio.\n\nDesarrollamos sitios web profesionales, rápidos y optimizados para que los clientes de Logroño encuentren y contacten con ustedes fácilmente.\n\n¿Le interesa una breve propuesta sin compromiso?\n\nUn saludo,\n[Nombre]\n[Teléfono]"
+  }
+]

@@ -13,9 +13,10 @@
  *    0.00 USD in Fase A; mock) are allowed.
  *
  * Persistence: Prisma has UsageRecord + BudgetLimit (§8 entities) for the
- * durable store. Phase 0 keeps an in-memory store (the API has no DB
- * wiring yet); Fase B moves recording to Prisma. The summary shape is
- * final: GET /api/costs/summary returns exactly these 8 indicators.
+ * durable store. The store is still in-memory after Fase B (the API seeds
+ * the real Fase A + Fase B measurements at startup); Prisma-backed
+ * recording is still pending. The summary shape is final:
+ * GET /api/costs/summary returns exactly these 8 indicators.
  */
 import {
   PROVIDERS,
@@ -206,6 +207,119 @@ export class InMemoryUsageStore {
         referenceMonthlyBudgetEurCents: REFERENCE_MONTHLY_BUDGET_EUR_CENTS,
         effectiveSpendLimitEurCents,
       },
+    };
+  }
+}
+
+/**
+ * Cumulative token budgets (Fase B, §3 "Límite de gasto por agente /
+ * empresa / web"). These cap TOTAL tokens consumed in the process lifetime
+ * (in-memory store, like the usage store); they are guardrails against
+ * runaway consumption, not the per-call caps in ai-engine
+ * (DEFAULT_AGENT_TOKEN_LIMITS). A single Fase B agent task costs
+ * ~200-300 tokens, so these budgets allow dozens of tasks per agent.
+ */
+export const DEFAULT_AGENT_TOKEN_BUDGETS: Record<AgentKind, number> = {
+  orchestrator: 20000,
+  researcher: 20000,
+  designer: 40000,
+  auditor: 20000,
+  sales: 20000,
+  crm: 20000,
+};
+
+/** Total tokens any single business may consume across all agents. */
+export const DEFAULT_BUSINESS_TOKEN_BUDGET = 10000;
+/** Total tokens any single website project may consume across all agents. */
+export const DEFAULT_WEBSITE_TOKEN_BUDGET = 50000;
+
+export type TokenBudgetConfig = {
+  agentBudgets?: Partial<Record<AgentKind, number>>;
+  businessBudget?: number;
+  websiteBudget?: number;
+};
+
+/**
+ * Tracks cumulative token consumption per agent / business / website and
+ * blocks BEFORE a call is made when any applicable budget is exhausted.
+ * Exceeding a budget throws SpendBlockedError (never a silent overrun),
+ * which the FallbackProvider propagates without retrying another provider.
+ */
+export class TokenBudgetTracker {
+  private readonly agentBudgets: Record<AgentKind, number>;
+  private readonly businessBudget: number;
+  private readonly websiteBudget: number;
+  private readonly agentUsed = new Map<AgentKind, number>();
+  private readonly businessUsed = new Map<string, number>();
+  private readonly websiteUsed = new Map<string, number>();
+
+  constructor(config: TokenBudgetConfig = {}) {
+    this.agentBudgets = { ...DEFAULT_AGENT_TOKEN_BUDGETS, ...(config.agentBudgets ?? {}) };
+    this.businessBudget = config.businessBudget ?? DEFAULT_BUSINESS_TOKEN_BUDGET;
+    this.websiteBudget = config.websiteBudget ?? DEFAULT_WEBSITE_TOKEN_BUDGET;
+  }
+
+  /** Tokens consumed so far by an agent (0 if none). */
+  agentTokens(agentKind: AgentKind): number {
+    return this.agentUsed.get(agentKind) ?? 0;
+  }
+
+  businessTokens(businessId: string): number {
+    return this.businessUsed.get(businessId) ?? 0;
+  }
+
+  websiteTokens(websiteProjectId: string): number {
+    return this.websiteUsed.get(websiteProjectId) ?? 0;
+  }
+
+  /** Records tokens after a successful call. */
+  record(agentKind: AgentKind, totalTokens: number, businessId?: string, websiteProjectId?: string): void {
+    this.agentUsed.set(agentKind, this.agentTokens(agentKind) + totalTokens);
+    if (businessId) this.businessUsed.set(businessId, this.businessTokens(businessId) + totalTokens);
+    if (websiteProjectId) {
+      this.websiteUsed.set(websiteProjectId, this.websiteTokens(websiteProjectId) + totalTokens);
+    }
+  }
+
+  /**
+   * Blocks before a call when any applicable budget is already exhausted.
+   * Throws SpendBlockedError (provider 'mock', model 'mock' are placeholders:
+   * the block is about the budget, not a provider — the message names the
+   * scope that ran out).
+   */
+  check(agentKind?: AgentKind, businessId?: string, websiteProjectId?: string): void {
+    if (agentKind && this.agentTokens(agentKind) >= this.agentBudgets[agentKind]) {
+      throw new SpendBlockedError(
+        'mock',
+        'mock',
+        `token budget for agent "${agentKind}" exhausted (${this.agentTokens(agentKind)}/${this.agentBudgets[agentKind]} tokens)`,
+      );
+    }
+    if (businessId && this.businessTokens(businessId) >= this.businessBudget) {
+      throw new SpendBlockedError(
+        'mock',
+        'mock',
+        `token budget for business "${businessId}" exhausted (${this.businessTokens(businessId)}/${this.businessBudget} tokens)`,
+      );
+    }
+    if (websiteProjectId && this.websiteTokens(websiteProjectId) >= this.websiteBudget) {
+      throw new SpendBlockedError(
+        'mock',
+        'mock',
+        `token budget for website "${websiteProjectId}" exhausted (${this.websiteTokens(websiteProjectId)}/${this.websiteBudget} tokens)`,
+      );
+    }
+  }
+
+  /** Adapts this tracker to the ai-engine CallLimitChecker shape. */
+  asLimitChecker(): { check(options?: { agentKind?: string; businessId?: string; websiteProjectId?: string }): void } {
+    return {
+      check: (options) =>
+        this.check(
+          options?.agentKind as AgentKind | undefined,
+          options?.businessId,
+          options?.websiteProjectId,
+        ),
     };
   }
 }
