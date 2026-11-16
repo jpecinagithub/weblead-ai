@@ -1,7 +1,7 @@
 /**
  * Generated demos (Fase D) — WRITTEN BY apps/api/src/export-demos.ts.
  * Do not edit by hand: regenerated from the WebsiteProject rows in Postgres.
- * Generated at 2026-11-16T19:58:53.860Z (2 demos).
+ * Generated at 2026-11-16T20:19:13.691Z (6 demos).
  */
 import type { GeneratedWebsiteContent } from '@weblead/website-generator';
 
@@ -318,5 +318,335 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
     "businessState": "APPROVED",
     "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/begona-ruiz-peluqueria-logrono"
+  },
+  {
+    "content": {
+      "demo": true,
+      "fixture": true,
+      "businessName": "VERIFICACIÓN FASE E — Empresa de prueba (ficticia, no contactar)"
+    },
+    "businessState": "SALES_APPROVED",
+    "auditStatus": null,
+    "demoUrl": "/demos/verificacion-fase-e-empresa-de-prueba"
+  },
+  {
+    "content": {
+      "demo": true,
+      "fixture": true,
+      "businessName": "VERIFICACIÓN FASE E — Baja de prueba (ficticia, no contactar)"
+    },
+    "businessState": "APPROVED",
+    "auditStatus": null,
+    "demoUrl": "/demos/verificacion-fase-e-baja-de-prueba"
+  },
+  {
+    "content": {
+      "faq": [
+        {
+          "answer": "Para saber si pueden atender una avería urgente, llama al teléfono de contacto de esta web: te confirman disponibilidad y qué hacer mientras tanto. Esta demo no publica horarios ni servicios de urgencia no verificados.",
+          "question": "¿Atienden averías urgentes?"
+        },
+        {
+          "answer": "Pide presupuesto por teléfono o por el formulario de esta web. El formulario es solo una demostración: no envía tus datos a ningún tercero y nadie recibe tu mensaje.",
+          "question": "¿Hacen presupuestos?"
+        },
+        {
+          "answer": "La dirección verificada de la empresa está en Logroño (ver sección Contacto). Para trabajos fuera de Logroño, consúltalo por teléfono.",
+          "question": "¿Trabajan solo en Logroño?"
+        }
+      ],
+      "llm": {
+        "used": false,
+        "rejections": [],
+        "acceptedAbout": false,
+        "acceptedSubtitle": false
+      },
+      "seo": {
+        "title": "Hidrorioja SC — fontanería/climatización en Logroño (propuesta conceptual)",
+        "robots": "index, follow",
+        "ogImage": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1200&q=80",
+        "ogTitle": "Hidrorioja SC — fontanería/climatización en Logroño",
+        "description": "Hidrorioja SC, fontanería/climatización en Logroño. Dirección y teléfono verificados en el expediente WebLead AI. Propuesta conceptual de web, no oficial.",
+        "ogDescription": "Propuesta conceptual de web independiente, no oficial y pendiente de autorización.",
+        "sitemapEntries": [
+          "/demos/hidrorioja-sc-logrono"
+        ]
+      },
+      "hero": {
+        "title": "Hidrorioja SC",
+        "kicker": "Fontanería y climatización en Logroño",
+        "ctaLabel": "Llamar al 941255266",
+        "subtitle": "fontanería/climatización en Logroño. Contacto directo por teléfono, sin intermediarios."
+      },
+      "about": {
+        "heading": "La empresa",
+        "paragraphs": [
+          "Hidrorioja SC es una empresa de fontanería/climatización en Logroño (La Rioja). Su actividad está verificada en el expediente de WebLead AI (CONFIRMED, consultado 2026-11-16) y no tiene web propia. Esta página es una propuesta conceptual de cómo podría presentarse en internet: los datos de contacto son los verificados en el expediente y nada más está afirmado."
+        ]
+      },
+      "brand": {
+        "palette": {
+          "text": "#1a2b33",
+          "muted": "#5b6b73",
+          "accent": "#c67a2e",
+          "primary": "#0b3d5c",
+          "surface": "#ffffff",
+          "background": "#f4f6f5",
+          "primaryDark": "#072a40"
+        },
+        "fontBody": "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+        "logoText": "H",
+        "logoMotif": "pipe",
+        "fontHeading": "'Arial Narrow', 'Helvetica Neue', Arial, sans-serif",
+        "logoSvgDataUri": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%3E%3Crect%20width%3D%22120%22%20height%3D%2260%22%20rx%3D%2210%22%20fill%3D%22%230b3d5c%22%2F%3E%3Cpath%20d%3D%22M14%206h20v6H20v22a4%204%200%200%201-8%200V12H6z%22%20fill%3D%22%23fff%22%20opacity%3D%220.9%22%2F%3E%3Ctext%20x%3D%2266%22%20y%3D%2238%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2224%22%20font-weight%3D%22bold%22%20fill%3D%22%23c67a2e%22%3EH%3C%2Ftext%3E%3C%2Fsvg%3E"
+      },
+      "legal": {
+        "demoNote": "Web de demostración generada por WebLead AI. Propuesta conceptual independiente, no oficial y pendiente de autorización de la empresa. No es la web contratada de la empresa.",
+        "imageCredits": "Fotografías: Unsplash (licencia Unsplash, imágenes de archivo, no son el local). Logotipo: propuesta conceptual propia."
+      },
+      "trust": {
+        "items": [
+          "Actividad verificada: CONFIRMED (expediente consultado 2026-11-16)",
+          "Sin web propia (verificado caso a caso)",
+          "Fuentes del expediente: Cylex + Exa Places",
+          "Señal de actividad: Cylex actualizado 03/07/2026; 3 reseñas, 3,7/5 (últimas fechadas en 2019)"
+        ]
+      },
+      "assets": [
+        {
+          "url": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%3E%3Crect%20width%3D%22120%22%20height%3D%2260%22%20rx%3D%2210%22%20fill%3D%22%230b3d5c%22%2F%3E%3Cpath%20d%3D%22M14%206h20v6H20v22a4%204%200%200%201-8%200V12H6z%22%20fill%3D%22%23fff%22%20opacity%3D%220.9%22%2F%3E%3Ctext%20x%3D%2266%22%20y%3D%2238%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2224%22%20font-weight%3D%22bold%22%20fill%3D%22%23c67a2e%22%3EH%3C%2Ftext%3E%3C%2Fsvg%3E",
+          "kind": "LOGO",
+          "source": "generado por WebLead AI (conceptual, sin marca de terceros)",
+          "license": "propio (SVG generado por WebLead AI)"
+        },
+        {
+          "url": "/images/ferrer-hero.jpg",
+          "kind": "IMAGE",
+          "source": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1200&q=80",
+          "license": "Unsplash License"
+        },
+        {
+          "url": "/images/ferrer-gallery-1.jpg",
+          "kind": "IMAGE",
+          "source": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&q=80",
+          "license": "Unsplash License"
+        },
+        {
+          "url": "/images/ferrer-gallery-2.jpg",
+          "kind": "IMAGE",
+          "source": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80",
+          "license": "Unsplash License"
+        }
+      ],
+      "notice": "Propuesta conceptual independiente, no oficial y pendiente de autorización de la empresa.",
+      "sector": "fontanería/climatización",
+      "contact": {
+        "email": "hidrorioja@telefonica.net",
+        "phone": "941255266",
+        "address": "C/ Quintiliano, 1, 26004 Logroño",
+        "formNote": "Formulario de demostración: comprueba los datos que escribes, pero no envía nada a ningún tercero. Nadie recibe tu mensaje.",
+        "phoneHref": "tel:+34941255266",
+        "whatsappHref": "https://wa.me/34941255266"
+      },
+      "gallery": {
+        "images": [
+          {
+            "url": "/images/ferrer-hero.jpg",
+            "source": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1200&q=80",
+            "caption": "Grifería de bañera (imagen de archivo, no es el local)",
+            "license": "Unsplash License",
+            "placement": "hero"
+          },
+          {
+            "url": "/images/ferrer-gallery-1.jpg",
+            "source": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&q=80",
+            "caption": "Cuarto de baño reformado (imagen de archivo, no es el local)",
+            "license": "Unsplash License",
+            "placement": "gallery"
+          },
+          {
+            "url": "/images/ferrer-gallery-2.jpg",
+            "source": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80",
+            "caption": "Instalación de tuberías (imagen de archivo, no es el local)",
+            "license": "Unsplash License",
+            "placement": "gallery"
+          }
+        ]
+      },
+      "services": {
+        "note": "Servicios pendientes de confirmar con la empresa: el expediente no lista servicios contrastados y esta demo no inventa ninguno. Pregunta por teléfono qué servicios ofrecen.",
+        "items": [],
+        "pendingConfirmation": true
+      },
+      "howItWorks": {
+        "steps": [
+          "Llama al teléfono de contacto y explica qué necesitas.",
+          "Te confirman si pueden ayudarte y qué información necesitan.",
+          "Acuerdas con la empresa la visita o el trabajo directamente, sin intermediarios."
+        ]
+      },
+      "templateId": "fontaneria-climatizacion",
+      "businessName": "Hidrorioja SC",
+      "businessSlug": "hidrorioja-sc-logrono",
+      "municipality": "Logroño"
+    },
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (content-only)",
+    "demoUrl": "/demos/hidrorioja-sc-logrono"
+  },
+  {
+    "content": {
+      "faq": [
+        {
+          "answer": "Para saber si pueden atender una avería urgente, llama al teléfono de contacto de esta web: te confirman disponibilidad y qué hacer mientras tanto. Esta demo no publica horarios ni servicios de urgencia no verificados.",
+          "question": "¿Atienden averías urgentes?"
+        },
+        {
+          "answer": "Pide presupuesto por teléfono o por el formulario de esta web. El formulario es solo una demostración: no envía tus datos a ningún tercero y nadie recibe tu mensaje.",
+          "question": "¿Hacen presupuestos?"
+        },
+        {
+          "answer": "La dirección verificada de la empresa está en Logroño (ver sección Contacto). Para trabajos fuera de Logroño, consúltalo por teléfono.",
+          "question": "¿Trabajan solo en Logroño?"
+        }
+      ],
+      "llm": {
+        "used": false,
+        "rejections": [],
+        "acceptedAbout": false,
+        "acceptedSubtitle": false
+      },
+      "seo": {
+        "title": "Expert Fontaneros Logroño — fontanería/climatización en Logroño (propuesta conceptual)",
+        "robots": "index, follow",
+        "ogImage": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1200&q=80",
+        "ogTitle": "Expert Fontaneros Logroño — fontanería/climatización en Logroño",
+        "description": "Expert Fontaneros Logroño, fontanería/climatización en Logroño. Dirección y teléfono verificados en el expediente WebLead AI. Propuesta conceptual de web, no oficial.",
+        "ogDescription": "Propuesta conceptual de web independiente, no oficial y pendiente de autorización.",
+        "sitemapEntries": [
+          "/demos/expert-fontaneros-logrono-logrono"
+        ]
+      },
+      "hero": {
+        "title": "Expert Fontaneros Logroño",
+        "kicker": "Fontanería y climatización en Logroño",
+        "ctaLabel": "Llamar al 941722140",
+        "subtitle": "fontanería/climatización en Logroño. Contacto directo por teléfono, sin intermediarios."
+      },
+      "about": {
+        "heading": "La empresa",
+        "paragraphs": [
+          "Expert Fontaneros Logroño es una empresa de fontanería/climatización en Logroño (La Rioja). Su actividad está verificada en el expediente de WebLead AI (CONFIRMED, consultado 2026-11-16) y no tiene web propia. Esta página es una propuesta conceptual de cómo podría presentarse en internet: los datos de contacto son los verificados en el expediente y nada más está afirmado."
+        ]
+      },
+      "brand": {
+        "palette": {
+          "text": "#1a2b33",
+          "muted": "#5b6b73",
+          "accent": "#c67a2e",
+          "primary": "#0b3d5c",
+          "surface": "#ffffff",
+          "background": "#f4f6f5",
+          "primaryDark": "#072a40"
+        },
+        "fontBody": "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+        "logoText": "EF",
+        "logoMotif": "pipe",
+        "fontHeading": "'Arial Narrow', 'Helvetica Neue', Arial, sans-serif",
+        "logoSvgDataUri": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%3E%3Crect%20width%3D%22120%22%20height%3D%2260%22%20rx%3D%2210%22%20fill%3D%22%230b3d5c%22%2F%3E%3Cpath%20d%3D%22M14%206h20v6H20v22a4%204%200%200%201-8%200V12H6z%22%20fill%3D%22%23fff%22%20opacity%3D%220.9%22%2F%3E%3Ctext%20x%3D%2266%22%20y%3D%2238%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2224%22%20font-weight%3D%22bold%22%20fill%3D%22%23c67a2e%22%3EEF%3C%2Ftext%3E%3C%2Fsvg%3E"
+      },
+      "legal": {
+        "demoNote": "Web de demostración generada por WebLead AI. Propuesta conceptual independiente, no oficial y pendiente de autorización de la empresa. No es la web contratada de la empresa.",
+        "imageCredits": "Fotografías: Unsplash (licencia Unsplash, imágenes de archivo, no son el local). Logotipo: propuesta conceptual propia."
+      },
+      "trust": {
+        "items": [
+          "Actividad verificada: CONFIRMED (expediente consultado 2026-11-16)",
+          "Sin web propia (verificado caso a caso)",
+          "Fuentes del expediente: buscarfontaneros.com",
+          "Señal de actividad: Reseñas 'hace un mes' (~oct 2026); 5,0/5, 16 reseñas"
+        ]
+      },
+      "assets": [
+        {
+          "url": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%2260%22%20viewBox%3D%220%200%20120%2060%22%3E%3Crect%20width%3D%22120%22%20height%3D%2260%22%20rx%3D%2210%22%20fill%3D%22%230b3d5c%22%2F%3E%3Cpath%20d%3D%22M14%206h20v6H20v22a4%204%200%200%201-8%200V12H6z%22%20fill%3D%22%23fff%22%20opacity%3D%220.9%22%2F%3E%3Ctext%20x%3D%2266%22%20y%3D%2238%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2224%22%20font-weight%3D%22bold%22%20fill%3D%22%23c67a2e%22%3EEF%3C%2Ftext%3E%3C%2Fsvg%3E",
+          "kind": "LOGO",
+          "source": "generado por WebLead AI (conceptual, sin marca de terceros)",
+          "license": "propio (SVG generado por WebLead AI)"
+        },
+        {
+          "url": "/images/ferrer-hero.jpg",
+          "kind": "IMAGE",
+          "source": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1200&q=80",
+          "license": "Unsplash License"
+        },
+        {
+          "url": "/images/ferrer-gallery-1.jpg",
+          "kind": "IMAGE",
+          "source": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&q=80",
+          "license": "Unsplash License"
+        },
+        {
+          "url": "/images/ferrer-gallery-2.jpg",
+          "kind": "IMAGE",
+          "source": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80",
+          "license": "Unsplash License"
+        }
+      ],
+      "notice": "Propuesta conceptual independiente, no oficial y pendiente de autorización de la empresa.",
+      "sector": "fontanería/climatización",
+      "contact": {
+        "email": null,
+        "phone": "941722140",
+        "address": "C/ Fray Diego de Leiva, 38, A, 26007 Logroño",
+        "formNote": "Formulario de demostración: comprueba los datos que escribes, pero no envía nada a ningún tercero. Nadie recibe tu mensaje.",
+        "phoneHref": "tel:+34941722140",
+        "whatsappHref": "https://wa.me/34941722140"
+      },
+      "gallery": {
+        "images": [
+          {
+            "url": "/images/ferrer-hero.jpg",
+            "source": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1200&q=80",
+            "caption": "Grifería de bañera (imagen de archivo, no es el local)",
+            "license": "Unsplash License",
+            "placement": "hero"
+          },
+          {
+            "url": "/images/ferrer-gallery-1.jpg",
+            "source": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&q=80",
+            "caption": "Cuarto de baño reformado (imagen de archivo, no es el local)",
+            "license": "Unsplash License",
+            "placement": "gallery"
+          },
+          {
+            "url": "/images/ferrer-gallery-2.jpg",
+            "source": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80",
+            "caption": "Instalación de tuberías (imagen de archivo, no es el local)",
+            "license": "Unsplash License",
+            "placement": "gallery"
+          }
+        ]
+      },
+      "services": {
+        "note": "Servicios pendientes de confirmar con la empresa: el expediente no lista servicios contrastados y esta demo no inventa ninguno. Pregunta por teléfono qué servicios ofrecen.",
+        "items": [],
+        "pendingConfirmation": true
+      },
+      "howItWorks": {
+        "steps": [
+          "Llama al teléfono de contacto y explica qué necesitas.",
+          "Te confirman si pueden ayudarte y qué información necesitan.",
+          "Acuerdas con la empresa la visita o el trabajo directamente, sin intermediarios."
+        ]
+      },
+      "templateId": "fontaneria-climatizacion",
+      "businessName": "Expert Fontaneros Logroño",
+      "businessSlug": "expert-fontaneros-logrono-logrono",
+      "municipality": "Logroño"
+    },
+    "businessState": "PREVIEW_READY",
+    "auditStatus": null,
+    "demoUrl": "/demos/expert-fontaneros-logrono-logrono"
   }
 ];

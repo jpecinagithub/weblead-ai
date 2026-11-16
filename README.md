@@ -5,9 +5,12 @@ presencia deficiente, crea webs personalizadas, las audita, prepara propuestas
 comerciales (borradores, sin envío) y gestiona el seguimiento desde un
 dashboard centralizado.
 
-> **Estado: FASE 0 — ESQUELETO.** Solo estructura, tipos, máquina de estados,
-> schema de BD y endpoints mínimos. Ningún agente funcional todavía.
-> Ver [docs/architecture.md](docs/architecture.md) y el estado por fase abajo.
+> **Estado: FASES A–E COMPLETADAS (2026-11-16).** Monorepo, multiprovider,
+> Researcher, Designer + Auditor Playwright, Sales + CRM con gate LSSI.
+> Flujo punta a punta verificado por el coordinador con empresas reales del
+> piloto (ver [docs/validation-report.md](docs/validation-report.md)).
+> **Sin desplegar** (ni Oracle ni Vercel), **0 emails enviados**, coste LLM
+> acumulado 0,00 USD estimado. Falta la Fase F (Optimización).
 
 ## Arranque rápido (dev)
 
@@ -31,8 +34,8 @@ Requisitos: Node 24, pnpm 10, PostgreSQL 16 local con BD `weblead_dev`
 | `pnpm dev:all` | API + dashboard + demo-platform en paralelo |
 | `pnpm build` | Compila todos los paquetes/apps (orden topológico) |
 | `pnpm typecheck` | `tsc --noEmit` por paquete/app (con `-p tsconfig.app.json` en las apps Vite) |
-| `pnpm test` | Vitest (máquina de estados) |
-| `pnpm db:generate` / `db:push` / `db:migrate` | Prisma |
+| `pnpm test` | Vitest: 144 tests en verde (estados, fallback, costes, researcher, generator, designer, auditor, sales, crm) |
+| `pnpm db:generate` / `db:push` / `db:migrate` | Prisma (3 migraciones: Fase C researcher, Fase D designer/auditor, Fase E sales/crm) |
 
 ## Estructura
 
@@ -49,21 +52,33 @@ packages/
                    + selección por agente + fallback + SpendGate
   cost-control/    Módulo de costes (§8): registro, 8 indicadores, límite efectivo 0 €
   agent-core/      Orchestrator: registro de agentes + puerta de transiciones
-  agent-researcher/  Esqueleto Fase 1 (discovery provisional: búsqueda web + directorios)
-  agent-designer/    Esqueleto Fase 2 (webs + aviso conceptual)
-  agent-auditor/     Esqueleto Fase 3 (auditoría Playwright)
-  agent-sales/       Esqueleto Fase 4 (borradores Gmail, sin envío)
-  agent-crm/         Esqueleto Fase 5 (pipeline + bajas)
-  integrations/    Gmail / Google Places / Overpass / Vercel (estados, sin credenciales)
-  website-generator/ Esqueleto Fase 2
-  website-templates/ Esqueleto Fase 2 (catálogo de plantillas)
+  agent-researcher/  Researcher: expediente estructurado, scoring 0-100 (umbral 70),
+                   actividad CONFIRMED/PROBABLE/UNVERIFIED/INACTIVE, ≥2 fuentes
+  agent-designer/    Designer: 2 plantillas sectoriales, generador determinista sin invenciones
+  agent-auditor/     Auditor independiente con Playwright (capturas desktop+móvil)
+  agent-sales/       Sales: pricing BASIC/PRO/PREMIUM configurable, gate legal LSSI,
+                   borradores LOCALES (sin envío), clasificador 8 categorías
+  agent-crm/         CRM: pipeline 13 estados, historial, recordatorios, bajas SUPPRESSED
+  integrations/    Gmail (stub not_connected) / Places / Overpass / Vercel / Serper / Exa
+                   (estados honestos, sin credenciales)
+  website-generator/ Generador determinista + validateNoInventedClaims
+  website-templates/ 2 plantillas reales: fontaneria-climatizacion, peluqueria-barberia
   testing/         Helpers de test (MockProvider, seed)
 docs/
-  master-prompt-v1.md   Prompt maestro v1.0 (ORIGINAL TRUNCADO al final de §8)
+  master-prompt-v1.md   Prompt maestro v1.0 (el resto tras "UUID" NO existe: pendiente §8 CERRADO 2026-11-16)
+  instrucciones-equipo-agentes.md  2ª parte: multiprovider, costes, seguridad, panel, fases A–F
   feasibility.md        Fase A: GO CON ALCANCE RECORTADO (piloto Logroño, 10 leads ≥ 70)
   feasibility-data.csv  26 empresas del piloto (fuente y fecha por dato)
-  architecture.md       Decisiones de arquitectura + bloqueadores
+  architecture.md       Decisiones de arquitectura + bloqueadores + inventario de créditos
+  search-providers.md   Matriz de fuentes (Serper candidato principal; Apify Maps descartado por base legal)
+  phase-b-measurements.md  Medición LLM por tarea (Top-Tools-Ai-Basic, 949 tokens)
+  phase-c-report.md / phase-d-report.md / phase-e-report.md  Informes §12 por fase
+  validation-report.md  Verificación final del coordinador (flujo punta a punta)
+  gmail-setup.md        Pasos para conectar Gmail OAuth (pendiente de Jon)
 fase-a/            Medición de coste Top Tools AI (4 expedientes, 0,00 USD)
+fase-b/            Medición por tarea (4 tareas, 949 tokens)
+fase-d/            Borradores de diseño LLM (2 llamadas, 657 tokens)
+fase-e/            Borrador comercial LLM (1 llamada, 226 tokens)
 ```
 
 ## Estado por fase
@@ -74,33 +89,47 @@ viabilidad es la puerta de la nueva Fase C.
 
 | Fase (plan nuevo) | Estado |
 |---|---|
-| Fase A — Infraestructura (antes "Fase 0 — Esqueleto") | ✅ Este repo: monorepo, estados, schema, API mínima, multiprovider, costes, panel |
-| Fase B — Inteligencia artificial (Groq/OpenRouter, fallback, medición) | ⏳ Pendiente (claves sin comprobar) |
-| Fase C — Investigación (Researcher) | ⏳ Pendiente — puerta: piloto Fase A ✅ GO con alcance recortado |
-| Fase D — Generación y auditoría (Designer + Auditor) | ⏳ Pendiente |
-| Fase E — Comercial (Sales + CRM) | ⏳ Pendiente (borradores, sin envío, gate LSSI) |
-| Fase F — Optimización | ⏳ Pendiente |
+| Fase A — Infraestructura (antes "Fase 0 — Esqueleto") | ✅ `d8b8270`: monorepo, estados, schema, API, multiprovider, costes, panel |
+| Fase B — Inteligencia artificial | ✅ `6d8a60d`: solo Top Tools AI Basic operativo; fallback, límites, medición 949 tokens |
+| Fase C — Investigación (Researcher) | ✅ `8d8af2b`: 10/10 leads reproducidos, 58 tests, persistencia Prisma |
+| Fase D — Generación y auditoría (Designer + Auditor) | ✅ `e6227ac`: 2 plantillas, 2 demos APPROVED (Playwright 100/100/100/100), 91 tests |
+| Fase E — Comercial (Sales + CRM) | ✅ `afbffdc`: pricing, gate LSSI, borradores locales, CRM 13 estados, 144 tests |
+| Fase F — Optimización | ⏳ Pendiente (costes reales, Serper/Exa, backup Postgres, 8 demos restantes) |
 
-## Pendientes y bloqueadores (de Fase A, sin resolver en Fase 0)
+Flujo punta a punta verificado por el coordinador el 2026-11-16
+([docs/validation-report.md](docs/validation-report.md)): Hidrorioja y Expert
+(QUALIFIED → DESIGNING → PREVIEW_READY → AUDITING → APPROVED); prepare de
+empresas reales bloqueado correctamente (NO_EMAIL / NO_LEGAL_BASIS);
+SALES_PENDING → SALES_APPROVED solo con fixture sintética marcada.
 
-- **xAI: credencial registrada INVÁLIDA** (400 Incorrect API key, 2026-11-16).
-  Ningún agente depende de xAI; el proveedor es configurable por env.
-- **CoArena: clave revocada** (401 api_key_revoked). Configurada pero no operativa.
-- **Groq / OpenRouter: sin claves asumidas.** Groq es el primer candidato
-  (§3) pero solo queda la clave "Audio to Text"; las 4 claves OpenRouter se
-  eliminaron el 2026-11-14. La comprobación real de claves es Fase B.
-- **Top Tools AI renombró sus modelos**: `Top-Tools-Ai` y `Kimi-K2.6` devuelven
-  400 `model_not_found`; el vigente es `Top-Tools-Ai-Basic` (también Pro/Max,
-  sin probar). El `CONNECTOR.md` del proveedor sigue con los nombres viejos
-  y queda pendiente de actualizar (fuera de esta fase).
+## Pendientes y bloqueadores (actualizado 2026-11-16)
+
+- **xAI / grok FUERA: saldo $0,00** (uso $5,78, 7.088.187 tokens, 798 requests,
+  verificado por Jon en console.x.ai). Clave NEXUS (…IGKt) existe y está activa,
+  pero sin recarga (pago, solo con aprobación expresa de Jon) grok no funciona.
+  La credencial 400 de este entorno NO es la clave NEXUS.
+  Discrepancia: NEXUS dice 4,09/4,21 USD; manda la consola. No tocar la BD de
+  NEXUS desde WebLead.
+- **CoArena: clave revocada** (401). **Groq: sin clave de inferencia**
+  (solo "Audio to Text"). **OpenRouter: sin claves**, saldo 0,91/10 USD.
+- **Top Tools AI**: único operativo (`Top-Tools-Ai-Basic`). NEXUS dice 0 tokens
+  usados pero la Fase A gastó 805 reales (filas manuales, no sincronizadas).
+- **Créditos de Jon** (NEXUS 2026-11-16): Serper 2.382/2.500 (candidato principal
+  Researcher, coste/empresa sin medir), Exa 19,013/20 USD, Vercel AI Gateway
+  4,999/5 USD (LLM alternativo viable), Gemini pendiente de verificar.
+- **Sin fuente de discovery masivo conforme**: Apify Maps descartado por base
+  legal, Places restringido, Overpass inaccesible desde esta VM.
+- **Postgres local no sobrevive a reinicios/reemplazos de esta VM** (ocurrido en
+  Fases C y D): falta backup diario con restauración probada.
 - **Límite efectivo de gasto: 0 €** hasta aprobación expresa de Jon
   (presupuesto de referencia: 30 €/mes adicionales). Las llamadas LLM de
   pago están bloqueadas por el SpendGate.
-- **Overpass inaccesible desde esta VM**; **Google Places API sin probar**
-  (requiere clave + revisión de ToS). El Researcher usará búsqueda web como
-  fuente provisional.
-- El §8 del prompt maestro llegó **truncado**; el schema Prisma implementa la
-  lista de 31 entidades tal como aparece, con campos inferidos de §§0–5.
+- **Preguntas para Jon**: ¿cuándo caduca el crédito Apify de 5 USD? ¿Recargar
+  xAI? ¿Base legal o canal alternativo para Ferrer/Begoña/Hidrorioja?
+  ¿Clave Groq de inferencia / clave nueva OpenRouter?
+- El pendiente §8 quedó **CERRADO 2026-11-16**: no existe resto literal del
+  prompt tras "UUID". BD con las entidades de §8 (30 citadas / 31 nombres
+  contados, las 31 en Prisma) + segundo documento.
 
 ## Reglas
 
