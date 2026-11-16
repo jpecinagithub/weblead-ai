@@ -32,6 +32,7 @@
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "generate:designs": "tsx src/generate-designs.ts",
+    "generate:designs:fase-f": "tsx src/generate-designs-fase-f.ts",
     "export:demos": "tsx src/export-demos.ts"
   },
   "type": "module",

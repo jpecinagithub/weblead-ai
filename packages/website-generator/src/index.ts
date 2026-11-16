@@ -134,6 +134,28 @@ export function validateNoInventedClaims(text: string): string[] {
   return FORBIDDEN_CLAIM_PATTERNS.filter(({ pattern }) => pattern.test(text)).map(({ label }) => label);
 }
 
+/**
+ * Sanitizes a free-text activity signal for display as a trust item.
+ *
+ * The signal is verified source text from the Fase A dossier, but it can
+ * contain a word the forbidden-claims list treats as a claim (e.g. Nuria:
+ * "Ficha activa con horarios" trips the 'horario' pattern, although no
+ * opening hours are stated). The generator must not emit trust items that
+ * fail the same validation applied to LLM drafts, so only the sentences
+ * free of forbidden claims are kept, in order, verbatim. Returns '' when
+ * nothing survives (the caller then omits the trust item).
+ */
+export function sanitizeActivitySignal(signal: string): string {
+  const sentences = signal
+    .split(/(?<=[.;])\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  const kept = sentences.filter((s) => validateNoInventedClaims(s).length === 0);
+  if (kept.length === 0) return '';
+  const joined = kept.join(' ');
+  return joined.charAt(0).toUpperCase() + joined.slice(1);
+}
+
 /** Initials of the first two significant words ("Santiago Ferrer ..." -> "SF"). */
 export function extractInitials(name: string): string {
   const stop = new Set(['de', 'del', 'la', 'el', 'en', 'y', 'sl', 's.l.', 'sc']);
@@ -230,7 +252,10 @@ export function buildWebsiteContent(
     input.hasOwnWebsite ? 'Con web propia (verificado)' : 'Sin web propia (verificado caso a caso)',
     `Fuentes del expediente: ${input.sources.length > 0 ? input.sources.join(' + ') : 'sin fuentes registradas'}`,
   ];
-  if (input.activitySignal) trustItems.push(`Señal de actividad: ${input.activitySignal}`);
+  if (input.activitySignal) {
+    const cleanSignal = sanitizeActivitySignal(input.activitySignal);
+    if (cleanSignal) trustItems.push(`Señal de actividad: ${cleanSignal}`);
+  }
 
   const servicesPending = input.services.length === 0;
   const images: GeneratedImage[] = template.photos.map((p) => ({

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildWebsiteContent,
   extractInitials,
+  sanitizeActivitySignal,
   validateNoInventedClaims,
   whatsappHrefFor,
 } from '../src/index.js';
@@ -120,6 +121,29 @@ describe('forbidden-claims validation (LLM drafts included)', () => {
     expect(c.llm.rejections).toEqual([]);
     expect(c.hero.subtitle).toContain('Santiago Ferrer');
     expect(c.about.paragraphs).toHaveLength(2);
+  });
+
+  it('sanitizes an activity signal: keeps only sentences free of forbidden claims', () => {
+    // Nuria (Fase F): the verbatim dossier signal trips the 'horario'
+    // pattern ("Ficha activa con horarios") although no hours are stated.
+    const signal =
+      "Ficha activa con horarios; última evidencia dura 2017-2018 (oferta Colectivia, Carné Joven). Un directorio menciona 'página web disponible' sin URL: no verificada.";
+    const clean = sanitizeActivitySignal(signal);
+    expect(validateNoInventedClaims(clean)).toEqual([]);
+    expect(clean).toContain('2017-2018');
+    expect(clean).not.toMatch(/horario/i);
+    expect(sanitizeActivitySignal('Abierto de 9 a 20.')).toBe('');
+  });
+
+  it('emits no trust item with a forbidden claim, even from the dossier signal', () => {
+    const c = buildWebsiteContent({
+      ...FERRER_INPUT,
+      activitySignal:
+        "Ficha activa con horarios; última evidencia dura 2017-2018 (oferta Colectivia, Carné Joven).",
+    });
+    for (const item of c.trust.items) expect(validateNoInventedClaims(item)).toEqual([]);
+    expect(c.trust.items.some((i) => i.includes('2017-2018'))).toBe(true);
+    expect(c.trust.items.some((i) => /horario/i.test(i))).toBe(false);
   });
 
   it('throws for an unknown sector (no generic fallback template)', () => {
