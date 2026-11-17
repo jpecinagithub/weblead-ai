@@ -3,11 +3,13 @@ import { DEMO_NOTICE } from '@weblead/agent-designer';
 import { checkPassword, isUnlocked, markUnlocked } from './password-gate.js';
 
 /**
- * Puerta de clave de la plataforma de demos (orden de Jon 2026-11-17).
+ * Puerta de clave SOLO para la página de entrada (índice de proyectos),
+ * por orden de Jon 2026-11-17: esa página solo la ve quien tiene la
+ * clave (Jon). Las demos individuales (/demos/{slug}) son públicas y
+ * no pasan por aquí: cualquiera con el enlace las ve sin clave.
  *
- * Sin desbloquear no se renderiza ningún contenido de las demos (ni el
- * índice ni las fichas de empresa): solo esta pantalla. El único
- * formulario de toda la plataforma es este campo de clave; los
+ * Sin desbloquear no se renderiza el índice: solo esta pantalla. El
+ * único formulario de la plataforma es este campo de clave; los
  * formularios de contacto siguen prohibidos y no existen.
  */
 export default function PasswordGate({ children }: { children: ReactNode }) {
@@ -39,8 +41,8 @@ export default function PasswordGate({ children }: { children: ReactNode }) {
       <div className="gate-card">
         <h1>WebLead AI — Plataforma de demos</h1>
         <p>
-          Las webs de prueba de las empresas de Logroño están protegidas con
-          una clave. Introdúcela para verlas.
+          Esta página es privada: solo la ve quien tiene la clave.
+          Introdúcela para ver todos los proyectos en activo.
         </p>
         <form onSubmit={onSubmit} aria-label="Acceso con clave">
           <label htmlFor="demo-password">Clave de acceso</label>
@@ -61,10 +63,6 @@ export default function PasswordGate({ children }: { children: ReactNode }) {
             {checking ? 'Comprobando…' : 'Entrar'}
           </button>
         </form>
-        <p className="gate-note">
-          Si te hemos enviado el enlace a una demo, la clave viene en el
-          mismo email.
-        </p>
       </div>
     </main>
   );

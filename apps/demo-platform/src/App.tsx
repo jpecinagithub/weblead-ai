@@ -340,7 +340,16 @@ function AppContent() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  if (!slug) return <Dashboard />;
+  // Sin slug: la página de entrada (índice) es PRIVADA y solo la ve
+  // quien tiene la clave (Jon). Las demos individuales son públicas:
+  // cualquiera con el enlace las ve sin clave.
+  if (!slug) {
+    return (
+      <PasswordGate>
+        <Dashboard />
+      </PasswordGate>
+    );
+  }
 
   const demo = GENERATED_DEMOS.find((d) => d.content.businessSlug === slug);
   if (!demo) {
@@ -358,13 +367,10 @@ function AppContent() {
 }
 
 /**
- * Toda la plataforma (índice + demos) queda detrás de la puerta de
- * clave: sin desbloquear no se renderiza ningún contenido de las demos.
+ * La página de entrada (índice de proyectos) es privada: solo la ve
+ * quien tiene la clave (Jon). Las demos individuales (/demos/{slug})
+ * son públicas y no pasan por esta puerta.
  */
 export default function App() {
-  return (
-    <PasswordGate>
-      <AppContent />
-    </PasswordGate>
-  );
+  return <AppContent />;
 }

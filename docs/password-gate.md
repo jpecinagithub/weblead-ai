@@ -1,31 +1,37 @@
 # Puerta de clave de la plataforma de demos
 
-> Añadida 2026-11-17 por orden expresa de Jon: la plataforma de demos
-> (índice + 10 demos) queda detrás de una clave sencilla.
+> Añadida 2026-11-17 por orden expresa de Jon: la página de entrada
+> de la plataforma queda detrás de una clave sencilla.
+>
+> CORRECCIÓN 2026-11-17 12:39 (Jon: «creo que no estás entendiendo»):
+> la clave protege SOLO la página de entrada (el listado de todos los
+> proyectos en activo), que solo la ve Jon. Las demos individuales
+> son públicas: cualquiera con el enlace las ve sin clave. Antes la
+> puerta cubría también las demos; era al revés de lo pedido.
 
 ## Cómo funciona
 
-- Al abrir cualquier página de `weblead-demos.vercel.app` se muestra
-  solo la pantalla de clave: título, campo de contraseña, botón
-  «Entrar» y el aviso conceptual obligatorio. Sin la clave no se
-  renderiza ningún contenido de las demos (ni nombres de empresas, ni
-  datos de contacto, ni fotos).
-- La clave actual es **`demo2026`**.
+- Al abrir la página de entrada (`/` o `/demos/`) se muestra solo
+  la pantalla de clave: título, campo de contraseña, botón «Entrar»
+  y el aviso conceptual obligatorio. Sin la clave no se ve el listado
+  de proyectos.
+- Las demos individuales (`/demos/{slug}`) son públicas y NO piden
+  clave: se abren directamente con el enlace.
+- La clave actual es **`demo2026`** y solo la usa Jon para ver la
+  página de entrada.
 - La clave **nunca** se guarda en texto plano en el código: en
   `apps/demo-platform/src/password-gate.ts` solo vive su hash SHA-256
   (`PASSWORD_HASH`). Al pulsar «Entrar», el navegador calcula el hash
   de lo escrito con `crypto.subtle` y lo compara con el guardado.
-- La clave se pide SIEMPRE (orden de Jon 2026-11-17). Al recargar, al
-  abrir otra demo en una pestaña nueva o al volver más tarde, la
-  puerta vuelve a pedir la clave. No hay persistencia en
-  `sessionStorage`, `localStorage` ni cookies. Dentro de una misma
-  carga, navegar entre demos no la vuelve a pedir (es la misma página).
+- La clave se pide SIEMPRE al abrir la página de entrada (orden de
+  Jon 2026-11-17). Al recargar, la puerta vuelve a pedir la clave.
+  No hay persistencia en `sessionStorage`, `localStorage` ni cookies.
 - **No hay índice de demos** (orden de Jon 2026-11-17): la página de
-  entrada (`/` y `/demos/`) no lista ninguna empresa ni enlaza a
+  entrada, tras la clave, no lista ninguna empresa ni enlaza a
   ninguna demo, para que nadie vea todos los proyectos que tenemos
   funcionando. Cada demo solo se abre con su enlace directo
-  (`/demos/{slug}`) tras introducir la clave. Las demos tampoco
-  enlazan de vuelta a la plataforma.
+  (`/demos/{slug}`) y las demos tampoco enlazan de vuelta a la
+  plataforma.
 - El único formulario de toda la plataforma es este campo de clave.
   Los formularios de contacto siguen prohibidos y no existen.
 
@@ -39,6 +45,8 @@
    `apps/demo-platform/src/password-gate.ts` por el hash obtenido.
 3. Actualiza los borradores de email en
    `docs/borradores-10-leads-oferta-50eur.md` con la nueva clave.
+   (Las demos son públicas y no llevan clave en el email: la clave
+   es solo para la página de entrada de Jon.)
 4. Commit + push: el auto-deploy de Vercel publica el cambio.
 
 ## Limitaciones honestas
@@ -59,15 +67,15 @@
 
 - `apps/demo-platform/test/password-gate.test.ts`: vectores SHA-256
   conocidos, `checkPassword` con la clave correcta e incorrectas,
-  bloqueo sin desbloquear (índice y las 10 demos) y render con la
-  puerta desbloqueada (sin formularios de contacto).
+  bloqueo del índice sin desbloquear, índice desbloqueado sin listado,
+  y demos públicas que se ven sin clave (sin formularios).
 - `apps/demo-platform/test/no-forms.test.ts`: sigue comprobando que
-  las demos no tienen formularios, renderizando con la puerta
-  desbloqueada.
+  las demos no tienen formularios (las demos son públicas y no pasan
+  por la puerta).
 - Las auditorías Playwright (`audit-redesign.ts` y
   `scripts/audit-polish.mjs`) desbloquean la puerta por la interfaz
-  (escriben la clave y pulsan «Entrar» tras cargar), como haría un
-  usuario, para auditar el contenido de las demos; la puerta en sí se
-  cubre con los tests unitarios, no con la auditoría. La clave para
-  las auditorías se lee de `WEBLEAD_DEMO_PASSWORD` (por defecto la
-  clave actual).
+  (escriben la clave y pulsan «Entrar» tras cargar) cuando auditan
+  la página de entrada; en las demos públicas el desbloqueo no hace
+  nada, porque no hay puerta. La puerta en sí se cubre con los tests
+  unitarios, no con la auditoría. La clave para las auditorías se lee
+  de `WEBLEAD_DEMO_PASSWORD` (por defecto la clave actual).

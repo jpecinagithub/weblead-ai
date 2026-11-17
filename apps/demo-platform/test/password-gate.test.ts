@@ -14,15 +14,16 @@ import {
 } from '../src/password-gate.js';
 
 /**
- * Puerta de clave (orden de Jon 2026-11-17; siempre pide la clave
- * desde 2026-11-17: el desbloqueo vive solo en la memoria de la carga
- * actual, sin sessionStorage ni persistencia).
+ * Puerta de clave SOLO para la página de entrada (orden de Jon
+ * 2026-11-17; corrección: antes la puerta cubría también las demos).
+ * El índice solo lo ve quien tiene la clave (Jon); las demos
+ * individuales son públicas y se ven SIN clave. La clave se pide
+ * siempre al abrir el índice (sin persistencia).
  *
- * Sin desbloquear no se renderiza ningún contenido de las demos (ni el
- * índice ni las fichas); con la clave correcta sí. La clave nunca aparece
- * en texto plano en este fichero salvo como entrada de la prueba de
- * `checkPassword` (la propia clave que el usuario escribiría); el hash
- * guardado se compara contra vectores conocidos y contra la función real.
+ * La clave nunca aparece en texto plano en este fichero salvo como
+ * entrada de la prueba de `checkPassword` (la propia clave que el
+ * usuario escribiría); el hash guardado se compara contra vectores
+ * conocidos y contra la función real.
  */
 function renderPath(pathname: string, unlocked: boolean): string {
   (globalThis as unknown as { window: unknown }).window = {
@@ -80,26 +81,19 @@ describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
   });
 
   for (const demo of GENERATED_DEMOS) {
-    it(`sin desbloquear: ${demo.content.businessSlug} no muestra contenido de la demo`, () => {
+    it(`la demo ${demo.content.businessSlug} se ve SIN clave (pública)`, () => {
       const html = renderPath(demo.demoUrl, false);
-      expect(html).toContain('Clave de acceso');
-      expect(html).not.toContain(demo.content.businessName);
-      expect(html).not.toContain('href="tel:+34');
-      if (demo.content.contact.email) {
-        expect(html).not.toContain(demo.content.contact.email);
-      }
-    });
-
-    it(`desbloqueada: ${demo.content.businessSlug} sí muestra la demo sin formulario de contacto`, () => {
-      const html = renderPath(demo.demoUrl, true);
+      expect(html).not.toContain('Clave de acceso');
       expect(html).toContain(demo.content.businessName);
       expect(html).toContain(DEMO_NOTICE);
       expect(html).toContain('href="tel:+34');
-      expect(html).not.toContain('Clave de acceso');
-      // La puerta es el único formulario de la plataforma; desbloqueada
-      // no queda ningún <form> en la demo.
+      // Las demos no tienen ningún formulario (el de la clave solo
+      // existe en la página de entrada, no aquí).
       expect(html).not.toMatch(/<form[\s>]/i);
       expect(html).not.toMatch(/<textarea[\s>]/i);
+      if (demo.content.contact.email) {
+        expect(html).toContain(demo.content.contact.email);
+      }
     });
   }
 

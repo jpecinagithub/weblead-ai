@@ -16,11 +16,10 @@
 > y **sus demos ya no están en la plataforma**. Los 10 de esta lista
 > tienen email verificado: los 10 son enviables.
 >
-> **Clave de las demos:** la plataforma pide la clave **`demo2026`**
-> SIEMPRE (sin persistencia: se vuelve a pedir al recargar o al abrir
-> otra demo). Cada email incluye la línea con la clave, porque sin
-> ella el destinatario no puede ver su demo. La página de entrada no
-> lista ninguna demo: cada proyecto solo se abre con su enlace directo.
+> **Demos públicas:** cada demo se abre directamente con su enlace,
+> sin clave (cualquiera con el enlace la ve). La clave **`demo2026`**
+> solo protege la página de entrada, que solo la ve Jon y no lista
+> ninguna demo: cada proyecto solo se abre con su enlace directo.
 
 ## Modelo de email (igual para los 10, con nombre y enlace propios)
 
@@ -33,9 +32,6 @@ Asunto: `Su web corporativa por 50 €: les he preparado una muestra`
 > quedaría su web corporativa:
 >
 > {URL_DEMO}
->
-> La demo está protegida con la clave **demo2026**: al abrir el enlace,
-> la página pide esa clave para ver la web.
 >
 > Si les gusta, puedo implementarla como su web por **50 €**, que
 > incluye el desarrollo de la página web, un subdominio corporativo

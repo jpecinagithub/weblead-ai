@@ -4,7 +4,6 @@ import { renderToString } from 'react-dom/server';
 import App from '../src/App.js';
 import { GENERATED_DEMOS } from '../src/data/generated-demos.js';
 import { DEMO_NOTICE } from '@weblead/agent-designer';
-import { markUnlocked } from '../src/password-gate.js';
 
 /**
  * No-forms render test (rediseño 2026-11-17, orden de Jon).
@@ -15,11 +14,11 @@ import { markUnlocked } from '../src/password-gate.js';
  * dossier has an email, Google Maps link) and the mandatory demo notice.
  * The live-browser Playwright audit checks the same in a real Chromium.
  *
- * Puerta de clave (2026-11-17): las demos se renderizan con la puerta
- * desbloqueada en memoria (markUnlocked), porque sin desbloquear no se ve
- * el contenido de ninguna demo. La puerta en sí se prueba en
- * password-gate.test.ts. El único formulario de la plataforma es el
- * campo de la clave; aquí se comprueba que las demos no tienen ninguno.
+ * Puerta de clave (2026-11-17): la puerta solo cubre la página de
+ * entrada; las demos son públicas y se renderizan sin desbloquear.
+ * La puerta en sí se prueba en password-gate.test.ts. El único
+ * formulario de la plataforma es el campo de la clave (en la entrada);
+ * aquí se comprueba que las demos no tienen ninguno.
  */
 function renderPath(pathname: string): string {
   (globalThis as unknown as { window: unknown }).window = {
@@ -27,8 +26,6 @@ function renderPath(pathname: string): string {
     addEventListener: () => {},
     removeEventListener: () => {},
   };
-  // Puerta desbloqueada: se prueba el contenido de la demo, no la puerta.
-  markUnlocked();
   return renderToString(createElement(App));
 }
 
@@ -62,10 +59,12 @@ describe('demo-platform: no forms in any rendered demo (rediseño 2026-11-17)', 
     });
   }
 
-  it('dashboard: sin formularios', () => {
+  it('dashboard: solo el formulario de la clave (la entrada es privada)', () => {
     const html = renderPath('/');
-    expect(html).not.toMatch(/<form[\s>]/i);
-    expect(html).not.toMatch(/<input[\s>]/i);
+    // La página de entrada es la puerta de clave: su único formulario
+    // es el campo de la clave. No hay formularios de contacto.
+    expect(html).toContain('Clave de acceso');
+    expect(html.match(/<form[\s>]/gi)?.length).toBe(1);
     expect(html).not.toMatch(/formulario/i);
     expect(html).toContain(DEMO_NOTICE);
   });
