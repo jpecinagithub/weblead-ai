@@ -3,6 +3,7 @@ import { DEMO_NOTICE } from '@weblead/agent-designer';
 import { getTemplate } from '@weblead/website-templates';
 import type { GeneratedWebsiteContent } from '@weblead/website-generator';
 import { GENERATED_DEMOS, type GeneratedDemo } from './data/generated-demos.js';
+import { outreachLabel } from './data/outreach.js';
 import PasswordGate from './PasswordGate.js';
 
 /** Slug from the path: /demos/{slug}. No router dep. */
@@ -337,6 +338,7 @@ function Dashboard() {
               <th>Variante</th>
               <th>Estado</th>
               <th>Auditoría</th>
+              <th>Seguimiento</th>
               <th>Demo</th>
             </tr>
           </thead>
@@ -349,6 +351,7 @@ function Dashboard() {
                 <td>{demo.content.brand.variantId}</td>
                 <td>{demo.businessState}</td>
                 <td>{demo.auditStatus ?? 'pendiente'}</td>
+                <td>{outreachLabel(demo.content.businessSlug)}</td>
                 <td>
                   <a href={demo.demoUrl}>Ver demo</a>
                 </td>
@@ -366,6 +369,9 @@ function Dashboard() {
             </p>
             <p className="demo-card-status">
               {demo.businessState} · Auditoría: {demo.auditStatus ?? 'pendiente'}
+            </p>
+            <p className="demo-card-outreach">
+              Seguimiento: {outreachLabel(demo.content.businessSlug)}
             </p>
             <a className="demo-card-link" href={demo.demoUrl}>
               Ver demo →
