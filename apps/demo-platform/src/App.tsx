@@ -197,21 +197,25 @@ function DemoSite({ demo }: { demo: GeneratedDemo }) {
                         {item}
                       </li>
                     ))}
-                    {reviews ? (
-                      <li key="reviews" className="trust-card trust-reviews">
-                        <span className="review-rating">{reviews.rating} / 5</span>
-                        <span className="review-count">
-                          {reviews.count} {reviews.count === 1 ? 'reseña' : 'reseñas'} verificadas
-                        </span>
-                      </li>
-                    ) : null}
-                    {foundedYear ? (
-                      <li key="founded" className="trust-card trust-founded">
-                        <span className="founded-year">{foundedYear}</span>
-                        <span className="founded-label">Año de constitución (verificado)</span>
-                      </li>
-                    ) : null}
                   </ul>
+                  {reviews || foundedYear ? (
+                    <div className="trust-stats" aria-label="Distintivos verificados">
+                      {reviews ? (
+                        <div className="trust-stat trust-reviews">
+                          <span className="review-rating">{reviews.rating} / 5</span>
+                          <span className="review-count">
+                            {reviews.count} {reviews.count === 1 ? 'reseña' : 'reseñas'} verificadas
+                          </span>
+                        </div>
+                      ) : null}
+                      {foundedYear ? (
+                        <div className="trust-stat trust-founded">
+                          <span className="founded-year">{foundedYear}</span>
+                          <span className="founded-label">Año de constitución (verificado)</span>
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </section>
               );
             case 'services':
@@ -318,34 +322,52 @@ function Dashboard() {
         empresa. Ninguna es la web oficial de la empresa: son propuestas conceptuales pendientes de
         autorización.
       </p>
-      <table className="demo-table">
-        <thead>
-          <tr>
-            <th>Empresa</th>
-            <th>Sector</th>
-            <th>Plantilla</th>
-            <th>Variante</th>
-            <th>Estado</th>
-            <th>Auditoría</th>
-            <th>Demo</th>
-          </tr>
-        </thead>
-        <tbody>
-          {GENERATED_DEMOS.map((demo) => (
-            <tr key={demo.content.businessSlug}>
-              <td>{demo.content.businessName}</td>
-              <td>{demo.content.sector}</td>
-              <td>{demo.content.templateId}</td>
-              <td>{demo.content.brand.variantId}</td>
-              <td>{demo.businessState}</td>
-              <td>{demo.auditStatus ?? 'pendiente'}</td>
-              <td>
-                <a href={demo.demoUrl}>Ver demo</a>
-              </td>
+      <div className="demo-table-wrap">
+        <table className="demo-table">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Sector</th>
+              <th>Plantilla</th>
+              <th>Variante</th>
+              <th>Estado</th>
+              <th>Auditoría</th>
+              <th>Demo</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {GENERATED_DEMOS.map((demo) => (
+              <tr key={demo.content.businessSlug}>
+                <td>{demo.content.businessName}</td>
+                <td>{demo.content.sector}</td>
+                <td>{demo.content.templateId}</td>
+                <td>{demo.content.brand.variantId}</td>
+                <td>{demo.businessState}</td>
+                <td>{demo.auditStatus ?? 'pendiente'}</td>
+                <td>
+                  <a href={demo.demoUrl}>Ver demo</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul className="demo-cards">
+        {GENERATED_DEMOS.map((demo) => (
+          <li key={demo.content.businessSlug} className="demo-card">
+            <h2>{demo.content.businessName}</h2>
+            <p className="demo-card-meta">
+              {demo.content.sector} · {demo.content.templateId} · {demo.content.brand.variantId}
+            </p>
+            <p className="demo-card-status">
+              {demo.businessState} · Auditoría: {demo.auditStatus ?? 'pendiente'}
+            </p>
+            <a className="demo-card-link" href={demo.demoUrl}>
+              Ver demo →
+            </a>
+          </li>
+        ))}
+      </ul>
       {GENERATED_DEMOS.length === 0 ? (
         <p>No hay demos generadas todavía. Genera una con POST /api/websites/generate.</p>
       ) : null}
