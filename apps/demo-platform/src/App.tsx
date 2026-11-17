@@ -302,9 +302,6 @@ function DemoSite({ demo }: { demo: GeneratedDemo }) {
 
       <footer className="demo-footer">
         <p>{content.legal.demoNote}</p>
-        <p>
-          <a href="/">← Volver a la plataforma de demos</a>
-        </p>
       </footer>
     </div>
   );
