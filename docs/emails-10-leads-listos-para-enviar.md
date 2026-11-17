@@ -18,7 +18,7 @@
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Santiago Ferrer Fontanería en General SL no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Santiago Ferrer Fontanería en General SL no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/santiago-ferrer-fontaneria-en-general-sl-logrono
 
@@ -27,7 +27,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -42,7 +42,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Hidrorioja SC no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Hidrorioja SC no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/hidrorioja-sc-logrono
 
@@ -51,7 +51,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -66,7 +66,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Moisés Muñoz, S.L. no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Moisés Muñoz, S.L. no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/moises-munoz-s-l-logrono
 
@@ -75,7 +75,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -90,7 +90,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que ATESA — Aire y Temperatura, S.L. no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que ATESA — Aire y Temperatura, S.L. no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/atesa-aire-y-temperatura-s-l-logrono
 
@@ -99,7 +99,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -114,7 +114,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Mishea Peluqueros no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Mishea Peluqueros no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/mishea-peluqueros-logrono
 
@@ -123,7 +123,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -138,7 +138,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que La Guarida 111 no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que La Guarida 111 no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/la-guarida-111-logrono
 
@@ -147,7 +147,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -162,7 +162,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Charles barbershop no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Charles barbershop no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/charles-barbershop-logrono
 
@@ -171,7 +171,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -186,7 +186,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Peluquería E.style no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Peluquería E.style no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/peluqueria-e-style-logrono
 
@@ -195,7 +195,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -210,7 +210,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Pintor Logroño Roberto Decoración no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Pintor Logroño Roberto Decoración no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/pintor-logrono-roberto-decoracion-logrono
 
@@ -219,7 +219,7 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño
 
 ---
@@ -234,7 +234,7 @@ Desarrollador web, Logroño
 
 Buenos días,
 
-Soy Jon Peciña, desarrollador web de Logroño. He visto que Carpintería Sergio Martínez no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
+Soy Miguel Martín, desarrollador web de Logroño. He visto que Carpintería Sergio Martínez no tiene página web propia y les he preparado una muestra de cómo quedaría su web corporativa:
 
 https://weblead-demos.vercel.app/demos/carpinteria-sergio-martinez-logrono
 
@@ -243,5 +243,5 @@ Si les gusta, puedo dejarla como su web por 50 €, que incluye el desarrollo de
 Es solo una propuesta, sin compromiso. Si les interesa, no tienen que hacer nada más: basta con responder a este mismo correo y me encargo de todo. Y si quieren algún cambio en la web o tienen cualquier duda, me lo dicen por aquí y lo vemos juntos.
 
 Un saludo,
-Jon Peciña
+Miguel Martín
 Desarrollador web, Logroño

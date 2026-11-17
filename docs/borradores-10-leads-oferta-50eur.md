@@ -32,7 +32,7 @@ Asunto: `Su web corporativa por 50 €: les he preparado una muestra`
 
 > Buenos días,
 >
-> Soy Jon Peciña, desarrollador web de Logroño. He visto que {NOMBRE}
+> Soy Miguel Martín, desarrollador web de Logroño. He visto que {NOMBRE}
 > no tiene página web propia y les he preparado una muestra de cómo
 > quedaría su web corporativa:
 >
