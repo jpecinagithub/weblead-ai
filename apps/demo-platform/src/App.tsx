@@ -76,7 +76,9 @@ function ContactCard({ content }: { content: GeneratedWebsiteContent }) {
         ) : null}
       </address>
       <p className="contact-note">
-        Contacto directo con la empresa por teléfono o email.
+        {content.contact.phone
+          ? 'Contacto directo con la empresa por teléfono o email.'
+          : 'Contacto directo con la empresa por email.'}
       </p>
     </div>
   );
