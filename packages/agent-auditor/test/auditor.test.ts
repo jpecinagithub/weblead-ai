@@ -93,6 +93,37 @@ describe('auditor: content audit vs dossier (Fase D, independent of designer)', 
     expect(merged.scores.technical).toBe(75);
     expect(merged.findings).toHaveLength(1);
   });
+
+  it('stale content still carrying formNote fails as CRITICAL CONTENT (rediseño 2026-11-17)', () => {
+    const content = contentFor();
+    (content.contact as unknown as Record<string, unknown>).formNote =
+      'Formulario de demostración: no envía nada a ningún tercero.';
+    const report = auditWebsiteContent(content, FERRER_DOSSIER);
+    expect(report.result).toBe('FAILED');
+    expect(report.findings.some((f) => f.severity === 'CRITICAL' && f.message.includes('formNote'))).toBe(true);
+  });
+
+  it('a Playwright finding of a present form fails the audit as CONTENT CRITICAL', () => {
+    const base = auditWebsiteContent(contentFor(), FERRER_DOSSIER);
+    const merged = mergePlaywrightFindings(base, [
+      {
+        severity: 'CRITICAL',
+        category: 'CONTENT',
+        message: 'Formulario presente (3 controles form/input/textarea/select): el rediseño 2026-11-17 los eliminó de todas las demos.',
+      },
+    ]);
+    expect(merged.result).toBe('FAILED');
+    expect(merged.scores.content).toBe(75);
+  });
+
+  it('a missing Google Maps link is only a MINOR CONTENT finding', () => {
+    const content = contentFor();
+    content.contact.mapsHref = null;
+    const report = auditWebsiteContent(content, FERRER_DOSSIER);
+    expect(report.result).toBe('PASSED');
+    expect(report.scores.content).toBe(90);
+    expect(report.findings.some((f) => f.message.includes('Google Maps'))).toBe(true);
+  });
 });
 
 describe('auditor: state-machine gate (master prompt §3)', () => {

@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildWebsiteContent,
+  extractFoundedYear,
   extractInitials,
+  extractReviewSummary,
+  mapsHrefFor,
   sanitizeActivitySignal,
   validateNoInventedClaims,
   whatsappHrefFor,
@@ -64,10 +67,54 @@ describe('generator: real dossier data, nothing invented', () => {
     expect(c.seo.ogImage?.startsWith('https://images.unsplash.com/photo-')).toBe(true);
   });
 
-  it('contact form is demo-only: the note says it sends nothing anywhere', () => {
+  it('contact has NO form at all (rediseño 2026-11-17): tel/mailto/address/Maps only', () => {
     const c = buildWebsiteContent(FERRER_INPUT);
-    expect(c.contact.formNote).toMatch(/demostración/i);
-    expect(c.contact.formNote).toMatch(/no envía nada/i);
+    // The formNote field is gone from the type; a stale object carrying it
+    // must be caught, so assert on the serialized content too.
+    expect('formNote' in c.contact).toBe(false);
+    expect(JSON.stringify(c)).not.toMatch(/formNote|formulario|<form|<input|<textarea/i);
+    expect(c.contact.mapsHref).toBe(
+      'https://www.google.com/maps/search/?api=1&query=C%2F%20Gonzalo%20de%20Berceo%2C%208%2C%203-D%2C%2026005%20Logro%C3%B1o',
+    );
+    expect(mapsHrefFor(null)).toBeNull();
+    expect(buildWebsiteContent({ ...FERRER_INPUT, address: null }).contact.mapsHref).toBeNull();
+  });
+
+  it('assigns a deterministic per-business variant (same slug, same variant)', () => {
+    const a = buildWebsiteContent(FERRER_INPUT);
+    const b = buildWebsiteContent(FERRER_INPUT);
+    expect(a.brand.variantId).toBe(b.brand.variantId);
+    expect(a.brand.heroLayout).toBe(b.brand.heroLayout);
+    expect(a.brand.variantId).toMatch(/^fontaneria-climatizacion-v[012]$/);
+    expect(['banner', 'split', 'card']).toContain(a.brand.heroLayout);
+    // Variant accent overrides the sector default; the logo uses it.
+    expect(a.brand.palette.accent).not.toBe('#c67a2e');
+    expect(a.brand.logoSvgDataUri).toContain(`%23${a.brand.palette.accent.slice(1)}`);
+    const hair = buildWebsiteContent(BEGONA_INPUT);
+    expect(hair.brand.variantId).toMatch(/^peluqueria-barberia-v[012]$/);
+    expect(hair.brand.variantId).not.toBe(a.brand.variantId);
+  });
+
+  it('extracts verified review figures and founding year from the signal, verbatim', () => {
+    expect(extractReviewSummary('Datos verificados 05/05/2026; 33 reseñas, 4,9/5')).toEqual({
+      count: 33,
+      rating: '4,9',
+    });
+    expect(extractReviewSummary("Reseñas 'hace un mes' (~oct 2026); 5,0/5, 16 reseñas")).toEqual({
+      count: 16,
+      rating: '5,0',
+    });
+    expect(extractReviewSummary('Booksy en vivo: 335 reseñas, 5,0/5; agenda Yeasy activa')).toEqual({
+      count: 335,
+      rating: '5,0',
+    });
+    expect(extractReviewSummary('Solo directorios, sin reseñas ni fecha')).toBeNull();
+    expect(extractFoundedYear('SL, 10 empleados, constituida 1994')).toBe(1994);
+    expect(extractFoundedYear('Sin fecha de constitución')).toBeNull();
+    const ferrer = buildWebsiteContent(FERRER_INPUT);
+    expect(ferrer.verified).toEqual({ reviews: null, foundedYear: 1994 });
+    const begona = buildWebsiteContent(BEGONA_INPUT);
+    expect(begona.verified).toEqual({ reviews: { count: 33, rating: '4,9' }, foundedYear: null });
   });
 
   it('WhatsApp only for a verified public Spanish phone', () => {

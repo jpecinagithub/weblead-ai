@@ -8,8 +8,10 @@
  * 1. Content audit (pure, always runs): the demo's business facts against
  *    the Researcher dossier (name/address/phone/email/services), forbidden
  *    claims (prices, hours, testimonials, superlatives, certifications),
- *    demo notice, contact/demo-form honesty, visual coherence (palette,
- *    fonts, licensed images with provenance) and technical SEO/links.
+ *    demo notice, contact completeness (phone/email/address/Maps link, and
+ *    NO form — rediseño 2026-11-17 removed the demo contact form entirely;
+ *    stale content still carrying `formNote` is CRITICAL), visual coherence
+ *    (palette, fonts, licensed images with provenance) and technical SEO/links.
  * 2. Playwright audit (see ./playwright-runner.js): live browser checks —
  *    console/HTTP errors, links, images, responsive overflow, performance,
  *    screenshots. When Chromium is unavailable the runner reports exactly
@@ -136,15 +138,24 @@ export function auditWebsiteContent(
     }
   }
 
-  // ---- Content: notice, sections, honest demo form. ----
+  // ---- Content: notice, sections, contact without any form. ----
   if (content.notice !== DEMO_NOTICE || !content.hero.title) {
     critical('CONTENT', 'Falta el aviso de propuesta conceptual o el título principal.');
   }
   if (!content.contact.phone || !content.contact.address) {
     critical('CONTENT', 'La demo no muestra teléfono o dirección de contacto verificados.');
   }
-  if (!content.contact.formNote.toLowerCase().includes('demostración') || !content.contact.formNote.toLowerCase().includes('no envía')) {
-    minor('CONTENT', 'La nota del formulario no deja claro que es una demostración que no envía datos a terceros.');
+  // Rediseño 2026-11-17: no hay formulario en ninguna demo. El contenido
+  // obsoleto (generado antes del rediseño) aún trae `formNote`: es un
+  // CRITICAL, no un aviso — hay que regenerar esa demo.
+  if ('formNote' in (content.contact as Record<string, unknown>)) {
+    critical('CONTENT', 'Contenido obsoleto: aún trae formNote del formulario eliminado en el rediseño 2026-11-17. Regenerar la demo.');
+  }
+  if (content.contact.address && !content.contact.mapsHref) {
+    minor('CONTENT', 'La demo muestra dirección pero no enlaza a Google Maps.');
+  }
+  if (content.contact.mapsHref && !content.contact.mapsHref.startsWith('https://www.google.com/maps/search/?api=1&query=')) {
+    minor('CONTENT', `Enlace de Google Maps mal formado: ${content.contact.mapsHref}.`);
   }
   if (content.faq.length === 0) minor('CONTENT', 'La demo no tiene FAQ.');
   if (content.gallery.images.length === 0) minor('CONTENT', 'La demo no tiene galería de imágenes.');

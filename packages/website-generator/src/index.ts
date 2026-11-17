@@ -17,13 +17,25 @@
  *   independently; a rejected field falls back to the deterministic text
  *   and the rejection is recorded in `content.llm`.
  * - WhatsApp link only when the phone is a verified public Spanish number.
- * - The contact form is demo-only: no action URL, no third-party submit.
+ * - NO contact form anywhere (rediseño 2026-11-17, orden de Jon): the
+ *   contact block is phone (tel:), email (mailto:), address and a Google
+ *   Maps link only. The old `contact.formNote` field is GONE; any content
+ *   still carrying it is stale and must be regenerated.
+ * - Per-business visual variant (rediseño 2026-11-17): the template's
+ *   variant is picked deterministically from the slug, so each business
+ *   renders its own accent + hero layout inside its sector system.
+ * - Verified review/founded-year facts (rediseño 2026-11-17): when the
+ *   dossier's activity signal states a review count + rating (e.g.
+ *   "33 reseñas, 4,9/5") or a founding year ("constituida 1994"), the
+ *   generator extracts them verbatim into `verified` for display. Nothing
+ *   is parsed into a claim the signal does not state; when the signal has
+ *   no such figures, `verified` stays null.
  * - Every image is an Unsplash License stock photo from the template,
  *   visually verified 2026-11-16, with source URL + licence recorded.
  * - The conceptual logo is an own SVG (initials + sector motif), never a
  *   third-party mark, recorded as a WebsiteAsset with licence "propio".
  */
-import { getTemplate, templateForSector, type WebsiteTemplate } from '@weblead/website-templates';
+import { getTemplate, templateForSector, variantForSlug, type HeroLayout, type WebsiteTemplate } from '@weblead/website-templates';
 
 export const DEMO_NOTICE =
   'Propuesta conceptual independiente, no oficial y pendiente de autorización de la empresa.';
@@ -87,6 +99,19 @@ export type GeneratedWebsiteContent = {
     logoText: string;
     logoMotif: 'pipe' | 'scissors';
     logoSvgDataUri: string;
+    /** Deterministic per-business variant id (rediseño 2026-11-17). */
+    variantId: string;
+    /** Hero composition for this business (banner | split | card). */
+    heroLayout: HeroLayout;
+  };
+  /**
+   * Facts extracted verbatim from the dossier's activity signal (rediseño
+   * 2026-11-17). Only figures the signal actually states; null otherwise.
+   * Rating keeps the signal's own format ("4,9", never recomputed).
+   */
+  verified: {
+    reviews: { count: number; rating: string } | null;
+    foundedYear: number | null;
   };
   seo: {
     title: string;
@@ -110,7 +135,8 @@ export type GeneratedWebsiteContent = {
     phoneHref: string | null;
     whatsappHref: string | null;
     email: string | null;
-    formNote: string;
+    /** Google Maps search link for the verified address (null without one). */
+    mapsHref: string | null;
   };
   notice: string;
   legal: { demoNote: string; imageCredits: string };
@@ -156,8 +182,36 @@ export function sanitizeActivitySignal(signal: string): string {
   return joined.charAt(0).toUpperCase() + joined.slice(1);
 }
 
-/** Initials of the first two significant words ("Santiago Ferrer ..." -> "SF"). */
-export function extractInitials(name: string): string {
+/**
+ * Extracts a review count + rating from the dossier's activity signal,
+ * verbatim (rediseño 2026-11-17). The pilot signals state it in two
+ * orders: "33 reseñas, 4,9/5" and "5,0/5, 16 reseñas". Returns null when
+ * the signal states no such figures — never a guess, never a default.
+ */
+export function extractReviewSummary(signal: string): { count: number; rating: string } | null {
+  const countFirst = signal.match(/(\d+)\s*reseñas?,\s*(\d+[,.]\d)\s*\/\s*5/);
+  if (countFirst) return { count: Number.parseInt(countFirst[1]!, 10), rating: countFirst[2]! };
+  const ratingFirst = signal.match(/(\d+[,.]\d)\s*\/\s*5,\s*(\d+)\s*reseñas?/);
+  if (ratingFirst) return { count: Number.parseInt(ratingFirst[2]!, 10), rating: ratingFirst[1]! };
+  return null;
+}
+
+/**
+ * Extracts a founding year from the dossier's activity signal, verbatim
+ * ("constituida 1994" -> 1994). Null when the signal states none.
+ */
+export function extractFoundedYear(signal: string): number | null {
+  const m = signal.match(/constituida\s+(\d{4})/i);
+  return m ? Number.parseInt(m[1]!, 10) : null;
+}
+
+/** Google Maps search link for a verified address (null without one). */
+export function mapsHrefFor(address: string | null): string | null {
+  if (!address) return null;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
+
+/** Initials of the first two significant words ("Santiago Ferrer ..." -> "SF"). */export function extractInitials(name: string): string {
   const stop = new Set(['de', 'del', 'la', 'el', 'en', 'y', 'sl', 's.l.', 'sc']);
   const words = name
     .split(/[\s-]+/)
@@ -202,9 +256,16 @@ export function buildWebsiteContent(
     throw new Error(`No website template for sector "${input.sector}" (templateId "${templateId ?? ''}").`);
   }
   const initials = extractInitials(input.name);
-  const logoSvgDataUri = buildLogoSvg(initials, template.palette.primary, template.palette.accent, template.logoMotif);
+  const variant = variantForSlug(template, input.slug);
+  const palette = { ...template.palette, accent: variant.accent };
+  const logoSvgDataUri = buildLogoSvg(initials, template.palette.primary, variant.accent, template.logoMotif);
   const phoneHref = input.phone ? `tel:+34${digitsOnly(input.phone)}` : null;
   const whatsappHref = whatsappHrefFor(input.phone);
+  const mapsHref = mapsHrefFor(input.address);
+  const verified = {
+    reviews: input.activitySignal ? extractReviewSummary(input.activitySignal) : null,
+    foundedYear: input.activitySignal ? extractFoundedYear(input.activitySignal) : null,
+  };
 
   const deterministicSubtitle =
     `${input.sector} en ${input.municipality}. Contacto directo por teléfono, sin intermediarios.`;
@@ -289,13 +350,16 @@ export function buildWebsiteContent(
     sector: input.sector,
     municipality: input.municipality,
     brand: {
-      palette: template.palette,
+      palette,
       fontHeading: template.fontHeading,
       fontBody: template.fontBody,
       logoText: initials,
       logoMotif: template.logoMotif,
       logoSvgDataUri,
+      variantId: variant.id,
+      heroLayout: variant.heroLayout,
     },
+    verified,
     seo: {
       title: `${input.name} — ${input.sector} en ${input.municipality} (propuesta conceptual)`,
       description:
@@ -340,8 +404,7 @@ export function buildWebsiteContent(
       phoneHref,
       whatsappHref,
       email: input.email,
-      formNote:
-        'Formulario de demostración: comprueba los datos que escribes, pero no envía nada a ningún tercero. Nadie recibe tu mensaje.',
+      mapsHref,
     },
     notice: DEMO_NOTICE,
     legal: {

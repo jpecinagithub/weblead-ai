@@ -33,6 +33,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "generate:designs": "tsx src/generate-designs.ts",
     "generate:designs:fase-f": "tsx src/generate-designs-fase-f.ts",
+    "regenerate:demos": "tsx src/regenerate-demos-redesign.ts",
+    "sync:redesign": "tsx src/sync-redesign-to-db.ts",
+    "audit:redesign": "tsx src/audit-redesign.ts",
     "export:demos": "tsx src/export-demos.ts"
   },
   "type": "module",

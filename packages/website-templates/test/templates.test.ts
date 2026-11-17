@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { TEMPLATES, getTemplate, templateForSector, templatesAreDistinct } from '../src/index.js';
+import {
+  TEMPLATES,
+  contrastRatio,
+  getTemplate,
+  templateForSector,
+  templatesAreDistinct,
+  variantForSlug,
+} from '../src/index.js';
 
 describe('website-templates (Fase D: two real sector templates, not one generic)', () => {
   it('ships exactly the two sector templates', () => {
@@ -60,5 +67,57 @@ describe('website-templates (Fase D: two real sector templates, not one generic)
         expect(f.answer).not.toMatch(/abierto de \d|de \d{1,2}(:\d{2})? a \d{1,2} h/i);
       }
     }
+  });
+
+  it('no user-visible template text mentions any form (rediseño 2026-11-17: contact is direct only)', () => {
+    // Only strings the demo renders (FAQ + hero kicker). The template
+    // `description` is internal metadata, not rendered copy.
+    for (const t of TEMPLATES) {
+      const visible = [t.heroKicker, ...t.faq.flatMap((f) => [f.question, f.answer])].join(' ');
+      expect(visible).not.toMatch(/formulario|<form|input|textarea|Enviar/i);
+    }
+  });
+
+  it('each template ships 3 curated variants with distinct accents and hero layouts', () => {
+    for (const t of TEMPLATES) {
+      expect(t.variants).toHaveLength(3);
+      const accents = t.variants.map((v) => v.accent);
+      expect(new Set(accents).size).toBe(3);
+      const layouts = t.variants.map((v) => v.heroLayout);
+      expect(new Set(layouts).size).toBeGreaterThanOrEqual(2);
+      expect(t.variants.map((v) => v.id)).toEqual(
+        accents.map((_, i) => `${t.id}-v${i}`),
+      );
+      // Variant accents are dark enough to carry text on the template
+      // background (WCAG AA for normal text, >= 4.5:1).
+      for (const v of t.variants) {
+        expect(contrastRatio(v.accent, t.palette.background)).toBeGreaterThanOrEqual(4.5);
+      }
+      // And the sector primary still carries white CTA text.
+      expect(contrastRatio('#ffffff', t.palette.primary)).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it('variantForSlug is deterministic and spreads the 10 pilot slugs across variants', () => {
+    const plumbing = getTemplate('fontaneria-climatizacion')!;
+    const slugs = [
+      'santiago-ferrer-fontaneria-en-general-sl-logrono',
+      'hidrorioja-sc-logrono',
+      'expert-fontaneros-logrono-logrono',
+      'fontaneria-la-moderna-logrono',
+      'fontaneria-chuchi-logrono',
+    ];
+    const picked = slugs.map((s) => variantForSlug(plumbing, s).id);
+    expect(slugs.map((s) => variantForSlug(plumbing, s).id)).toEqual(picked);
+    expect(new Set(picked).size).toBeGreaterThanOrEqual(2);
+    const hair = getTemplate('peluqueria-barberia')!;
+    const hairSlugs = [
+      'begona-ruiz-peluqueria-logrono',
+      'avalon-stilistas-logrono',
+      'lumberjack-barbershop-logrono',
+      'star-barber-shop-logrono',
+      'peluqueria-nuria-logrono',
+    ];
+    expect(new Set(hairSlugs.map((s) => variantForSlug(hair, s).id)).size).toBeGreaterThanOrEqual(2);
   });
 });

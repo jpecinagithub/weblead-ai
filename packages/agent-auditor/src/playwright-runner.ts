@@ -127,6 +127,30 @@ export async function runPlaywrightAudit(
     for (const href of badLinks) {
       findings.push({ severity: 'CRITICAL', category: 'TECHNICAL', message: `Enlace roto (href vacío o javascript:): "${href}"`, url: demoUrl });
     }
+    // Rediseño 2026-11-17: no form in any demo — contact is tel:/mailto:/
+    // address/Maps only. Any form control is a CRITICAL regression.
+    const formControls = await desktop.evaluate(() =>
+      document.querySelectorAll('form, input, textarea, select').length,
+    );
+    if (formControls > 0) {
+      findings.push({
+        severity: 'CRITICAL',
+        category: 'CONTENT',
+        message: `Formulario presente (${formControls} controles form/input/textarea/select): el rediseño 2026-11-17 los eliminó de todas las demos.`,
+        url: demoUrl,
+      });
+    }
+    // The contact block must offer the direct channels (tel: + Maps link).
+    const contactChannels = await desktop.evaluate(() => ({
+      tel: document.querySelectorAll('a[href^="tel:"]').length,
+      maps: document.querySelectorAll('a[href^="https://www.google.com/maps/"]').length,
+    }));
+    if (contactChannels.tel === 0) {
+      findings.push({ severity: 'CRITICAL', category: 'CONTENT', message: 'Sin enlace tel: en la demo.', url: demoUrl });
+    }
+    if (contactChannels.maps === 0) {
+      findings.push({ severity: 'MINOR', category: 'CONTENT', message: 'Sin enlace a Google Maps en la demo.', url: demoUrl });
+    }
     await desktop.close();
 
     // ---- Mobile 390x844 ----
