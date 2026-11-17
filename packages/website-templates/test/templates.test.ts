@@ -8,10 +8,11 @@ import {
   variantForSlug,
 } from '../src/index.js';
 
-describe('website-templates (Fase D: two real sector templates, not one generic)', () => {
-  it('ships exactly the two sector templates', () => {
+describe('website-templates (Fase D + 2ª tanda: three real sector templates, not one generic)', () => {
+  it('ships exactly the three sector templates', () => {
     expect(TEMPLATES.map((t) => t.id).sort()).toEqual([
       'fontaneria-climatizacion',
+      'oficios-hogar',
       'peluqueria-barberia',
     ]);
     expect(getTemplate('placeholder')).toBeUndefined();
@@ -40,6 +41,8 @@ describe('website-templates (Fase D: two real sector templates, not one generic)
   it('maps pilot sectors to the right template', () => {
     expect(templateForSector('fontanería/climatización')?.id).toBe('fontaneria-climatizacion');
     expect(templateForSector('peluquería/barbería')?.id).toBe('peluqueria-barberia');
+    expect(templateForSector('pintura/decoración')?.id).toBe('oficios-hogar');
+    expect(templateForSector('carpintería')?.id).toBe('oficios-hogar');
     expect(templateForSector('sector desconocido')).toBeUndefined();
   });
 

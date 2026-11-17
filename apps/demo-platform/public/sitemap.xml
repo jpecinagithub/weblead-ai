@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Fase D: generado por apps/api/src/export-demos.ts; host local de dev. -->
+<!-- Segunda tanda 2026-11-17: generado por apps/api/src/regenerate-demos-segunda-tanda.ts -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>http://localhost:5174/</loc></url>
-  <url><loc>http://localhost:5174/demos/santiago-ferrer-fontaneria-en-general-sl-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/begona-ruiz-peluqueria-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/hidrorioja-sc-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/expert-fontaneros-logrono-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/fontaneria-la-moderna-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/fontaneria-chuchi-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/avalon-stilistas-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/lumberjack-barbershop-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/star-barber-shop-logrono</loc></url>
-  <url><loc>http://localhost:5174/demos/peluqueria-nuria-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/santiago-ferrer-fontaneria-en-general-sl-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/hidrorioja-sc-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/moises-munoz-s-l-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/atesa-aire-y-temperatura-s-l-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/mishea-peluqueros-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/la-guarida-111-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/charles-barbershop-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/peluqueria-e-style-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/pintor-logrono-roberto-decoracion-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/carpinteria-sergio-martinez-logrono</loc></url>
 </urlset>

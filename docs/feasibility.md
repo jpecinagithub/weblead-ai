@@ -164,3 +164,33 @@ gratuito. El coste de LLM no es el factor limitante; el factor limitante es el d
 - `fase-a/cost-measure-tta.json` (4 expedientes medidos con Top Tools AI Basic)
 - `fase-a/cost-measure-tta.py` (script de medición, reutiliza la credencial registrada)
 - Preparación previa: `fase-a-piloto.md`; prompt maestro: `docs/master-prompt-v1.md`
+
+## 10. Segunda tanda (2026-11-17): sin email no hay proyecto
+
+**Regla nueva permanente (Jon, 2026-11-17 12:12): para empezar un
+proyecto hay que tener el email de contacto verificado; sin email no
+hay proyecto.** La primera tanda quedó invalidada como lista enviable
+(solo 2 de 10 tenían email); los 8 sin email quedan aparcados y sus
+demos eliminadas de la plataforma (orden de Jon 2026-11-17 12:27).
+
+La segunda tanda reutiliza Ferrer (100) e Hidrorioja (90) y añade 8
+negocios nuevos en Logroño con email verificado y score ≥ 70 (misma
+regla de puntuación de §3): Moisés Muñoz S.L. (100), ATESA (90),
+Mishea Peluqueros (85), La Guarida 111 (95), Charles barbershop (95),
+Peluquería E.style (95), Pintor Logroño Roberto Decoración (95) y
+Carpintería Sergio Martínez (80). Los dos sectores originales dieron 6
+sólidos; los 2 restantes vienen de sectores adyacentes (pintura y
+carpintería) — el cambio de alcance queda registrado en
+`docs/segunda-tanda-10-leads.md`, no se hizo en silencio.
+
+Corrección de scores respecto a la primera lectura manual (manda la
+regla implementada en `packages/agent-researcher/src/scoring.ts`):
+`social-only` (20/15) es solo para presencia funcional con reserva;
+Instagram solo, Linktree o un subdominio gratuito del proveedor son
+`none` (25/20); SL con plantilla conocida = 15. Detalle en
+`docs/segunda-tanda-10-leads.md` §3.
+
+`docs/feasibility-data.csv` tiene ahora 34 filas (26 + 8) y
+`packages/shared/src/data/pilot-leads.json` contiene los 10 leads de
+la segunda tanda. Plantilla nueva `oficios-hogar` para pintura y
+carpintería. Auditoría Playwright 10/10 PASSED 100/100/100/100.

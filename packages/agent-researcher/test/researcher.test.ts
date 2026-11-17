@@ -273,19 +273,19 @@ describe('researchBusiness pipeline', () => {
     expect(dossier.rejectionReason).toContain('actividad no verificada');
   });
 
-  it('reproduces the pilot scores for all 10 leads', () => {
+  it('reproduces the pilot scores for all 10 leads (segunda tanda 2026-11-17)', () => {
     const mismatches: string[] = [];
     for (const lead of [
-      getPilotLead(4)!,
       getPilotLead(6)!,
-      getPilotLead(7)!,
       getPilotLead(8)!,
-      getPilotLead(13)!,
-      getPilotLead(17)!,
-      getPilotLead(19)!,
-      getPilotLead(24)!,
-      getPilotLead(25)!,
-      getPilotLead(26)!,
+      getPilotLead(27)!,
+      getPilotLead(28)!,
+      getPilotLead(29)!,
+      getPilotLead(30)!,
+      getPilotLead(31)!,
+      getPilotLead(32)!,
+      getPilotLead(33)!,
+      getPilotLead(34)!,
     ]) {
       const { dossier } = researchBusiness(pilotLeadToEvidence(lead));
       if (dossier.score.total !== lead.score.total) {

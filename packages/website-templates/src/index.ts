@@ -1,7 +1,8 @@
 /**
- * Website templates — Fase D + rediseño 2026-11-17 (sin formularios).
+ * Website templates — Fase D + rediseño 2026-11-17 (sin formularios) +
+ * 2ª tanda 2026-11-17 (oficios del hogar: pintura y carpintería).
  *
- * Two REAL, differentiated sector templates — not one generic template with
+ * Three REAL, differentiated sector templates — not one generic template with
  * different colours. Each one carries its own layout order, palette,
  * typography, hero framing, sector FAQ (answers never assert an unverified
  * fact: they always deflect to the verified phone) and stock-photo set.
@@ -34,7 +35,7 @@
  * asset keeps its source URL + licence in WebsiteAsset (see generator).
  */
 
-export type TemplateId = 'fontaneria-climatizacion' | 'peluqueria-barberia';
+export type TemplateId = 'fontaneria-climatizacion' | 'peluqueria-barberia' | 'oficios-hogar';
 
 export type BrandPalette = {
   /** Page background. */
@@ -110,7 +111,7 @@ export type WebsiteTemplate = {
   /** Stock photos for this sector (Unsplash License, visually verified). */
   photos: TemplateStockPhoto[];
   /** Conceptual logo motif (SVG, drawn from initials — never a third-party mark). */
-  logoMotif: 'pipe' | 'scissors';
+  logoMotif: 'pipe' | 'scissors' | 'hammer';
   /**
    * Visual variants (rediseño 2026-11-17): 3 per template. The generator
    * picks one deterministically from the business slug, so the same
@@ -158,6 +159,33 @@ const HAIR_PHOTOS: TemplateStockPhoto[] = [
     url: '/images/begona-gallery-2.jpg',
     sourceUrl: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200&q=80',
     caption: 'Arreglo de barba con tijera (imagen de archivo)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Oficios del hogar (2ª tanda 2026-11-17: pintura y carpintería). Fotos
+ * Unsplash License, verificadas visualmente el 2026-11-17 por el
+ * coordinador (rodillo pintando, corte de madera, taladro en obra) y
+ * servidas en local desde apps/demo-platform/public/images/.
+ */
+const TRADES_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/oficios-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=1200&q=80',
+    caption: 'Rodillo pintando una pared (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/oficios-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1200&q=80',
+    caption: 'Corte de madera en obra (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/oficios-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1200&q=80',
+    caption: 'Taladro en obra (imagen de archivo, no es el local)',
     placement: 'gallery',
   },
 ];
@@ -249,6 +277,50 @@ export const TEMPLATES: WebsiteTemplate[] = [
       { id: 'peluqueria-barberia-v0', accent: '#8a6420', heroLayout: 'card' },
       { id: 'peluqueria-barberia-v1', accent: '#7c2e3e', heroLayout: 'split' },
       { id: 'peluqueria-barberia-v2', accent: '#4d5e2a', heroLayout: 'banner' },
+    ],
+  },
+  {
+    id: 'oficios-hogar',
+    name: 'Oficios y servicios del hogar',
+    description:
+      'Plantilla sectorial para oficios del hogar (2ª tanda 2026-11-17: pintura/decoración y carpintería): hero de trabajo con foto de oficio, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de presupuestos y trabajos. Paleta verde musgo + terracota. Rediseño 2026-11-17: 3 variantes (terracota/banner, ocre/partida, pizarra/tarjeta) y contacto sin formulario.',
+    sectors: ['pintura/decoración', 'pintura', 'carpintería', 'carpinteria'],
+    palette: {
+      background: '#f6f4ee',
+      surface: '#fffdf8',
+      primary: '#333f2b',
+      primaryDark: '#232b1d',
+      accent: '#a34d28',
+      text: '#26291f',
+      muted: '#5f6656',
+    },
+    fontHeading: "'Palatino Linotype', Palatino, Georgia, serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'trust', 'gallery', 'services', 'howItWorks', 'about', 'faq', 'contact'],
+    heroKicker: 'Oficios y servicios del hogar en Logroño',
+    faq: [
+      {
+        question: '¿Hacen presupuestos?',
+        answer:
+          'Pide presupuesto por teléfono: llama al número de contacto de esta web y te confirman si pueden hacerlo y qué información necesitan. El contacto es directo con la empresa.',
+      },
+      {
+        question: '¿Qué trabajos hacen?',
+        answer:
+          'Los trabajos concretos solo se publican cuando están contrastados en el expediente de la empresa. Si la lista de servicios de esta demo aparece como pendiente de confirmar, es porque aún no se ha verificado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Trabajan solo en Logroño?',
+        answer:
+          'La dirección verificada de la empresa está en Logroño (ver sección Contacto). Para trabajos fuera de Logroño, consúltalo por teléfono.',
+      },
+    ],
+    photos: TRADES_PHOTOS,
+    logoMotif: 'hammer',
+    variants: [
+      { id: 'oficios-hogar-v0', accent: '#a34d28', heroLayout: 'banner' },
+      { id: 'oficios-hogar-v1', accent: '#7a5c14', heroLayout: 'split' },
+      { id: 'oficios-hogar-v2', accent: '#33606e', heroLayout: 'card' },
     ],
   },
 ];

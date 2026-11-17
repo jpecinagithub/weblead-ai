@@ -1,4 +1,4 @@
-# Borradores — oferta web corporativa 50 € (10 leads)
+# Borradores — oferta web corporativa 50 € (SEGUNDA TANDA, 10 leads)
 
 > Preparado 2026-11-17, sin enviar nada. Los envía Jon mismo desde
 > **mmartin19791979parra@gmail.com** (Gmail sigue desconectado en Muse).
@@ -9,15 +9,18 @@
 > enlace a la demo correspondiente en
 > `https://weblead-demos.vercel.app/demos/{slug}` (verificadas en vivo).
 >
-> **Clave de las demos (2026-11-17):** la plataforma está protegida
-> con la clave **`demo2026`**. Cada email incluye la línea con la
-> clave, porque sin ella el destinatario no puede ver su demo.
+> **Regla nueva permanente (Jon, 2026-11-17 12:12): sin email de
+> contacto verificado no hay proyecto.** Esta segunda tanda sustituye
+> a la primera: los 8 leads sin email (La Moderna, Chuchi, Expert,
+> Begoña Ruiz, Avalon, Lumberjack, Star Barber, Nuria) quedan aparcados
+> y **sus demos ya no están en la plataforma**. Los 10 de esta lista
+> tienen email verificado: los 10 son enviables.
 >
-> **Solo 2 de los 10 leads tienen email verificado en el expediente**
-> (Ferrer e Hidrorioja). Los otros 8 NO tienen email: su texto está
-> preparado, pero NO se envía hasta conseguir su dirección de contacto
-> (llamada, visita o mensaje por su canal público). Nunca enviar a una
-> dirección inventada o adivinada.
+> **Clave de las demos:** la plataforma pide la clave **`demo2026`**
+> SIEMPRE (sin persistencia: se vuelve a pedir al recargar o al abrir
+> otra demo). Cada email incluye la línea con la clave, porque sin
+> ella el destinatario no puede ver su demo. La página de entrada no
+> lista ninguna demo: cada proyecto solo se abre con su enlace directo.
 
 ## Modelo de email (igual para los 10, con nombre y enlace propios)
 
@@ -58,53 +61,53 @@ Asunto: `Su web corporativa por 50 €: les he preparado una muestra`
 - **Demo:** https://weblead-demos.vercel.app/demos/hidrorioja-sc-logrono
 - **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 3. Fontanería la Moderna — SIN EMAIL, NO ENVIABLE
+## 3. Moisés Muñoz, S.L. — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/fontaneria-la-moderna-logrono
-- **Para conseguir el email:** llamar al 941251317. Dirección: C/ Duquesa de la Victoria, 75, 26004 Logroño.
+- **Para:** fontaneria.moisesmunoz@fer.es
+- **Demo:** https://weblead-demos.vercel.app/demos/moises-munoz-s-l-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 4. Fontanería Chuchi — SIN EMAIL, NO ENVIABLE
+## 4. ATESA — Aire y Temperatura, S.L. — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/fontaneria-chuchi-logrono
-- **Para conseguir el email:** llamar al 649412049 o escribir por su Facebook (facebook.com/107624921031562). Dirección: C/ Manuel de Falla, 47, 5-A, 26007 Logroño.
+- **Para:** atesa@fer.es
+- **Demo:** https://weblead-demos.vercel.app/demos/atesa-aire-y-temperatura-s-l-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 5. Expert Fontaneros Logroño — SIN EMAIL, NO ENVIABLE
+## 5. Mishea Peluqueros — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/expert-fontaneros-logrono-logrono
-- **Para conseguir el email:** llamar al 941722140. Dirección: C/ Fray Diego de Leiva, 38, A, 26007 Logroño.
+- **Para:** misheapeluqueros@gmail.com
+- **Demo:** https://weblead-demos.vercel.app/demos/mishea-peluqueros-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 6. Begoña Ruiz Peluquería — SIN EMAIL, NO ENVIABLE
+## 6. La Guarida 111 — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/begona-ruiz-peluqueria-logrono
-- **Para conseguir el email:** llamar al 941235784 o pasarse por C/ Gral. Vara de Rey, 33, 26002 Logroño.
+- **Para:** miah_syt@hotmail.com
+- **Demo:** https://weblead-demos.vercel.app/demos/la-guarida-111-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 7. Avalon Stilistas — SIN EMAIL, NO ENVIABLE
+## 7. Charles barbershop — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/avalon-stilistas-logrono
-- **Para conseguir el email:** llamar al 941289846. Dirección: C/ Lardero, 8, 26002 Logroño.
+- **Para:** charlesbarbers27@gmail.com
+- **Demo:** https://weblead-demos.vercel.app/demos/charles-barbershop-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 8. Lumberjack Barbershop — SIN EMAIL, NO ENVIABLE
+## 8. Peluquería E.style — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/lumberjack-barbershop-logrono
-- **Para conseguir el email:** llamar al 941760684 o por Instagram / Booksy. Dirección: Av. de la Solidaridad, 46, 26003 Logroño.
+- **Para:** businessestyle@gmail.com
+- **Demo:** https://weblead-demos.vercel.app/demos/peluqueria-e-style-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 9. Star Barber Shop — SIN EMAIL, NO ENVIABLE
+## 9. Pintor Logroño Roberto Decoración — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/star-barber-shop-logrono
-- **Para conseguir el email:** llamar al 641216748. Dirección: C/ Padre Marín, 11, 26004 Logroño.
+- **Para:** robertoinretec@gmail.com
+- **Demo:** https://weblead-demos.vercel.app/demos/pintor-logrono-roberto-decoracion-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
-## 10. Peluquería Nuria — SIN EMAIL, NO ENVIABLE
+## 10. Carpintería Sergio Martínez — ENVIABLE
 
-- **Para:** (sin email en el expediente)
-- **Demo:** https://weblead-demos.vercel.app/demos/peluqueria-nuria-logrono
-- **Para conseguir el email:** llamar al 941581920. Dirección: C/ Oviedo, 12, bajo 3, 26003 Logroño.
+- **Para:** carpinteriasm@gmail.com
+- **Demo:** https://weblead-demos.vercel.app/demos/carpinteria-sergio-martinez-logrono
+- **Asunto:** Su web corporativa por 50 €: les he preparado una muestra
 
 ## Resumen
 
@@ -112,13 +115,13 @@ Asunto: `Su web corporativa por 50 €: les he preparado una muestra`
 |---|---|---|---|
 | 1 | Santiago Ferrer | sanfefo@terra.com | Enviable |
 | 2 | Hidrorioja SC | hidrorioja@telefonica.net | Enviable |
-| 3 | Fontanería la Moderna | — | Sin email |
-| 4 | Fontanería Chuchi | — | Sin email |
-| 5 | Expert Fontaneros | — | Sin email |
-| 6 | Begoña Ruiz | — | Sin email |
-| 7 | Avalon Stilistas | — | Sin email |
-| 8 | Lumberjack Barbershop | — | Sin email |
-| 9 | Star Barber Shop | — | Sin email |
-| 10 | Peluquería Nuria | — | Sin email |
+| 3 | Moisés Muñoz, S.L. | fontaneria.moisesmunoz@fer.es | Enviable |
+| 4 | ATESA | atesa@fer.es | Enviable |
+| 5 | Mishea Peluqueros | misheapeluqueros@gmail.com | Enviable |
+| 6 | La Guarida 111 | miah_syt@hotmail.com | Enviable |
+| 7 | Charles barbershop | charlesbarbers27@gmail.com | Enviable |
+| 8 | Peluquería E.style | businessestyle@gmail.com | Enviable |
+| 9 | Pintor Roberto | robertoinretec@gmail.com | Enviable |
+| 10 | Carpintería Sergio Martínez | carpinteriasm@gmail.com | Enviable |
 
-**Enviables ahora: 2 de 10.** Los otros 8 textos están listos; solo falta su email.
+**Enviables ahora: 10 de 10.**

@@ -97,7 +97,7 @@ export type GeneratedWebsiteContent = {
     fontHeading: string;
     fontBody: string;
     logoText: string;
-    logoMotif: 'pipe' | 'scissors';
+    logoMotif: 'pipe' | 'scissors' | 'hammer';
     logoSvgDataUri: string;
     /** Deterministic per-business variant id (rediseño 2026-11-17). */
     variantId: string;
@@ -220,11 +220,13 @@ export function mapsHrefFor(address: string | null): string | null {
   return (words.slice(0, 2).map((w) => w[0]!.toUpperCase()).join('') || 'W').slice(0, 2);
 }
 
-function buildLogoSvg(initials: string, primary: string, accent: string, motif: 'pipe' | 'scissors'): string {
+function buildLogoSvg(initials: string, primary: string, accent: string, motif: 'pipe' | 'scissors' | 'hammer'): string {
   const glyph =
     motif === 'pipe'
       ? '<path d="M14 6h20v6H20v22a4 4 0 0 1-8 0V12H6z" fill="#fff" opacity="0.9"/>'
-      : '<circle cx="18" cy="18" r="5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="42" cy="18" r="5" fill="none" stroke="#fff" stroke-width="3"/><path d="M22 21 52 42M38 21 8 42" stroke="#fff" stroke-width="3"/>';
+      : motif === 'hammer'
+        ? '<rect x="12" y="12" width="24" height="11" rx="3" fill="#fff" opacity="0.9"/><path d="M30 23 L18 50" stroke="#fff" stroke-width="6" stroke-linecap="round"/>'
+        : '<circle cx="18" cy="18" r="5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="42" cy="18" r="5" fill="none" stroke="#fff" stroke-width="3"/><path d="M22 21 52 42M38 21 8 42" stroke="#fff" stroke-width="3"/>';
   const svg =
     `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60" viewBox="0 0 120 60">` +
     `<rect width="120" height="60" rx="10" fill="${primary}"/>${glyph}` +
@@ -388,7 +390,7 @@ export function buildWebsiteContent(
     about: { heading: 'La empresa', paragraphs: aboutParagraphs },
     gallery: { images },
     howItWorks:
-      template.id === 'fontaneria-climatizacion'
+      template.id === 'fontaneria-climatizacion' || template.id === 'oficios-hogar'
         ? {
             steps: [
               'Llama al teléfono de contacto y explica qué necesitas.',
