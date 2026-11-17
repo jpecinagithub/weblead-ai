@@ -142,8 +142,15 @@ export function auditWebsiteContent(
   if (content.notice !== DEMO_NOTICE || !content.hero.title) {
     critical('CONTENT', 'Falta el aviso de propuesta conceptual o el título principal.');
   }
-  if (!content.contact.phone || !content.contact.address) {
-    critical('CONTENT', 'La demo no muestra teléfono o dirección de contacto verificados.');
+  // 3ª tanda 2026-11-17: los expedientes de pueblos traen a menudo solo
+  // localidad (sin calle verificada) y en un caso ni teléfono; la demo no
+  // debe inventar calle ni Maps, así que la falta de teléfono o de
+  // dirección por sí sola ya no es CRITICAL. Lo que sí es CRITICAL es
+  // quedarse sin NINGÚN canal de contacto verificado. La consistencia con
+  // el expediente la siguen guardando los checks BUSINESS de arriba, que
+  // exigen teléfono/dirección idénticos cuando el expediente los trae.
+  if (!content.contact.phone && !content.contact.address && !content.contact.email) {
+    critical('CONTENT', 'La demo no muestra ningún canal de contacto verificado.');
   }
   // Rediseño 2026-11-17: no hay formulario en ninguna demo. El contenido
   // obsoleto (generado antes del rediseño) aún trae `formNote`: es un

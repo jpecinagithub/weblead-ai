@@ -94,7 +94,15 @@ export async function runPlaywrightAudit(
   demoUrl: string,
   screenshotsDir: string,
   slug: string,
+  // Canales de contacto que el expediente trae y la demo debe enlazar.
+  // 3ª tanda (2026-11-17): la mayoría de expedientes no tienen calle
+  // (solo localidad) y uno no tiene teléfono; la demo no debe inventarlos,
+  // así que el llamador pasa { tel: !!lead.phone, maps: !!lead.address }.
+  // Por defecto ambos true: el comportamiento anterior.
+  expected: { tel?: boolean; maps?: boolean } = { tel: true, maps: true },
 ): Promise<PlaywrightAuditResult> {
+  const expectTel = expected.tel ?? true;
+  const expectMaps = expected.maps ?? true;
   const executablePath = findChromiumExecutable();
   if (!executablePath) throw new PlaywrightUnavailableError(searchedChromiumPaths());
   mkdirSync(screenshotsDir, { recursive: true });
@@ -166,15 +174,18 @@ export async function runPlaywrightAudit(
         url: demoUrl,
       });
     }
-    // The contact block must offer the direct channels (tel: + Maps link).
+    // The contact block must offer the direct channels (tel: + Maps link),
+    // but only the ones the dossier actually has (see `expected` above:
+    // a demo without a verified street address must not link to Maps,
+    // and one without a phone must not offer a tel: link).
     const contactChannels = await desktop.evaluate(() => ({
       tel: document.querySelectorAll('a[href^="tel:"]').length,
       maps: document.querySelectorAll('a[href^="https://www.google.com/maps/"]').length,
     }));
-    if (contactChannels.tel === 0) {
+    if (expectTel && contactChannels.tel === 0) {
       findings.push({ severity: 'CRITICAL', category: 'CONTENT', message: 'Sin enlace tel: en la demo.', url: demoUrl });
     }
-    if (contactChannels.maps === 0) {
+    if (expectMaps && contactChannels.maps === 0) {
       findings.push({ severity: 'MINOR', category: 'CONTENT', message: 'Sin enlace a Google Maps en la demo.', url: demoUrl });
     }
     await desktop.close();

@@ -29,9 +29,17 @@ function renderPath(pathname: string): string {
   return renderToString(createElement(App));
 }
 
+/**
+ * Nombre tal como lo pinta React en el HTML (3ª tanda): renderToString
+ * escapa el apóstrofo como &#x27; — REFOYO'S y MADI'S solo aparecen así.
+ */
+function htmlName(name: string): string {
+  return name.replaceAll("'", '&#x27;');
+}
+
 describe('demo-platform: no forms in any rendered demo (rediseño 2026-11-17)', () => {
-  it('renders 10 demos', () => {
-    expect(GENERATED_DEMOS).toHaveLength(10);
+  it('renders 27 demos', () => {
+    expect(GENERATED_DEMOS).toHaveLength(27);
   });
 
   for (const demo of GENERATED_DEMOS) {
@@ -43,16 +51,24 @@ describe('demo-platform: no forms in any rendered demo (rediseño 2026-11-17)', 
       expect(html).not.toMatch(/<select[\s>]/i);
       expect(html).not.toMatch(/formulario/i);
       expect(html).not.toMatch(/Enviar/i);
-      // Direct contact channels instead of the form.
-      expect(html).toContain('href="tel:+34');
-      expect(html).toContain('https://www.google.com/maps/search/?api=1&amp;query=');
+      // Direct contact channels instead of the form: tel: only when the
+      // dossier has a phone (Pelayo has none), Google Maps only when
+      // it has an address, mailto: when it has an email — and at least
+      // one direct channel in every demo.
+      if (demo.content.contact.phone) {
+        expect(html).toContain('href="tel:+34');
+      }
+      if (demo.content.contact.address) {
+        expect(html).toContain('https://www.google.com/maps/search/?api=1&amp;query=');
+      }
       if (demo.content.contact.email) {
         expect(html).toContain(`href="mailto:${demo.content.contact.email}"`);
       }
+      expect(html.includes('href="tel:+34') || html.includes('href="mailto:')).toBe(true);
       // Mandatory conceptual-proposal notice, verbatim.
       expect(html).toContain(DEMO_NOTICE);
       // Business name and verified address are visible.
-      expect(html).toContain(demo.content.businessName);
+      expect(html).toContain(htmlName(demo.content.businessName));
       if (demo.content.contact.address) {
         expect(html).toContain(demo.content.contact.address);
       }

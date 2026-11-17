@@ -8,12 +8,17 @@ import {
   variantForSlug,
 } from '../src/index.js';
 
-describe('website-templates (Fase D + 2ª tanda: three real sector templates, not one generic)', () => {
-  it('ships exactly the three sector templates', () => {
+describe('website-templates (Fase D + 2ª/3ª tanda: eight real sector templates, not one generic)', () => {
+  it('ships exactly the eight sector templates', () => {
     expect(TEMPLATES.map((t) => t.id).sort()).toEqual([
+      'cerrajeria',
+      'electricista',
       'fontaneria-climatizacion',
+      'jardineria',
       'oficios-hogar',
       'peluqueria-barberia',
+      'salud-fisioterapia',
+      'taller-mecanico',
     ]);
     expect(getTemplate('placeholder')).toBeUndefined();
   });
@@ -43,7 +48,50 @@ describe('website-templates (Fase D + 2ª tanda: three real sector templates, no
     expect(templateForSector('peluquería/barbería')?.id).toBe('peluqueria-barberia');
     expect(templateForSector('pintura/decoración')?.id).toBe('oficios-hogar');
     expect(templateForSector('carpintería')?.id).toBe('oficios-hogar');
+    // 3ª tanda (Zamora/Ávila/Cuenca/Soria): formas saneadas, sin "24h" ni "urgencias".
+    expect(templateForSector('mecánica general')?.id).toBe('taller-mecanico');
+    expect(templateForSector('chapa y pintura')?.id).toBe('taller-mecanico');
+    expect(templateForSector('taller vehículos + maquinaria agrícola husqvarna')?.id).toBe('taller-mecanico');
+    expect(templateForSector('reparación servicio / electricidad')?.id).toBe('taller-mecanico');
+    expect(templateForSector('fisioterapia + pilates terapéutico')?.id).toBe('salud-fisioterapia');
+    expect(templateForSector('fisioterapia + neuromodulación nesa')?.id).toBe('salud-fisioterapia');
+    expect(templateForSector('fisioterapia manual')?.id).toBe('salud-fisioterapia');
+    expect(templateForSector('fisioterapia + feldenkrais')?.id).toBe('salud-fisioterapia');
+    expect(templateForSector('electricista + placas solares')?.id).toBe('electricista');
+    expect(templateForSector('electricista')?.id).toBe('electricista');
+    expect(templateForSector('cerrajería/herrería')?.id).toBe('cerrajeria');
+    expect(templateForSector('jardinería/paisajismo')?.id).toBe('jardineria');
     expect(templateForSector('sector desconocido')).toBeUndefined();
+  });
+
+  it('3rd-batch templates: howItWorks where it belongs, distinct palettes across all eight', () => {
+    // Taller, electricista, cerrajería y jardinería llevan "Cómo
+    // trabajamos"; fisioterapia no (como peluquería).
+    for (const id of ['taller-mecanico', 'electricista', 'cerrajeria', 'jardineria']) {
+      expect(getTemplate(id)!.sections).toContain('howItWorks');
+    }
+    expect(getTemplate('salud-fisioterapia')!.sections).not.toContain('howItWorks');
+    // Every pair of templates is visually distinct (palette, fonts,
+    // section order) — not a colour swap.
+    for (let i = 0; i < TEMPLATES.length; i++) {
+      for (let j = i + 1; j < TEMPLATES.length; j++) {
+        expect(templatesAreDistinct(TEMPLATES[i]!, TEMPLATES[j]!)).toBe(true);
+      }
+    }
+    // Each palette field is unique across the eight templates.
+    for (const field of ['primary', 'accent', 'background', 'surface', 'text', 'muted'] as const) {
+      const values = TEMPLATES.map((t) => t.palette[field]);
+      expect(new Set(values).size).toBe(TEMPLATES.length);
+    }
+    for (const t of TEMPLATES) {
+      expect(t.faq.length).toBeGreaterThanOrEqual(3);
+    }
+    // 3ª tanda: el kicker no lleva localidad (el generador añade
+    // " en {municipio}"). Las 3 plantillas anteriores conservan su
+    // kicker con Logroño y no se tocan.
+    for (const id of ['taller-mecanico', 'salud-fisioterapia', 'electricista', 'cerrajeria', 'jardineria']) {
+      expect(getTemplate(id)!.heroKicker).not.toMatch(/Logroño|Zamora|Ávila|Cuenca|Soria/i);
+    }
   });
 
   it('every template has a hero photo and gallery photos, served locally with Unsplash provenance', () => {

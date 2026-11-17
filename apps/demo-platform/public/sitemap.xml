@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Segunda tanda 2026-11-17: generado por apps/api/src/regenerate-demos-segunda-tanda.ts -->
+<!-- Tercera tanda 2026-11-17: generado por apps/api/src/regenerate-demos-tercera-tanda.ts -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://weblead-demos.vercel.app/demos/</loc></url>
   <url><loc>https://weblead-demos.vercel.app/demos/santiago-ferrer-fontaneria-en-general-sl-logrono</loc></url>
@@ -12,4 +12,21 @@
   <url><loc>https://weblead-demos.vercel.app/demos/peluqueria-e-style-logrono</loc></url>
   <url><loc>https://weblead-demos.vercel.app/demos/pintor-logrono-roberto-decoracion-logrono</loc></url>
   <url><loc>https://weblead-demos.vercel.app/demos/carpinteria-sergio-martinez-logrono</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/taller-mecanico-refoyo-s-zamora</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/fisioavanza-zamora-zamora</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/taller-chapa-y-pintura-valentin-mym-c-b-avila</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/magneto-electricidad-mota-del-cuervo</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/fisio-maff-zamora</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/grinan-bueno-talleres-iniesta</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/dalon-taller-mecanico-avila</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/fisiofyr-zamora</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/tallares-avilagri-el-barco-de-avila</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/aura-fisioterapia-y-feldenkrais-soria</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/i-e-raul-c-v-canete</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/fontaneria-talayuelas-talayuelas</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/carpinteria-ebanisteria-francisco-toranzo-villaralbo</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/heralu-hermanos-alvarez-urones-villaralbo</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/fontaneria-pelayo-villaralbo</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/jardineria-raul-hernandez-laperal-villaralbo</loc></url>
+  <url><loc>https://weblead-demos.vercel.app/demos/peluqueria-madi-s-villaralbo</loc></url>
 </urlset>

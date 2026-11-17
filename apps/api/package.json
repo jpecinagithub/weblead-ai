@@ -35,6 +35,7 @@
     "generate:designs:fase-f": "tsx src/generate-designs-fase-f.ts",
     "regenerate:demos": "tsx src/regenerate-demos-redesign.ts",
     "regenerate:segunda-tanda": "tsx src/regenerate-demos-segunda-tanda.ts",
+    "regenerate:tercera-tanda": "tsx src/regenerate-demos-tercera-tanda.ts",
     "audit:segunda-tanda": "tsx src/audit-segunda-tanda.ts",
     "sync:redesign": "tsx src/sync-redesign-to-db.ts",
     "audit:redesign": "tsx src/audit-redesign.ts",

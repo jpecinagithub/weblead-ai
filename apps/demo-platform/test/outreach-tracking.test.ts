@@ -11,7 +11,9 @@ import { lock, markUnlocked } from '../src/password-gate.js';
  * 2026-11-17): el índice privado muestra, por proyecto, el estado
  * del email de oferta (50 €) enviado el 17 nov 2026. 9 ofertas
  * enviadas sin respuesta y 1 rebote (Pintor Roberto, dirección no
- * encontrada). El seguimiento solo se ve tras la clave, nunca en
+ * encontrada). Tercera tanda (2026-11-17): 17 demos nuevas en
+ * 'pending' (pendiente de contacto, sin email enviado todavía).
+ * El seguimiento solo se ve tras la clave, nunca en
  * las demos públicas.
  */
 function renderPath(pathname: string, unlocked: boolean): string {
@@ -36,10 +38,11 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     }
   });
 
-  it('9 ofertas enviadas y 1 rebote (Roberto, dirección no encontrada)', () => {
+  it('9 ofertas enviadas, 1 rebote (Roberto) y 17 pendientes (tercera tanda)', () => {
     const statuses = Object.values(OUTREACH).map((entry) => entry.status);
     expect(statuses.filter((s) => s === 'sent')).toHaveLength(9);
     expect(statuses.filter((s) => s === 'bounced')).toHaveLength(1);
+    expect(statuses.filter((s) => s === 'pending')).toHaveLength(17);
     expect(
       OUTREACH['pintor-logrono-roberto-decoracion-logrono'],
     ).toMatchObject({ status: 'bounced', note: 'dirección no encontrada' });
@@ -47,13 +50,15 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
       'Rebotado',
     );
     expect(outreachLabel('moises-munoz-s-l-logrono')).toContain('Oferta enviada');
+    expect(outreachLabel('fontaneria-pelayo-villaralbo')).toBe('Pendiente de contacto');
   });
 
-  it('desbloqueado: el índice muestra el seguimiento de los 10', () => {
+  it('desbloqueado: el índice muestra el seguimiento de los 27', () => {
     const html = renderPath('/', true);
     // Cada etiqueta se pinta dos veces: fila de la tabla + tarjeta.
     expect(count(html, 'Oferta enviada')).toBe(18);
     expect(count(html, 'Rebotado')).toBe(2);
+    expect(count(html, 'Pendiente de contacto')).toBe(34);
     expect(count(html, 'dirección no encontrada')).toBe(2);
     expect(html).toContain('Seguimiento');
   });
@@ -65,6 +70,7 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     expect(html).toContain('Respuestas');
     expect(html).toContain('pill-sent');
     expect(html).toContain('pill-bounced');
+    expect(html).toContain('pill-neutral');
     expect(html).toContain('pill-ok');
   });
 

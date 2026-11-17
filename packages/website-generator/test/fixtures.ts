@@ -39,3 +39,29 @@ export const BEGONA_INPUT: GeneratorBusinessInput = {
   sources: ['mispelus.com', 'directorios'],
 };
 
+/**
+ * 3ª tanda (2026-11-17): FONTANERÍA PELAYO, Villaralbo (Zamora) — the
+ * one lead without a phone and without a street address (only email).
+ * Sector uses the codebase's fontanería template string: the dossier
+ * sector is bare 'Fontanería', which has no template yet (templates are
+ * another worker's file in this batch).
+ */
+export const PELAYO_INPUT: GeneratorBusinessInput = {
+  name: 'FONTANERÍA PELAYO',
+  sector: 'fontanería/climatización',
+  address: null,
+  phone: null,
+  email: 'pelayofontaneria@hotmail.com',
+  municipality: 'Villaralbo',
+  province: 'Zamora',
+  activity: 'CONFIRMED',
+  activitySignal: null,
+  hasOwnWebsite: false,
+  scoreTotal: 82,
+  services: [],
+  slug: 'fontaneria-pelayo-villaralbo',
+  pilotId: null,
+  consultedAt: '2026-11-17',
+  sources: ['Google Maps', 'Facebook'],
+};
+

@@ -124,6 +124,64 @@ describe('auditor: content audit vs dossier (Fase D, independent of designer)', 
     expect(report.scores.content).toBe(90);
     expect(report.findings.some((f) => f.message.includes('Google Maps'))).toBe(true);
   });
+
+  it('a demo with only email (no phone, no address) is not a CONTENT CRITICAL (3ª tanda 2026-11-17)', () => {
+    // Dossier without phone or address (locality only): the demo shows just
+    // the verified email and must still be auditable to 100/100/100/100.
+    const dossier: AuditDossierFacts = { ...FERRER_DOSSIER, address: null, phone: null };
+    const content = contentFor();
+    content.contact.phone = null;
+    content.contact.phoneHref = null;
+    content.contact.address = null;
+    content.contact.mapsHref = null;
+    const report = auditWebsiteContent(content, dossier);
+    expect(report.result).toBe('PASSED');
+    expect(report.scores).toEqual({ business: 100, visual: 100, technical: 100, content: 100 });
+    expect(report.findings).toEqual([]);
+  });
+
+  it('missing only the phone, or only the address, with email present is not a CONTENT CRITICAL (3ª tanda 2026-11-17)', () => {
+    // No phone (dossier has none either, e.g. FONTANERÍA PELAYO).
+    const noPhoneDossier: AuditDossierFacts = { ...FERRER_DOSSIER, phone: null };
+    const noPhone = contentFor();
+    noPhone.contact.phone = null;
+    noPhone.contact.phoneHref = null;
+    const noPhoneReport = auditWebsiteContent(noPhone, noPhoneDossier);
+    expect(noPhoneReport.result).toBe('PASSED');
+    expect(noPhoneReport.scores.content).toBe(100);
+    expect(noPhoneReport.findings.some((f) => f.severity === 'CRITICAL' && f.category === 'CONTENT')).toBe(false);
+
+    // No street address (dossier has none; locality only).
+    const noAddressDossier: AuditDossierFacts = { ...FERRER_DOSSIER, address: null };
+    const noAddress = contentFor();
+    noAddress.contact.address = null;
+    noAddress.contact.mapsHref = null;
+    const noAddressReport = auditWebsiteContent(noAddress, noAddressDossier);
+    expect(noAddressReport.result).toBe('PASSED');
+    expect(noAddressReport.scores.content).toBe(100);
+    expect(noAddressReport.findings.some((f) => f.severity === 'CRITICAL' && f.category === 'CONTENT')).toBe(false);
+  });
+
+  it('a demo with no contact channel at all is a CONTENT CRITICAL', () => {
+    const dossier: AuditDossierFacts = { ...FERRER_DOSSIER, address: null, phone: null };
+    const content = contentFor();
+    content.contact.phone = null;
+    content.contact.phoneHref = null;
+    content.contact.address = null;
+    content.contact.mapsHref = null;
+    content.contact.email = null;
+    const report = auditWebsiteContent(content, dossier);
+    expect(report.result).toBe('FAILED');
+    expect(report.scores.content).toBe(75);
+    expect(
+      report.findings.some(
+        (f) =>
+          f.severity === 'CRITICAL' &&
+          f.category === 'CONTENT' &&
+          f.message === 'La demo no muestra ningún canal de contacto verificado.',
+      ),
+    ).toBe(true);
+  });
 });
 
 describe('auditor: state-machine gate (master prompt §3)', () => {

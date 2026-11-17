@@ -1,0 +1,540 @@
+{
+ "source": "workspace/user/files/investigacion_leads_completa.xlsx",
+ "decision": "Jon 2026-11-17: hacer primero las 17 con nota; las 10 sin nota quedan para después; Carpintería Soria descartada (tiene web propia)",
+ "build_now": [
+  {
+   "email": "rrefoyin@hotmail.com",
+   "lots": [
+    "Lote 1 #2"
+   ],
+   "sectors_seen": [
+    "Mecánica general"
+   ],
+   "name": "TALLER MECÁNICO REFOYO'S",
+   "sector": "Mecánica general",
+   "town": "Zamora capital",
+   "province": "Zamora",
+   "phone": "980 53 32 87",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "23",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 95
+  },
+  {
+   "email": "fisioavanzazamora@gmail.com",
+   "lots": [
+    "Lote 1 #7"
+   ],
+   "sectors_seen": [
+    "Fisioterapia + pilates terapéutico"
+   ],
+   "name": "FISIOAVANZA ZAMORA",
+   "sector": "Fisioterapia + pilates terapéutico",
+   "town": "Zamora capital",
+   "province": "Zamora",
+   "phone": "624 32 10 22",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "57",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 93
+  },
+  {
+   "email": "tallermymavila@gmail.com",
+   "lots": [
+    "Lote 1 #4"
+   ],
+   "sectors_seen": [
+    "Chapa y pintura"
+   ],
+   "name": "TALLER CHAPA Y PINTURA VALENTÍN MYM C.B.",
+   "sector": "Chapa y pintura",
+   "town": "Ávila capital",
+   "province": "Ávila",
+   "phone": "920 22 10 24",
+   "web": "Solo Facebook",
+   "rating": "4.8★",
+   "reviews": "30",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 92
+  },
+  {
+   "email": "magnetoelectricidad@hotmail.com",
+   "lots": [
+    "Lote 4 #1",
+    "Lote 5 #9"
+   ],
+   "sectors_seen": [
+    "Electricista + placas solares 24h",
+    "Electricista + placas 24h"
+   ],
+   "name": "MAGNETO ELECTRICIDAD",
+   "sector": "Electricista + placas solares 24h",
+   "town": "Mota del Cuervo",
+   "province": "Cuenca",
+   "phone": "677 31 45 05",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "20",
+   "validation": "Maps 5.0★ (20) · Solo FB · Activo",
+   "score": 92
+  },
+  {
+   "email": "pmartinbartolom@gmail.com",
+   "lots": [
+    "Lote 1 #8"
+   ],
+   "sectors_seen": [
+    "Fisioterapia + neuromodulación NESA"
+   ],
+   "name": "FISIO MAFF",
+   "sector": "Fisioterapia + neuromodulación NESA",
+   "town": "Zamora capital",
+   "province": "Zamora",
+   "phone": "980 51 74 63",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "25",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 91
+  },
+  {
+   "email": "grinanbueno@gmail.com",
+   "lots": [
+    "Lote 1 #1"
+   ],
+   "sectors_seen": [
+    "Taller vehículos + maquinaria agrícola HUSQVARNA"
+   ],
+   "name": "GRINAN BUENO TALLERES",
+   "sector": "Taller vehículos + maquinaria agrícola HUSQVARNA",
+   "town": "Iniesta",
+   "province": "Cuenca",
+   "address": "Avd. Constitución 78 / Ctra. Híjar 23, 16235 Iniesta",
+   "coords": "39.440437, -1.738911",
+   "phone": "967 49 02 35 / 646 00 00 00",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "2",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "cif": "B16207417",
+   "score": 90,
+   "notes": "Desplegado en Vercel - en auditoría"
+  },
+  {
+   "email": "dalontallermecanico@gmail.com",
+   "lots": [
+    "Lote 1 #5"
+   ],
+   "sectors_seen": [
+    "Mecánica general"
+   ],
+   "name": "DALON TALLER MECÁNICO",
+   "sector": "Mecánica general",
+   "town": "Ávila capital",
+   "province": "Ávila",
+   "phone": "660 70 99 78",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "23",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 90
+  },
+  {
+   "email": "fisiofyr@hotmail.com",
+   "lots": [
+    "Lote 1 #9"
+   ],
+   "sectors_seen": [
+    "Fisioterapia manual"
+   ],
+   "name": "FISIOFYR",
+   "sector": "Fisioterapia manual",
+   "town": "Zamora capital",
+   "province": "Zamora",
+   "phone": "980 65 06 53",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "22",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 89
+  },
+  {
+   "email": "talleresavilagri@gmail.com",
+   "lots": [
+    "Lote 1 #3"
+   ],
+   "sectors_seen": [
+    "Reparación servicio / electricidad"
+   ],
+   "name": "TALLARES AVILAGRI",
+   "sector": "Reparación servicio / electricidad",
+   "town": "El Barco de Ávila",
+   "province": "Ávila",
+   "phone": "635 84 12 32",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "5",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 88
+  },
+  {
+   "email": "aurafisiofel@gmail.com",
+   "lots": [
+    "Lote 2 #6",
+    "Lote 4 #8"
+   ],
+   "sectors_seen": [
+    "Fisioterapia + Feldenkrais"
+   ],
+   "name": "AURA FISIOTERAPIA Y FELDENKRAIS",
+   "sector": "Fisioterapia + Feldenkrais",
+   "town": "Soria capital",
+   "province": "Soria",
+   "address": "C. Puertas de Pro, 19, 42002 Soria",
+   "coords": "41.765511, -2.467867",
+   "phone": "667 09 96 84",
+   "web": "Solo Facebook",
+   "validation": "Exa Places: Solo FB, sin web",
+   "score": 88
+  },
+  {
+   "email": "ieraulcv@gmail.com",
+   "lots": [
+    "Lote 3 #2"
+   ],
+   "sectors_seen": [
+    "Electricista"
+   ],
+   "name": "I.E. RAÚL C.V.",
+   "sector": "Electricista",
+   "town": "Cañete",
+   "province": "Cuenca",
+   "phone": "636 38 72 55",
+   "web": "Solo Facebook",
+   "validation": "Maps + FB + email + activo",
+   "score": 88
+  },
+  {
+   "email": "fontaneriatalayuelas@hotmail.com",
+   "lots": [
+    "Lote 1 #6",
+    "Lote 3 #3",
+    "Lote 4 #2",
+    "Lote 5 #10"
+   ],
+   "sectors_seen": [
+    "Fontanería + calefacción 24h",
+    "Fontanería 24h",
+    "Fontanería 24h urgencias"
+   ],
+   "name": "FONTANERÍA TALAYUELAS",
+   "sector": "Fontanería + calefacción 24h",
+   "town": "Talayuelas",
+   "province": "Cuenca",
+   "phone": "687 47 50 54",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "2",
+   "validation": "Maps activa + FB + email + reseñas 2024-2026",
+   "score": 85
+  },
+  {
+   "email": "franmari4@hotmail.com",
+   "lots": [
+    "Lote 2 #1",
+    "Lote 3 #4",
+    "Lote 4 #3"
+   ],
+   "sectors_seen": [
+    "Carpintería/ebanistería"
+   ],
+   "name": "CARPINTERÍA EBANISTERÍA FRANCISCO TORANZO",
+   "sector": "Carpintería/ebanistería",
+   "town": "Villaralbo",
+   "province": "Zamora",
+   "phone": "620 277 332",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal + FB + email + activo",
+   "score": 85
+  },
+  {
+   "email": "hermanosalvarezurones@gmail.com",
+   "lots": [
+    "Lote 2 #3",
+    "Lote 3 #6",
+    "Lote 4 #5"
+   ],
+   "sectors_seen": [
+    "Cerrajería/herrería"
+   ],
+   "name": "HERALU – HERMANOS ÁLVAREZ URONES",
+   "sector": "Cerrajería/herrería",
+   "town": "Villaralbo",
+   "province": "Zamora",
+   "phone": "686 481 167",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal + FB + email + activo",
+   "score": 84
+  },
+  {
+   "email": "pelayofontaneria@hotmail.com",
+   "lots": [
+    "Lote 2 #2",
+    "Lote 3 #5",
+    "Lote 4 #4"
+   ],
+   "sectors_seen": [
+    "Fontanería"
+   ],
+   "name": "FONTANERÍA PELAYO",
+   "sector": "Fontanería",
+   "town": "Villaralbo",
+   "province": "Zamora",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal + FB + email + activo",
+   "score": 82
+  },
+  {
+   "email": "benjaraul@hotmail.com",
+   "lots": [
+    "Lote 2 #9",
+    "Lote 3 #9",
+    "Lote 4 #6"
+   ],
+   "sectors_seen": [
+    "Jardinería/paisajismo"
+   ],
+   "name": "JARDINERÍA RAÚL HERNÁNDEZ LAPERAL",
+   "sector": "Jardinería/paisajismo",
+   "town": "Villaralbo",
+   "province": "Zamora",
+   "phone": "625 433 364",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal + FB + email + activo",
+   "score": 80
+  },
+  {
+   "email": "madisvillaralbo@hotmail.com",
+   "lots": [
+    "Lote 2 #10",
+    "Lote 3 #10",
+    "Lote 4 #7"
+   ],
+   "sectors_seen": [
+    "Peluquería/estética"
+   ],
+   "name": "PELUQUERÍA MADI'S",
+   "sector": "Peluquería/estética",
+   "town": "Villaralbo",
+   "province": "Zamora",
+   "phone": "980 53 97 35",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal + FB + email + activo",
+   "score": 78
+  }
+ ],
+ "later_unscored": [
+  {
+   "email": "info@carpinterosensoria.com.es",
+   "lots": [
+    "Lote 2 #7"
+   ],
+   "sectors_seen": [
+    "Carpintería madera/melamina"
+   ],
+   "name": "CARPINTERÍA SORIA",
+   "sector": "Carpintería madera/melamina",
+   "town": "Soria capital",
+   "province": "Soria",
+   "phone": "618 42 82 64",
+   "web": "Tiene web",
+   "validation": "TIENE WEB PROPIA - DESCARTAR"
+  },
+  {
+   "email": "info@imaginesoria.com",
+   "lots": [
+    "Lote 4 #9"
+   ],
+   "sectors_seen": [
+    "Academia/centro formación"
+   ],
+   "name": "CENTRO DE ESTUDIOS",
+   "sector": "Academia/centro formación",
+   "town": "Soria capital",
+   "province": "Soria",
+   "phone": "605 74 00 03",
+   "web": "Solo Facebook",
+   "validation": "Exa Places: Solo FB, sin web"
+  },
+  {
+   "email": "doctoramorenotorcal@gmail.com",
+   "lots": [
+    "Lote 4 #10"
+   ],
+   "sectors_seen": [
+    "Clínica dental"
+   ],
+   "name": "CLÍNICA DENTAL MERCEDES MORENO TORCAL",
+   "sector": "Clínica dental",
+   "town": "Soria capital",
+   "province": "Soria",
+   "phone": "975 22 09 47",
+   "web": "Sin web (Opendi)",
+   "validation": "Opendi: 'Web: –' (sin web)"
+  },
+  {
+   "email": "talleressivi@gmail.com",
+   "lots": [
+    "Lote 5 #1"
+   ],
+   "sectors_seen": [
+    "Taller mecánico"
+   ],
+   "name": "TALLERES SIVI",
+   "sector": "Taller mecánico",
+   "town": "Arenas de San Pedro",
+   "province": "Ávila",
+   "phone": "920 372 192",
+   "web": "Solo Facebook",
+   "rating": "4.7★",
+   "reviews": "81",
+   "validation": "Exa Places: Solo FB · Activo"
+  },
+  {
+   "email": "tallerameson@gmail.com",
+   "lots": [
+    "Lote 5 #2"
+   ],
+   "sectors_seen": [
+    "Taller mecánico"
+   ],
+   "name": "TALLER MECÁNICO ADOLFO MESÓN",
+   "sector": "Taller mecánico",
+   "town": "Arenas de San Pedro",
+   "province": "Ávila",
+   "phone": "920 370 950",
+   "web": "Solo Facebook",
+   "rating": "4.8★",
+   "reviews": "18",
+   "validation": "Dir. municipal · Solo email · Activo"
+  },
+  {
+   "email": "taller@gonviauto.com",
+   "lots": [
+    "Lote 5 #3"
+   ],
+   "sectors_seen": [
+    "Taller mecánico"
+   ],
+   "name": "TALLERES GONVIAUTO HNOS.",
+   "sector": "Taller mecánico",
+   "town": "Arenas de San Pedro",
+   "province": "Ávila",
+   "phone": "920 372 536",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal · Solo email · Activo"
+  },
+  {
+   "email": "automovileselvalle@yahoo.com",
+   "lots": [
+    "Lote 5 #4"
+   ],
+   "sectors_seen": [
+    "Neumáticos + taller"
+   ],
+   "name": "AUTO-NEUMÁTICOS EL VALLE",
+   "sector": "Neumáticos + taller",
+   "town": "Arenas de San Pedro",
+   "province": "Ávila",
+   "phone": "920 370 725",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal · Solo email · Activo"
+  },
+  {
+   "email": "calefaccionyfontaneriamile@hotmail.com",
+   "lots": [
+    "Lote 5 #5"
+   ],
+   "sectors_seen": [
+    "Fontanería + calefacción"
+   ],
+   "name": "CALEFACCIÓN Y FONTANERÍA MILE",
+   "sector": "Fontanería + calefacción",
+   "town": "Arenas de San Pedro",
+   "province": "Ávila",
+   "phone": "629 125 637",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal · Solo email · Activo"
+  },
+  {
+   "email": "toldosalbarran@hotmail.com",
+   "lots": [
+    "Lote 5 #6"
+   ],
+   "sectors_seen": [
+    "Cerrajería/aluminio"
+   ],
+   "name": "CERRAJERÍA ALBARRÁN",
+   "sector": "Cerrajería/aluminio",
+   "town": "Arenas de San Pedro",
+   "province": "Ávila",
+   "phone": "678 973 611",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal · 2 emails · Activo"
+  },
+  {
+   "email": "chupi@chupiescultor.com",
+   "lots": [
+    "Lote 5 #7"
+   ],
+   "sectors_seen": [
+    "Cerrajería/escultura"
+   ],
+   "name": "CERRAJERÍA CHUPI",
+   "sector": "Cerrajería/escultura",
+   "town": "Arenas de San Pedro",
+   "province": "Ávila",
+   "phone": "637 706 996",
+   "web": "Solo Facebook",
+   "validation": "Dir. municipal · Solo email · Activo"
+  },
+  {
+   "email": "juanllaves1972@gmail.com",
+   "lots": [
+    "Lote 5 #8"
+   ],
+   "sectors_seen": [
+    "Cerrajería"
+   ],
+   "name": "DON LLAVES",
+   "sector": "Cerrajería",
+   "town": "Cuenca capital",
+   "province": "Cuenca",
+   "phone": "603 34 38 94",
+   "web": "Solo Facebook",
+   "rating": "5.0★",
+   "reviews": "2",
+   "validation": "Exa Places: Solo FB · Activo"
+  }
+ ],
+ "discarded": [
+  {
+   "email": "info@carpinterosensoria.com.es",
+   "lots": [
+    "Lote 2 #7"
+   ],
+   "sectors_seen": [
+    "Carpintería madera/melamina"
+   ],
+   "name": "CARPINTERÍA SORIA",
+   "sector": "Carpintería madera/melamina",
+   "town": "Soria capital",
+   "province": "Soria",
+   "phone": "618 42 82 64",
+   "web": "Tiene web",
+   "validation": "TIENE WEB PROPIA - DESCARTAR"
+  }
+ ]
+}

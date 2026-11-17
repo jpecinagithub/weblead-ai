@@ -38,6 +38,14 @@ function renderPath(pathname: string, unlocked: boolean): string {
   return renderToString(createElement(App));
 }
 
+/**
+ * Nombre tal como lo pinta React en el HTML (3ª tanda): renderToString
+ * escapa el apóstrofo como &#x27; — REFOYO'S y MADI'S solo aparecen así.
+ */
+function htmlName(name: string): string {
+  return name.replaceAll("'", '&#x27;');
+}
+
 describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
   it('sha256Hex coincide con vectores conocidos', async () => {
     expect(await sha256Hex('')).toBe(
@@ -75,7 +83,7 @@ describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
     expect(html).toContain('Clave de acceso');
     expect(html).toContain(DEMO_NOTICE);
     for (const demo of GENERATED_DEMOS) {
-      expect(html).not.toContain(demo.content.businessName);
+      expect(html).not.toContain(htmlName(demo.content.businessName));
     }
     expect(html).not.toContain('Ver demo');
   });
@@ -84,9 +92,12 @@ describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
     it(`la demo ${demo.content.businessSlug} se ve SIN clave (pública)`, () => {
       const html = renderPath(demo.demoUrl, false);
       expect(html).not.toContain('Clave de acceso');
-      expect(html).toContain(demo.content.businessName);
+      expect(html).toContain(htmlName(demo.content.businessName));
       expect(html).toContain(DEMO_NOTICE);
-      expect(html).toContain('href="tel:+34');
+      // tel: solo cuando el expediente tiene teléfono (Pelayo no tiene).
+      if (demo.content.contact.phone) {
+        expect(html).toContain('href="tel:+34');
+      }
       // Las demos no tienen ningún formulario (el de la clave solo
       // existe en la página de entrada, no aquí).
       expect(html).not.toMatch(/<form[\s>]/i);
@@ -97,11 +108,11 @@ describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
     });
   }
 
-  it('desbloqueada: el índice muestra las 10 demos con su enlace', () => {
+  it('desbloqueada: el índice muestra las 27 demos con su enlace', () => {
     const html = renderPath('/', true);
     expect(html).not.toContain('Clave de acceso');
     for (const demo of GENERATED_DEMOS) {
-      expect(html).toContain(demo.content.businessName);
+      expect(html).toContain(htmlName(demo.content.businessName));
       expect(html).toContain(`href="${demo.demoUrl}"`);
     }
     expect(html).toContain('Ver demo');

@@ -1,8 +1,10 @@
 /**
  * Website templates — Fase D + rediseño 2026-11-17 (sin formularios) +
- * 2ª tanda 2026-11-17 (oficios del hogar: pintura y carpintería).
+ * 2ª tanda 2026-11-17 (oficios del hogar: pintura y carpintería) +
+ * 3ª tanda 2026-11-17 (taller mecánico, fisioterapia, electricista,
+ * cerrajería, jardinería; empresas de Zamora/Ávila/Cuenca/Soria).
  *
- * Three REAL, differentiated sector templates — not one generic template with
+ * Eight REAL, differentiated sector templates — not one generic template with
  * different colours. Each one carries its own layout order, palette,
  * typography, hero framing, sector FAQ (answers never assert an unverified
  * fact: they always deflect to the verified phone) and stock-photo set.
@@ -35,7 +37,15 @@
  * asset keeps its source URL + licence in WebsiteAsset (see generator).
  */
 
-export type TemplateId = 'fontaneria-climatizacion' | 'peluqueria-barberia' | 'oficios-hogar';
+export type TemplateId =
+  | 'fontaneria-climatizacion'
+  | 'peluqueria-barberia'
+  | 'oficios-hogar'
+  | 'taller-mecanico'
+  | 'salud-fisioterapia'
+  | 'electricista'
+  | 'cerrajeria'
+  | 'jardineria';
 
 export type BrandPalette = {
   /** Page background. */
@@ -111,7 +121,7 @@ export type WebsiteTemplate = {
   /** Stock photos for this sector (Unsplash License, visually verified). */
   photos: TemplateStockPhoto[];
   /** Conceptual logo motif (SVG, drawn from initials — never a third-party mark). */
-  logoMotif: 'pipe' | 'scissors' | 'hammer';
+  logoMotif: 'pipe' | 'scissors' | 'hammer' | 'wrench' | 'cross' | 'bolt' | 'key' | 'leaf';
   /**
    * Visual variants (rediseño 2026-11-17): 3 per template. The generator
    * picks one deterministically from the business slug, so the same
@@ -186,6 +196,141 @@ const TRADES_PHOTOS: TemplateStockPhoto[] = [
     url: '/images/oficios-gallery-2.jpg',
     sourceUrl: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1200&q=80',
     caption: 'Taladro en obra (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Taller mecánico (3ª tanda 2026-11-17: mecánica general, chapa y
+ * pintura, vehículos + maquinaria agrícola). Fotos Unsplash License,
+ * verificadas visualmente el 2026-11-17 y servidas en local desde
+ * apps/demo-platform/public/images/.
+ */
+const TALLER_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/taller-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1200&q=80',
+    caption: 'Motor de coche en el taller (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/taller-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=1200&q=80',
+    caption: 'Mecánico trabajando en el taller (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/taller-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1613214149922-f1809c99b414?w=1200&q=80',
+    caption: 'Cambio de rueda con pistola neumática (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Fisioterapia y salud (3ª tanda 2026-11-17: fisioterapia, pilates
+ * terapéutico, neuromodulación NESA, fisioterapia manual, Feldenkrais).
+ * Fotos Unsplash License, verificadas visualmente el 2026-11-17 y
+ * servidas en local desde apps/demo-platform/public/images/.
+ */
+const SALUD_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/salud-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&q=80',
+    caption: 'Ejercicio abdominal sobre esterilla (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/salud-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&q=80',
+    caption: 'Estiramiento de yoga al atardecer (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/salud-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=1200&q=80',
+    caption: 'Masaje con piedras calientes en la espalda (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Electricista (3ª tanda 2026-11-17: electricidad y placas solares).
+ * Fotos Unsplash License, verificadas visualmente el 2026-11-17 y
+ * servidas en local desde apps/demo-platform/public/images/.
+ */
+const ELECTRICISTA_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/electricista-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1200&q=80',
+    caption: 'Trabajo eléctrico en una instalación (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/electricista-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=80',
+    caption: 'Placas solares en un campo solar (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/electricista-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1200&q=80',
+    caption: 'Planos técnicos y herramientas sobre la mesa (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Cerrajería y herrería (3ª tanda 2026-11-17). Fotos Unsplash License,
+ * verificadas visualmente el 2026-11-17 y servidas en local desde
+ * apps/demo-platform/public/images/. Las dos primeras candidatas
+ * (tarjeta de crédito, cuarto de baño) se rechazaron por no
+ * corresponder; las definitivas son cerradura inteligente, puerta de
+ * caja fuerte y soldadura (herrería).
+ */
+const CERRAJERIA_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/cerrajeria-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1558002038-1055907df827?w=1200&q=80',
+    caption: 'Cerradura inteligente en una puerta (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/cerrajeria-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=1200&q=80',
+    caption: 'Puerta de caja fuerte con cerraduras (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/cerrajeria-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=80',
+    caption: 'Soldadura con chispas en el taller (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Jardinería y paisajismo (3ª tanda 2026-11-17). Fotos Unsplash
+ * License, verificadas visualmente el 2026-11-17 y servidas en local
+ * desde apps/demo-platform/public/images/.
+ */
+const JARDINERIA_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/jardineria-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=80',
+    caption: 'Pala con tierra y herramientas de jardinería (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/jardineria-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=1200&q=80',
+    caption: 'Césped verde recién cortado (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/jardineria-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1200&q=80',
+    caption: 'Sendero de jardín con arbustos en flor (imagen de archivo, no es el local)',
     placement: 'gallery',
   },
 ];
@@ -321,6 +466,236 @@ export const TEMPLATES: WebsiteTemplate[] = [
       { id: 'oficios-hogar-v0', accent: '#a34d28', heroLayout: 'banner' },
       { id: 'oficios-hogar-v1', accent: '#7a5c14', heroLayout: 'split' },
       { id: 'oficios-hogar-v2', accent: '#33606e', heroLayout: 'card' },
+    ],
+  },
+  {
+    id: 'taller-mecanico',
+    name: 'Taller mecánico',
+    description:
+      'Plantilla sectorial para taller mecánico (3ª tanda 2026-11-17: mecánica general, chapa y pintura, vehículos + maquinaria agrícola, reparación/servicio y electricidad): hero de trabajo con foto de motor, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de revisiones y presupuestos. Paleta acero + ámbar. 3 variantes (ámbar/banner, teja partida, pizarra/tarjeta) y contacto sin formulario.',
+    sectors: [
+      'mecánica general',
+      'chapa y pintura',
+      'taller vehículos + maquinaria agrícola husqvarna',
+      'reparación servicio / electricidad',
+    ],
+    palette: {
+      background: '#eef0f1',
+      surface: '#fdfeff',
+      primary: '#1c2b36',
+      primaryDark: '#121e26',
+      accent: '#92400e',
+      text: '#1e2a32',
+      muted: '#55636c',
+    },
+    fontHeading: "'Trebuchet MS', 'Segoe UI', sans-serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'services', 'trust', 'howItWorks', 'gallery', 'about', 'faq', 'contact'],
+    heroKicker: 'Taller mecánico',
+    faq: [
+      {
+        question: '¿Hacen revisiones y reparaciones?',
+        answer:
+          'Los trabajos concretos solo se publican cuando están contrastados en el expediente de la empresa. Si la lista de servicios de esta demo aparece como pendiente de confirmar, es porque aún no se ha verificado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Puedo pedir presupuesto?',
+        answer:
+          'Pide presupuesto por teléfono: llama al número de contacto de esta web y te confirman si pueden hacerlo y qué información necesitan. El contacto es directo con la empresa.',
+      },
+      {
+        question: '¿Atienden averías urgentes?',
+        answer:
+          'Para saber si pueden atender una avería urgente, llama al teléfono de contacto de esta web: te confirman disponibilidad y qué hacer mientras tanto. Esta demo no publica horarios ni servicios de urgencia no verificados.',
+      },
+    ],
+    photos: TALLER_PHOTOS,
+    logoMotif: 'wrench',
+    variants: [
+      { id: 'taller-mecanico-v0', accent: '#92400e', heroLayout: 'banner' },
+      { id: 'taller-mecanico-v1', accent: '#0f766e', heroLayout: 'split' },
+      { id: 'taller-mecanico-v2', accent: '#334155', heroLayout: 'card' },
+    ],
+  },
+  {
+    id: 'salud-fisioterapia',
+    name: 'Fisioterapia y salud',
+    description:
+      'Plantilla sectorial para fisioterapia y salud (3ª tanda 2026-11-17: fisioterapia, pilates terapéutico, neuromodulación NESA, fisioterapia manual, Feldenkrais): hero calmado con foto de ejercicio terapéutico, galería protagonista, sección "La consulta" antes que los servicios y FAQ de cita y tratamientos. Sin sección "Cómo trabajamos" (como peluquería). Paleta verde azulado + esmeralda. 3 variantes (esmeralda/banner, azul partida, oliva/tarjeta) y contacto sin formulario.',
+    sectors: [
+      'fisioterapia + pilates terapéutico',
+      'fisioterapia + neuromodulación nesa',
+      'fisioterapia manual',
+      'fisioterapia + feldenkrais',
+    ],
+    palette: {
+      background: '#f0f7f5',
+      surface: '#feffff',
+      primary: '#0f4c46',
+      primaryDark: '#0a3632',
+      accent: '#047857',
+      text: '#1c2f2b',
+      muted: '#4f6b64',
+    },
+    fontHeading: "'Gill Sans', 'Gill Sans MT', Calibri, sans-serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'trust', 'about', 'services', 'gallery', 'faq', 'contact'],
+    heroKicker: 'Fisioterapia y salud',
+    faq: [
+      {
+        question: '¿Hace falta pedir cita?',
+        answer:
+          'Para saber si hace falta cita previa y qué huecos hay, llama al teléfono de contacto de esta web. Esta demo no publica horarios ni un sistema de reservas: no se ha verificado ninguno.',
+      },
+      {
+        question: '¿Qué tratamientos ofrecen?',
+        answer:
+          'Los tratamientos concretos solo se publican cuando están contrastados en el expediente de la empresa. Si la lista de servicios de esta demo aparece como pendiente de confirmar, es porque aún no se ha verificado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Cómo es una primera visita?',
+        answer:
+          'Para saber cómo es una primera visita y qué debes llevar, llama al teléfono de contacto de esta web: te lo explican directamente. Esta demo no publica servicios ni horarios no verificados.',
+      },
+    ],
+    photos: SALUD_PHOTOS,
+    logoMotif: 'cross',
+    variants: [
+      { id: 'salud-fisioterapia-v0', accent: '#047857', heroLayout: 'banner' },
+      { id: 'salud-fisioterapia-v1', accent: '#0e7490', heroLayout: 'split' },
+      { id: 'salud-fisioterapia-v2', accent: '#365314', heroLayout: 'card' },
+    ],
+  },
+  {
+    id: 'electricista',
+    name: 'Electricidad y placas solares',
+    description:
+      'Plantilla sectorial para electricista (3ª tanda 2026-11-17: electricidad y placas solares): hero técnico con foto de trabajo eléctrico, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de presupuestos y averías. Paleta azul noche + ámbar eléctrico. 3 variantes (ámbar/partida, azul/tarjeta, teja/banner) y contacto sin formulario.',
+    sectors: ['electricista + placas solares', 'electricista'],
+    palette: {
+      background: '#f7f5ec',
+      surface: '#fffef8',
+      primary: '#1b2a4a',
+      primaryDark: '#101c30',
+      accent: '#8a5a00',
+      text: '#20262e',
+      muted: '#5a6470',
+    },
+    fontHeading: "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'trust', 'howItWorks', 'services', 'gallery', 'about', 'faq', 'contact'],
+    heroKicker: 'Electricidad y placas solares',
+    faq: [
+      {
+        question: '¿Hacen presupuestos?',
+        answer:
+          'Pide presupuesto por teléfono: llama al número de contacto de esta web y te confirman si pueden hacerlo y qué información necesitan. El contacto es directo con la empresa.',
+      },
+      {
+        question: '¿Instalan placas solares?',
+        answer:
+          'Los trabajos concretos solo se publican cuando están contrastados en el expediente de la empresa. Si la lista de servicios de esta demo aparece como pendiente de confirmar, es porque aún no se ha verificado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Atienden averías urgentes?',
+        answer:
+          'Para saber si pueden atender una avería urgente, llama al teléfono de contacto de esta web: te confirman disponibilidad y qué hacer mientras tanto. Esta demo no publica horarios ni servicios de urgencia no verificados.',
+      },
+    ],
+    photos: ELECTRICISTA_PHOTOS,
+    logoMotif: 'bolt',
+    variants: [
+      { id: 'electricista-v0', accent: '#8a5a00', heroLayout: 'split' },
+      { id: 'electricista-v1', accent: '#1d4ed8', heroLayout: 'card' },
+      { id: 'electricista-v2', accent: '#0f766e', heroLayout: 'banner' },
+    ],
+  },
+  {
+    id: 'cerrajeria',
+    name: 'Cerrajería y herrería',
+    description:
+      'Plantilla sectorial para cerrajería y herrería (3ª tanda 2026-11-17): hero de oficio con foto de llaves, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de aperturas y copias de llaves. Paleta bronce oscuro + teja. 3 variantes (teja/banner, grafito/partida, bronce/tarjeta) y contacto sin formulario.',
+    sectors: ['cerrajería/herrería'],
+    palette: {
+      background: '#f3f1ec',
+      surface: '#fffefa',
+      primary: '#3a2e22',
+      primaryDark: '#241b12',
+      accent: '#7c2d12',
+      text: '#2a211a',
+      muted: '#6b5d4f',
+    },
+    fontHeading: "'Courier New', Courier, monospace",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'services', 'howItWorks', 'trust', 'gallery', 'about', 'faq', 'contact'],
+    heroKicker: 'Cerrajería y herrería',
+    faq: [
+      {
+        question: '¿Atienden aperturas urgentes?',
+        answer:
+          'Para saber si pueden atender una apertura urgente, llama al teléfono de contacto de esta web: te confirman disponibilidad y qué hacer mientras tanto. Esta demo no publica horarios ni servicios de urgencia no verificados.',
+      },
+      {
+        question: '¿Hacen copias de llaves?',
+        answer:
+          'Los trabajos concretos solo se publican cuando están contrastados en el expediente de la empresa. Si la lista de servicios de esta demo aparece como pendiente de confirmar, es porque aún no se ha verificado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Hacen presupuestos?',
+        answer:
+          'Pide presupuesto por teléfono: llama al número de contacto de esta web y te confirman si pueden hacerlo y qué información necesitan. El contacto es directo con la empresa.',
+      },
+    ],
+    photos: CERRAJERIA_PHOTOS,
+    logoMotif: 'key',
+    variants: [
+      { id: 'cerrajeria-v0', accent: '#7c2d12', heroLayout: 'banner' },
+      { id: 'cerrajeria-v1', accent: '#44403c', heroLayout: 'split' },
+      { id: 'cerrajeria-v2', accent: '#713f12', heroLayout: 'card' },
+    ],
+  },
+  {
+    id: 'jardineria',
+    name: 'Jardinería y paisajismo',
+    description:
+      'Plantilla sectorial para jardinería y paisajismo (3ª tanda 2026-11-17): hero verde con foto de jardín, galería protagonista, sección "Cómo trabajamos" en 3 pasos y FAQ de presupuestos y trabajos. Paleta verde hoja + ocre. 3 variantes (lima/partida, verde/banner, ocre/tarjeta) y contacto sin formulario.',
+    sectors: ['jardinería/paisajismo'],
+    palette: {
+      background: '#f1f6ee',
+      surface: '#fdfff9',
+      primary: '#1e4d2b',
+      primaryDark: '#122f1a',
+      accent: '#3f6212',
+      text: '#22301f',
+      muted: '#5c6b57',
+    },
+    fontHeading: "'Century Gothic', Futura, 'Trebuchet MS', sans-serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'gallery', 'services', 'howItWorks', 'trust', 'about', 'faq', 'contact'],
+    heroKicker: 'Jardinería y paisajismo',
+    faq: [
+      {
+        question: '¿Hacen presupuestos?',
+        answer:
+          'Pide presupuesto por teléfono: llama al número de contacto de esta web y te confirman si pueden hacerlo y qué información necesitan. El contacto es directo con la empresa.',
+      },
+      {
+        question: '¿Qué trabajos hacen?',
+        answer:
+          'Los trabajos concretos solo se publican cuando están contrastados en el expediente de la empresa. Si la lista de servicios de esta demo aparece como pendiente de confirmar, es porque aún no se ha verificado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Trabajan todo el año?',
+        answer:
+          'Para saber en qué épocas del año trabajan y qué pueden hacer en tu jardín, llama al teléfono de contacto de esta web. Esta demo no publica horarios ni servicios no verificados.',
+      },
+    ],
+    photos: JARDINERIA_PHOTOS,
+    logoMotif: 'leaf',
+    variants: [
+      { id: 'jardineria-v0', accent: '#3f6212', heroLayout: 'split' },
+      { id: 'jardineria-v1', accent: '#166534', heroLayout: 'banner' },
+      { id: 'jardineria-v2', accent: '#854d0e', heroLayout: 'card' },
     ],
   },
 ];
