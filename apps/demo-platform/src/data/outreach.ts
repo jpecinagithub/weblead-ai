@@ -23,12 +23,19 @@
  *   Gmail devolvió "Address not found": el buzón no existe. La demo
  *   se mantiene en la plataforma salvo que Jon diga lo contrario.
  *
- * Cuarta tanda (2026-11-17): 10 demos nuevas pendientes de contacto.
- * La oferta aún no se ha enviado (se decidirá después); todavía no
- * hay ningún email enviado para ninguna de ellas.
+ * Cuarta tanda (2026-11-17): los 10 emails de oferta (75 €) se
+ * enviaron a mano el 17 nov 2026 desde mmartin19791979parra@gmail.com,
+ * firmados como Miguel Martín. Estado actual:
  *
- * Totales de la plataforma: 25 enviadas esperando respuesta,
- * 2 rebotes, 10 pendientes de contacto, 0 respuestas.
+ * - 8 × oferta enviada, sin respuesta todavía.
+ * - 2 × rebotados: Centro de Estudios (info@imaginesoria.com) —
+ *   Gmail devolvió "domain imaginesoria.com couldn't be found": el
+ *   dominio no existe; y Talleres Sivi (talleressivi@gmail.com) —
+ *   "Address not found": el buzón no existe. Las demos se mantienen
+ *   en la plataforma salvo que Jon diga lo contrario.
+ *
+ * Totales de la plataforma: 33 enviadas esperando respuesta,
+ * 4 rebotes, 0 pendientes de contacto, 0 respuestas.
  */
 export type OutreachStatus = 'sent' | 'bounced' | 'replied' | 'pending';
 
@@ -78,16 +85,24 @@ export const OUTREACH: Record<string, OutreachEntry> = {
     note: 'dirección no encontrada',
   },
   // Cuarta tanda (2026-11-17): 10 pendientes de contacto, oferta aún sin enviar.
-  'centro-de-estudios-soria': { status: 'pending', date: '17 nov 2026' },
-  'clinica-dental-mercedes-moreno-torcal-soria': { status: 'pending', date: '17 nov 2026' },
-  'talleres-sivi-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
-  'taller-mecanico-adolfo-meson-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
-  'talleres-gonviauto-hnos-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
-  'auto-neumaticos-el-valle-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
-  'calefaccion-y-fontaneria-mile-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
-  'cerrajeria-albarran-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
-  'cerrajeria-chupi-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
-  'don-llaves-cuenca': { status: 'pending', date: '17 nov 2026' },
+  'centro-de-estudios-soria': {
+    status: 'bounced',
+    date: '17 nov 2026',
+    note: 'dirección no encontrada',
+  },
+  'clinica-dental-mercedes-moreno-torcal-soria': { status: 'sent', date: '17 nov 2026' },
+  'talleres-sivi-arenas-de-san-pedro': {
+    status: 'bounced',
+    date: '17 nov 2026',
+    note: 'dirección no encontrada',
+  },
+  'taller-mecanico-adolfo-meson-arenas-de-san-pedro': { status: 'sent', date: '17 nov 2026' },
+  'talleres-gonviauto-hnos-arenas-de-san-pedro': { status: 'sent', date: '17 nov 2026' },
+  'auto-neumaticos-el-valle-arenas-de-san-pedro': { status: 'sent', date: '17 nov 2026' },
+  'calefaccion-y-fontaneria-mile-arenas-de-san-pedro': { status: 'sent', date: '17 nov 2026' },
+  'cerrajeria-albarran-arenas-de-san-pedro': { status: 'sent', date: '17 nov 2026' },
+  'cerrajeria-chupi-arenas-de-san-pedro': { status: 'sent', date: '17 nov 2026' },
+  'don-llaves-cuenca': { status: 'sent', date: '17 nov 2026' },
 };
 
 /** Etiqueta que muestra el índice privado para cada proyecto. */
