@@ -19,8 +19,30 @@
 import { existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { chromium, type Browser } from 'playwright-core';
+import { chromium, type Browser, type Page } from 'playwright-core';
 import type { AuditFindingInput } from './index.js';
+
+// Puerta de clave (2026-11-17, siempre pide la clave: sin persistencia).
+// La auditoría desbloquea por la interfaz (escribe la clave y entra),
+// como haría un usuario; la puerta en sí se prueba con tests unitarios.
+// Clave por env WEBLEAD_DEMO_PASSWORD (por defecto la clave actual).
+const GATE_PASSWORD = process.env.WEBLEAD_DEMO_PASSWORD ?? 'demo2026';
+
+/** Desbloquea la puerta de clave por la interfaz, si está presente. */
+async function unlockGate(page: Page): Promise<void> {
+  const gate = page.locator('#demo-password');
+  if (await gate.count()) {
+    await gate.fill(GATE_PASSWORD);
+    await page
+      .locator('form[aria-label="Acceso con clave"] button[type="submit"]')
+      .click();
+    await page.waitForFunction(
+      () => !document.querySelector('#demo-password'),
+      null,
+      { timeout: 10000 },
+    );
+  }
+}
 
 export class PlaywrightUnavailableError extends Error {
   readonly searchedPaths: string[];
@@ -88,15 +110,6 @@ export async function runPlaywrightAudit(
 
     // ---- Desktop 1280x800 ----
     const desktop = await browser.newPage({ viewport: { width: 1280, height: 800 } });
-    // Puerta de clave (2026-11-17): la auditoría desbloquea la plataforma
-    // antes de navegar, para auditar el contenido de la demo. La clave es
-    // 'weblead-demos-unlocked' en sessionStorage (ver
-    // apps/demo-platform/src/password-gate.ts); la puerta en sí se prueba
-    // con tests unitarios, no aquí. Sin este desbloqueo la auditoría solo
-    // vería la pantalla de clave.
-    await desktop.addInitScript(() => {
-      sessionStorage.setItem('weblead-demos-unlocked', '1');
-    });
     desktop.on('console', (msg) => {
       if (msg.type() === 'error') consoleErrors.push(msg.text().slice(0, 300));
     });
@@ -106,6 +119,8 @@ export async function runPlaywrightAudit(
     });
     const t0 = Date.now();
     await desktop.goto(demoUrl, { waitUntil: 'networkidle', timeout: 30000 });
+    // Puerta de clave: desbloquear por la interfaz tras cargar (ver arriba).
+    await unlockGate(desktop);
     loadMs.desktop = Date.now() - t0;
     const desktopShot = join(screenshotsDir, `${slug}-desktop.png`);
     await desktop.screenshot({ path: desktopShot, fullPage: true });
@@ -138,8 +153,8 @@ export async function runPlaywrightAudit(
     }
     // Rediseño 2026-11-17: no form in any demo — contact is tel:/mailto:/
     // address/Maps only. Any form control is a CRITICAL regression.
-    // (La puerta de clave es un <form> aparte, pero las auditorías
-    // desbloquean antes de navegar, así que aquí nunca se ve.)
+    // (La puerta de clave es un <form> aparte, pero las auditorías la
+    // desbloquean por la interfaz tras cargar, así que aquí nunca se ve.)
     const formControls = await desktop.evaluate(() =>
       document.querySelectorAll('form, input, textarea, select').length,
     );
@@ -166,12 +181,10 @@ export async function runPlaywrightAudit(
 
     // ---- Mobile 390x844 ----
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
-    // Puerta de clave: mismo desbloqueo que en escritorio (ver arriba).
-    await mobile.addInitScript(() => {
-      sessionStorage.setItem('weblead-demos-unlocked', '1');
-    });
     const t1 = Date.now();
     await mobile.goto(demoUrl, { waitUntil: 'networkidle', timeout: 30000 });
+    // Puerta de clave: mismo desbloqueo que en escritorio (ver arriba).
+    await unlockGate(mobile);
     loadMs.mobile = Date.now() - t1;
     const mobileShot = join(screenshotsDir, `${slug}-mobile.png`);
     await mobile.screenshot({ path: mobileShot, fullPage: true });

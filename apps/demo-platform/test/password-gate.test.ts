@@ -6,15 +6,17 @@ import { GENERATED_DEMOS } from '../src/data/generated-demos.js';
 import { DEMO_NOTICE } from '@weblead/agent-designer';
 import {
   PASSWORD_HASH,
-  STORAGE_KEY,
   checkPassword,
   isUnlocked,
+  lock,
   markUnlocked,
   sha256Hex,
 } from '../src/password-gate.js';
 
 /**
- * Puerta de clave (orden de Jon 2026-11-17).
+ * Puerta de clave (orden de Jon 2026-11-17; siempre pide la clave
+ * desde 2026-11-17: el desbloqueo vive solo en la memoria de la carga
+ * actual, sin sessionStorage ni persistencia).
  *
  * Sin desbloquear no se renderiza ningún contenido de las demos (ni el
  * índice ni las fichas); con la clave correcta sí. La clave nunca aparece
@@ -22,33 +24,16 @@ import {
  * `checkPassword` (la propia clave que el usuario escribiría); el hash
  * guardado se compara contra vectores conocidos y contra la función real.
  */
-function makeSessionStorage(unlocked: boolean) {
-  const store = new Map<string, string>(
-    unlocked ? [[STORAGE_KEY, '1']] : [],
-  );
-  return {
-    getItem: (key: string) => store.get(key) ?? null,
-    setItem: (key: string, value: string) => {
-      store.set(key, value);
-    },
-    removeItem: (key: string) => {
-      store.delete(key);
-    },
-    clear: () => store.clear(),
-    key: (index: number) => [...store.keys()][index] ?? null,
-    get length() {
-      return store.size;
-    },
-  };
-}
-
 function renderPath(pathname: string, unlocked: boolean): string {
   (globalThis as unknown as { window: unknown }).window = {
     location: { pathname },
-    sessionStorage: makeSessionStorage(unlocked),
     addEventListener: () => {},
     removeEventListener: () => {},
   };
+  // El desbloqueo es memoria de la carga actual: cada render empieza
+  // bloqueado y solo se desbloquea si la prueba lo marca.
+  lock();
+  if (unlocked) markUnlocked();
   return renderToString(createElement(App));
 }
 
@@ -75,13 +60,13 @@ describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
     expect(await checkPassword('')).toBe(false);
   });
 
-  it('isUnlocked/markUnlocked usan sessionStorage', () => {
-    (globalThis as unknown as { window: unknown }).window = {
-      sessionStorage: makeSessionStorage(false),
-    };
+  it('isUnlocked/markUnlocked/lock usan solo memoria de la carga actual', () => {
+    lock();
     expect(isUnlocked()).toBe(false);
     markUnlocked();
     expect(isUnlocked()).toBe(true);
+    lock();
+    expect(isUnlocked()).toBe(false);
   });
 
   it('sin desbloquear: el índice no muestra ninguna empresa', () => {
@@ -118,11 +103,13 @@ describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
     });
   }
 
-  it('desbloqueada: el índice muestra las 10 demos', () => {
+  it('desbloqueada: el índice NO lista ninguna demo (orden de Jon 2026-11-17)', () => {
     const html = renderPath('/', true);
     expect(html).not.toContain('Clave de acceso');
+    expect(html).toContain('no hay un listado de demos');
     for (const demo of GENERATED_DEMOS) {
-      expect(html).toContain(demo.content.businessName);
+      expect(html).not.toContain(demo.content.businessName);
     }
+    expect(html).not.toContain('Ver demo');
   });
 });

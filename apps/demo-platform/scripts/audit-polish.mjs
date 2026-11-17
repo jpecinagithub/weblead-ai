@@ -35,21 +35,31 @@ if (!exe) throw new Error('No Chromium binary in ~/.cache/ms-playwright');
 const WIDTHS = [360, 768, 1280];
 const results = [];
 
+// Puerta de clave (2026-11-17, siempre pide la clave: sin persistencia).
+// La auditoría desbloquea por la interfaz (escribe la clave y entra),
+// como haría un usuario; la puerta en sí se prueba con tests unitarios.
+// Clave por env WEBLEAD_DEMO_PASSWORD (por defecto la clave actual).
+const GATE_PASSWORD = process.env.WEBLEAD_DEMO_PASSWORD ?? 'demo2026';
+async function unlockGate(page) {
+  const gate = page.locator('#demo-password');
+  if (await gate.count()) {
+    await gate.fill(GATE_PASSWORD);
+    await page.locator('form[aria-label="Acceso con clave"] button[type="submit"]').click();
+    await page.waitForFunction(() => !document.querySelector('#demo-password'), null, { timeout: 10000 });
+  }
+}
+
 async function auditPage(browser, path, label) {
   const entry = { page: label, path, overflow: {}, consoleErrors: [], httpErrors: [], brokenImages: [], forms: 0, loadMs: {} };
   for (const w of WIDTHS) {
     const page = await browser.newPage({ viewport: { width: w, height: 800 } });
-    // Puerta de clave (2026-11-17): desbloquear antes de navegar para
-    // auditar el contenido; la puerta en sí se prueba con tests unitarios.
-    await page.addInitScript(() => {
-      sessionStorage.setItem('weblead-demos-unlocked', '1');
-    });
     const cerr = [], herr = [];
     page.on('console', (m) => { if (m.type() === 'error') cerr.push(m.text().slice(0, 200)); });
     page.on('pageerror', (e) => cerr.push(String(e).slice(0, 200)));
     page.on('response', (r) => { if (r.status() >= 400) herr.push(`${r.status()} ${r.url()}`); });
     const t0 = Date.now();
     await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 30000 });
+    await unlockGate(page);
     await page.waitForTimeout(400);
     entry.loadMs[w] = Date.now() - t0;
     const metrics = await page.evaluate(() => ({
@@ -75,10 +85,8 @@ async function auditPage(browser, path, label) {
   }
   // 768 fullPage shot too (index + demos)
   const p768 = await browser.newPage({ viewport: { width: 768, height: 800 } });
-  await p768.addInitScript(() => {
-    sessionStorage.setItem('weblead-demos-unlocked', '1');
-  });
   await p768.goto(BASE + path, { waitUntil: 'networkidle', timeout: 30000 });
+  await unlockGate(p768);
   await p768.waitForTimeout(400);
   await p768.screenshot({ path: join(OUT, `${label}-tablet768.png`), fullPage: true });
   await p768.close();
