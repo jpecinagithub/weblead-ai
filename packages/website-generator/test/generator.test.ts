@@ -12,6 +12,7 @@ import {
   extractInitials,
   extractReviewSummary,
   FAQ_NO_CONTACT_FALLBACK,
+  firstPhoneNumber,
   mapsHrefFor,
   sanitizeActivitySignal,
   validateNoInventedClaims,
@@ -140,6 +141,16 @@ describe('generator: real dossier data, nothing invented', () => {
     expect(whatsappHrefFor(null)).toBeNull();
     expect(whatsappHrefFor('123')).toBeNull();
     expect(buildWebsiteContent({ ...FERRER_INPUT, phone: null }).contact.whatsappHref).toBeNull();
+  });
+
+  it('two numbers in one field: links dial only the first (3ª tanda: Grinan)', () => {
+    expect(firstPhoneNumber('967 49 02 35 / 646 00 00 00')).toBe('967 49 02 35');
+    expect(firstPhoneNumber('941227157')).toBe('941227157');
+    expect(firstPhoneNumber(null)).toBeNull();
+    const c = buildWebsiteContent({ ...FERRER_INPUT, phone: '967 49 02 35 / 646 00 00 00' });
+    expect(c.contact.phone).toBe('967 49 02 35 / 646 00 00 00');
+    expect(c.contact.phoneHref).toBe('tel:+34967490235');
+    expect(c.contact.whatsappHref).toBe('https://wa.me/34967490235');
   });
 });
 

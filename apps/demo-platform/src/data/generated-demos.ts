@@ -6,7 +6,7 @@
  * jardineria; fuentes: pilot-leads.json +
  * docs/tercera-tanda-17-leads.json, sin borrador LLM en las nuevas).
  * Do not edit by hand: re-run the script (it re-validates every fact).
- * Generated at 2026-11-17T12:51:15.607Z (27 demos).
+ * Generated at 2026-11-17T12:58:42.286Z (27 demos).
  */
 import type { GeneratedWebsiteContent } from '@weblead/website-generator';
 
@@ -2551,8 +2551,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
       "contact": {
         "address": "Avd. Constitución 78 / Ctra. Híjar 23, 16235 Iniesta",
         "phone": "967 49 02 35 / 646 00 00 00",
-        "phoneHref": "tel:+34967490235646000000",
-        "whatsappHref": null,
+        "phoneHref": "tel:+34967490235",
+        "whatsappHref": "https://wa.me/34967490235",
         "email": "grinanbueno@gmail.com",
         "mapsHref": "https://www.google.com/maps/search/?api=1&query=Avd.%20Constituci%C3%B3n%2078%20%2F%20Ctra.%20H%C3%ADjar%2023%2C%2016235%20Iniesta"
       },

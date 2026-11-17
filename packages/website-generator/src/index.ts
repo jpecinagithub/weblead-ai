@@ -438,10 +438,22 @@ function digitsOnly(phone: string): string {
   return phone.replace(/\D/g, '');
 }
 
+/**
+ * First number when the dossier lists several in one field
+ * ("967 49 02 35 / 646 00 00 00", Grinan 3ª tanda): the tel:/WhatsApp
+ * links must dial ONE number, never the concatenation of both. The
+ * displayed text keeps the full field; only the links use the first.
+ */
+export function firstPhoneNumber(phone: string | null): string | null {
+  if (!phone) return null;
+  const first = phone.split(/[/,;]/)[0]!.trim();
+  return first.length > 0 ? first : null;
+}
+
 /** WhatsApp only for a verified public Spanish phone (9 digits, 6/9...). */
 export function whatsappHrefFor(phone: string | null): string | null {
   if (!phone) return null;
-  const digits = digitsOnly(phone);
+  const digits = digitsOnly(firstPhoneNumber(phone) ?? '');
   if (!/^[69]\d{8}$/.test(digits)) return null;
   return `https://wa.me/34${digits}`;
 }
@@ -461,7 +473,8 @@ export function buildWebsiteContent(
   const variant = variantForSlug(template, input.slug);
   const palette = { ...template.palette, accent: variant.accent };
   const logoSvgDataUri = buildLogoSvg(initials, template.palette.primary, variant.accent, template.logoMotif);
-  const phoneHref = input.phone ? `tel:+34${digitsOnly(input.phone)}` : null;
+  const firstPhone = firstPhoneNumber(input.phone);
+  const phoneHref = firstPhone ? `tel:+34${digitsOnly(firstPhone)}` : null;
   const whatsappHref = whatsappHrefFor(input.phone);
   const mapsHref = mapsHrefFor(input.address);
   /** Display sector: urgency tokens stripped (3ª tanda); raw stays in the dossier. */

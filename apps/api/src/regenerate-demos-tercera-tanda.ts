@@ -16,7 +16,10 @@
  *   left for later). Each gets an EXPLICIT templateId (never sector
  *   matching), deterministic copy (no LLM draft: llm.used = false),
  *   businessState PREVIEW_READY and auditStatus null (pending the
- *   Playwright audit, another worker).
+ *   Playwright audit, another worker). On a RE-RUN (27 previous demos)
+ *   the 17 are rebuilt from the JSON and keep their previous
+ *   businessState / auditStatus, so re-running after the audit does
+ *   not wipe the APPROVED stamps.
  *
  * New-lead inputs (GeneratorBusinessInput):
  * - name = lead.name; sector = displaySector(lead.sector) (strips
@@ -94,7 +97,9 @@ function readPreviousDemos(): PreviousDemo[] {
 }
 
 const PREVIOUS = readPreviousDemos();
-if (PREVIOUS.length !== 10) throw new Error(`Tercera tanda: se esperaban 10 demos previas, hay ${PREVIOUS.length}.`);
+if (PREVIOUS.length !== 10 && PREVIOUS.length !== 27) {
+  throw new Error(`Tercera tanda: se esperaban 10 o 27 demos previas, hay ${PREVIOUS.length}.`);
+}
 
 // ---------------------------------------------------------------------------
 // Part 1 — rebuild the 10 Logroño demos, exactly like the segunda tanda.
@@ -355,10 +360,13 @@ for (const lead of newLeads) {
   if (content.llm.used) throw new Error(`LLM draft used for ${lead.name} — las demos nuevas son deterministas.`);
   checkCopy(lead.name, content, { phone, address });
 
+  // Re-run (27 previas): preserve the state this demo already had.
+  const prev = PREVIOUS.find((d) => d.content.businessName === lead.name);
   out.push({
     content,
-    businessState: 'PREVIEW_READY',
-    auditStatus: null, // pending Playwright audit
+    // Re-run: keep the previous state (audit stamp) if it exists.
+    businessState: prev?.businessState ?? 'PREVIEW_READY',
+    auditStatus: prev?.auditStatus ?? null, // pending Playwright audit
     demoUrl: `/demos/${slug}`,
   });
   console.log(
