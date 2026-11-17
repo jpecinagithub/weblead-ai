@@ -19,9 +19,14 @@
  * firmados como Miguel Martín. Estado actual:
  *
  * - 16 × oferta enviada, sin respuesta todavía.
- * - 1 × rebotado: Peluquería Madi's (madisvillaralbo@hotmail.com) —
- *   Gmail devolvió "Address not found": el buzón no existe. La demo
- *   se mantiene en la plataforma salvo que Jon diga lo contrario.
+ * - 1 × rebotado y DESCARTADO como lead: Peluquería Madi's
+ *   (madisvillaralbo@hotmail.com) — Gmail devolvió "Address not
+ *   found": el buzón no existe. Y además, verificado en vivo el
+ *   17 nov 2026, Madi's SÍ tiene web propia (peluqueriamadis.com,
+ *   desde oct 2024; email correcto info@peluqueriamadis.com), así
+ *   que nunca fue un lead válido. Jon decidió descartarla: su demo
+ *   se eliminó de la plataforma el 17 nov 2026 y ya no aparece en
+ *   el índice ni en el seguimiento.
  *
  * Cuarta tanda (2026-11-17): los 10 emails de oferta (75 €) se
  * enviaron a mano el 17 nov 2026 desde mmartin19791979parra@gmail.com,
@@ -35,7 +40,8 @@
  *   en la plataforma salvo que Jon diga lo contrario.
  *
  * Totales de la plataforma: 33 enviadas esperando respuesta,
- * 4 rebotes, 0 pendientes de contacto, 0 respuestas.
+ * 3 rebotes, 0 pendientes de contacto, 0 respuestas (36 empresas:
+ * Madi's descartada, ver nota de la tercera tanda).
  */
 export type OutreachStatus = 'sent' | 'bounced' | 'replied' | 'pending';
 
@@ -79,12 +85,7 @@ export const OUTREACH: Record<string, OutreachEntry> = {
   'heralu-hermanos-alvarez-urones-villaralbo': { status: 'sent', date: '17 nov 2026' },
   'fontaneria-pelayo-villaralbo': { status: 'sent', date: '17 nov 2026' },
   'jardineria-raul-hernandez-laperal-villaralbo': { status: 'sent', date: '17 nov 2026' },
-  'peluqueria-madi-s-villaralbo': {
-    status: 'bounced',
-    date: '17 nov 2026',
-    note: 'dirección no encontrada',
-  },
-  // Cuarta tanda (2026-11-17): 10 pendientes de contacto, oferta aún sin enviar.
+  // Cuarta tanda (2026-11-17): 10 emails enviados (75 €): 8 enviadas, 2 rebotadas.
   'centro-de-estudios-soria': {
     status: 'bounced',
     date: '17 nov 2026',

@@ -1,5 +1,8 @@
 /**
- * Audit ALL 37 demos (cuarta tanda 2026-11-17): the 27 sealed demos
+ * Audit ALL demos (cuarta tanda 2026-11-17: 37 al cerrar la tanda;
+ * 36 desde el 17 nov 2026 por la noche, cuando se descartó
+ * Peluquería Madi's como lead — tiene web propia — y su demo se
+ * eliminó de la plataforma): the 27 sealed demos
  * re-audited after the "Datos verificados" section was removed from
  * every demo (render + content changed, so their previous PASSED stamp
  * no longer covers the current render) + the 10 new demos.
@@ -194,7 +197,7 @@ async function extraLiveChecks(
 
 async function main(): Promise<void> {
   const demos = readDemosFile();
-  if (demos.length !== 37) throw new Error(`Expected 37 demos, got ${demos.length}.`);
+  if (demos.length !== 36) throw new Error(`Expected 36 demos, got ${demos.length}.`);
 
   // ---- Dossiers from the same sources as regenerate-demos-cuarta-tanda.ts ----
   const facts = new Map<string, LeadFacts>();

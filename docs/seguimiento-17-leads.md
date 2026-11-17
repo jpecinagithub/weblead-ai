@@ -28,22 +28,34 @@
 | 14 | Heralu – Hermanos Álvarez Urones | hermanosalvarezurones@gmail.com | Oferta enviada · 17 nov 2026 |
 | 15 | Fontanería Pelayo | pelayofontaneria@hotmail.com | Oferta enviada · 17 nov 2026 |
 | 16 | Jardinería Raúl Hernández Laperal | benjaraul@hotmail.com | Oferta enviada · 17 nov 2026 |
-| 17 | Peluquería Madi's | madisvillaralbo@hotmail.com | **Rebotado · 17 nov 2026 — dirección no encontrada** |
+| 17 | Peluquería Madi's | madisvillaralbo@hotmail.com | **DESCARTADA como lead · 17 nov 2026 — tiene web propia** |
 
-**Resumen tercera tanda: 17 enviados, 16 esperando respuesta, 1 rebotado, 0 respuestas.**
+**Resumen tercera tanda: 17 enviados, 16 esperando respuesta, 1 descartada, 0 respuestas.**
 
-**Totales de la plataforma: 27 empresas, 25 esperando respuesta, 2 rebotes, 0 respuestas.**
+**Totales de la plataforma: 36 empresas, 33 esperando respuesta, 3 rebotes, 0 respuestas.**
 
-## El rebote de Peluquería Madi's
+## El rebote de Peluquería Madi's — y su descarte como lead
 
 Gmail devolvió «Your message wasn't delivered to
 madisvillaralbo@hotmail.com because the address couldn't be found,
 or is unable to receive mail»: el buzón no existe o no puede
 recibir correo. La dirección aparecía en una página de origen (por
-eso se dio por verificada), pero no hay buzón detrás. La demo de
-Peluquería Madi's se mantiene en la plataforma salvo que Jon diga
-lo contrario; el contacto está muerto salvo que aparezca otro email
-de la empresa.
+eso se dio por verificada), pero no hay buzón detrás.
+
+**Corrección, 17 nov 2026 por la noche:** verificado en vivo en
+peluqueriamadis.com, Madi's SÍ tiene web propia (WordPress,
+publicada 2024-10-09, actualizada 2026-01-23, con servicios,
+reseñas y fotos; email correcto info@peluqueriamadis.com;
+teléfonos 980 546 735 y 675 529 777 — el 980 53 97 35 del
+expediente no coincide con ninguno). La frase «no tiene página
+web propia» de la oferta enviada era falsa en su caso, y nunca
+fue un lead válido.
+
+**Decisión de Jon (17 nov 2026, 21:01): descartarla como lead.**
+Su demo se eliminó de la plataforma (ya no aparece en el índice
+ni en el seguimiento) y su entrada se quitó de `outreach.ts`.
+Queda como dato histórico en este documento y en
+`docs/tercera-tanda-17-leads.md`.
 
 ## Cómo se actualiza
 

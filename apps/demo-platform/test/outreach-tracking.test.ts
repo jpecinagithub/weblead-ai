@@ -13,12 +13,14 @@ import { lock, markUnlocked } from '../src/password-gate.js';
  * 9 ofertas enviadas sin respuesta y 1 rebote (Pintor Roberto,
  * dirección no encontrada). Tercera tanda (75 €, 2026-11-17):
  * 16 ofertas enviadas sin respuesta y 1 rebote (Peluquería Madi's,
- * dirección no encontrada). Cuarta tanda (75 €, 2026-11-17):
- * 8 ofertas enviadas sin respuesta y 2 rebotes (Centro de Estudios,
- * dominio no encontrado; Talleres Sivi, dirección no encontrada).
- * Totales: 33 enviadas, 4 rebotes, 0 pendientes, 0 respuestas.
- * El seguimiento solo se ve tras la clave, nunca en
- * las demos públicas.
+ * dirección no encontrada) — Madi's DESCARTADA como lead el 17 nov
+ * 2026: sí tiene web propia (peluqueriamadis.com), así que su demo
+ * se eliminó de la plataforma y ya no cuenta. Cuarta tanda (75 €,
+ * 2026-11-17): 8 ofertas enviadas sin respuesta y 2 rebotes (Centro
+ * de Estudios, dominio no encontrado; Talleres Sivi, dirección no
+ * encontrada). Totales: 33 enviadas, 3 rebotes, 0 pendientes,
+ * 0 respuestas, 36 empresas. El seguimiento solo se ve tras la
+ * clave, nunca en las demos públicas.
  */
 function renderPath(pathname: string, unlocked: boolean): string {
   (globalThis as unknown as { window: unknown }).window = {
@@ -42,16 +44,13 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     }
   });
 
-  it('33 ofertas enviadas, 4 rebotes (Roberto, Madi\'s, Centro de Estudios y Sivi) y 0 pendientes', () => {
+  it('33 ofertas enviadas, 3 rebotes (Roberto, Centro de Estudios y Sivi) y 0 pendientes', () => {
     const statuses = Object.values(OUTREACH).map((entry) => entry.status);
     expect(statuses.filter((s) => s === 'sent')).toHaveLength(33);
-    expect(statuses.filter((s) => s === 'bounced')).toHaveLength(4);
+    expect(statuses.filter((s) => s === 'bounced')).toHaveLength(3);
     expect(statuses.filter((s) => s === 'pending')).toHaveLength(0);
     expect(
       OUTREACH['pintor-logrono-roberto-decoracion-logrono'],
-    ).toMatchObject({ status: 'bounced', note: 'dirección no encontrada' });
-    expect(
-      OUTREACH['peluqueria-madi-s-villaralbo'],
     ).toMatchObject({ status: 'bounced', note: 'dirección no encontrada' });
     expect(
       OUTREACH['centro-de-estudios-soria'],
@@ -59,9 +58,9 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     expect(
       OUTREACH['talleres-sivi-arenas-de-san-pedro'],
     ).toMatchObject({ status: 'bounced', note: 'dirección no encontrada' });
-    expect(outreachLabel('peluqueria-madi-s-villaralbo')).toContain(
-      'Rebotado',
-    );
+    // Madi's ya no existe ni en demos ni en seguimiento (descartada
+    // como lead el 17 nov 2026: tiene web propia).
+    expect(OUTREACH['peluqueria-madi-s-villaralbo']).toBeUndefined();
     expect(outreachLabel('centro-de-estudios-soria')).toContain(
       'Rebotado',
     );
@@ -69,13 +68,13 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     expect(outreachLabel('fontaneria-pelayo-villaralbo')).toContain('Oferta enviada');
   });
 
-  it('desbloqueado: el índice muestra el seguimiento de los 37', () => {
+  it('desbloqueado: el índice muestra el seguimiento de los 36', () => {
     const html = renderPath('/', true);
     // Cada etiqueta se pinta dos veces: fila de la tabla + tarjeta.
     expect(count(html, 'Oferta enviada')).toBe(66);
-    expect(count(html, 'Rebotado')).toBe(8);
+    expect(count(html, 'Rebotado')).toBe(6);
     expect(count(html, 'Pendiente de contacto')).toBe(0);
-    expect(count(html, 'dirección no encontrada')).toBe(8);
+    expect(count(html, 'dirección no encontrada')).toBe(6);
     expect(html).toContain('Seguimiento');
   });
 
