@@ -3,7 +3,7 @@ import { DEMO_NOTICE } from '@weblead/agent-designer';
 import { getTemplate } from '@weblead/website-templates';
 import type { GeneratedWebsiteContent } from '@weblead/website-generator';
 import { GENERATED_DEMOS, type GeneratedDemo } from './data/generated-demos.js';
-import { outreachLabel } from './data/outreach.js';
+import { OUTREACH, outreachClass, outreachLabel } from './data/outreach.js';
 import PasswordGate from './PasswordGate.js';
 
 /** Slug from the path: /demos/{slug}. No router dep. */
@@ -315,19 +315,53 @@ function DemoSite({ demo }: { demo: GeneratedDemo }) {
  * (Jon): la puerta de clave envuelve esta página. Sin la clave no se
  * ve nada del listado.
  */
+/**
+ * Píldora de estado del panel: verde solo para APPROVED / PASSED;
+ * cualquier otro valor queda neutro.
+ */
+function statePillClass(value: string | null | undefined): string {
+  if (!value) return 'pill-neutral';
+  return value === 'APPROVED' || value.startsWith('PASSED') ? 'pill-ok' : 'pill-neutral';
+}
+
 function Dashboard() {
   useEffect(() => {
     setSeo('WebLead AI — Plataforma de demos', 'Demos conceptuales generadas por WebLead AI para empresas de Logroño sin web propia.');
   }, []);
+  // Resumen de seguimiento (orden de Jon 2026-11-17): calculado desde
+  // outreach.ts, nunca a mano, para que el panel cuadre siempre.
+  const outreachEntries = Object.values(OUTREACH);
+  const sentCount = outreachEntries.filter((e) => e.status === 'sent').length;
+  const bouncedCount = outreachEntries.filter((e) => e.status === 'bounced').length;
+  const repliedCount = outreachEntries.filter((e) => e.status === 'replied').length;
   return (
     <main className="dashboard">
       <div className="notice">{DEMO_NOTICE}</div>
-      <h1>WebLead AI — Plataforma de demos</h1>
-      <p>
+      <p className="dashboard-eyebrow">WebLead AI · Panel privado</p>
+      <h1>Plataforma de demos</h1>
+      <p className="dashboard-intro">
         Demos generadas por el Designer de WebLead AI a partir del expediente verificado de cada
         empresa. Ninguna es la web oficial de la empresa: son propuestas conceptuales pendientes de
         autorización.
       </p>
+      <div className="dashboard-stats" aria-label="Resumen de seguimiento">
+        <div className="dashboard-stat">
+          <span className="dashboard-stat-number">{GENERATED_DEMOS.length}</span>
+          <span className="dashboard-stat-label">Empresas</span>
+        </div>
+        <div className="dashboard-stat">
+          <span className="dashboard-stat-number">{sentCount}</span>
+          <span className="dashboard-stat-label">Esperando respuesta</span>
+        </div>
+        <div className="dashboard-stat">
+          <span className="dashboard-stat-number">{bouncedCount}</span>
+          <span className="dashboard-stat-label">Rebotes</span>
+        </div>
+        <div className="dashboard-stat">
+          <span className="dashboard-stat-number">{repliedCount}</span>
+          <span className="dashboard-stat-label">Respuestas</span>
+        </div>
+      </div>
       <div className="demo-table-wrap">
         <table className="demo-table">
           <thead>
@@ -345,15 +379,29 @@ function Dashboard() {
           <tbody>
             {GENERATED_DEMOS.map((demo) => (
               <tr key={demo.content.businessSlug}>
-                <td>{demo.content.businessName}</td>
+                <td className="demo-table-business">{demo.content.businessName}</td>
                 <td>{demo.content.sector}</td>
                 <td>{demo.content.templateId}</td>
                 <td>{demo.content.brand.variantId}</td>
-                <td>{demo.businessState}</td>
-                <td>{demo.auditStatus ?? 'pendiente'}</td>
-                <td>{outreachLabel(demo.content.businessSlug)}</td>
                 <td>
-                  <a href={demo.demoUrl}>Ver demo</a>
+                  <span className={`pill ${statePillClass(demo.businessState)}`}>
+                    {demo.businessState}
+                  </span>
+                </td>
+                <td>
+                  <span className={`pill ${statePillClass(demo.auditStatus)}`}>
+                    {demo.auditStatus ?? 'pendiente'}
+                  </span>
+                </td>
+                <td>
+                  <span className={`pill ${outreachClass(demo.content.businessSlug)}`}>
+                    {outreachLabel(demo.content.businessSlug)}
+                  </span>
+                </td>
+                <td>
+                  <a className="demo-table-link" href={demo.demoUrl}>
+                    Ver demo
+                  </a>
                 </td>
               </tr>
             ))}
@@ -368,10 +416,18 @@ function Dashboard() {
               {demo.content.sector} · {demo.content.templateId} · {demo.content.brand.variantId}
             </p>
             <p className="demo-card-status">
-              {demo.businessState} · Auditoría: {demo.auditStatus ?? 'pendiente'}
+              <span className={`pill ${statePillClass(demo.businessState)}`}>
+                {demo.businessState}
+              </span>{' '}
+              <span className={`pill ${statePillClass(demo.auditStatus)}`}>
+                Auditoría: {demo.auditStatus ?? 'pendiente'}
+              </span>
             </p>
             <p className="demo-card-outreach">
-              Seguimiento: {outreachLabel(demo.content.businessSlug)}
+              Seguimiento:{' '}
+              <span className={`pill ${outreachClass(demo.content.businessSlug)}`}>
+                {outreachLabel(demo.content.businessSlug)}
+              </span>
             </p>
             <a className="demo-card-link" href={demo.demoUrl}>
               Ver demo →

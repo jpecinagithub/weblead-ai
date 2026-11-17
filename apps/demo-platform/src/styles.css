@@ -16,7 +16,7 @@
 /* border-box global: sin él, width:100% + padding/borde (CTAs móviles a
  * ancho completo, aviso .notice con width calc) desbordaban en horizontal. */
 *, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; background: #fff; color: #1a1d21; font-family: system-ui, sans-serif; }
+body { margin: 0; background: #faf8f4; color: #1a1d21; font-family: system-ui, sans-serif; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .notice {
   background: #fff3cd; border: 2px solid #e6c200; border-radius: 6px;
@@ -24,19 +24,92 @@ main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 }
 .muted { color: #5b6470; font-size: 0.9rem; }
 
-/* --- Índice / dashboard --- */
-.dashboard { max-width: 1080px; margin: 0 auto; padding: clamp(1.25rem, 4vw, 2.5rem) clamp(0.75rem, 3vw, 1.25rem); }
-.dashboard h1 { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); line-height: 1.15; margin: 0 0 0.75rem; }
-.dashboard > p { line-height: 1.65; max-width: 62em; }
+/* --- Índice / dashboard (rediseño elegante 2026-11-17, orden de Jon:
+ * página de trabajo diario: papel cálido, serif editorial, resumen de
+ * seguimiento y tabla en tarjeta blanca con píldoras de estado. Las
+ * demos no se tocan.) --- */
+.dashboard { max-width: 1240px; margin: 0 auto; padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 1.5rem) 4rem; }
+.dashboard .notice {
+  background: #fdf6e3; border: 1px solid #e8d9a8; border-radius: 10px;
+  padding: 0.7rem 1rem; font-weight: 600; font-size: 0.88rem; line-height: 1.55;
+  color: #5c4a12; margin-bottom: 2rem;
+}
+.dashboard-eyebrow {
+  margin: 0 0 0.6rem; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: #8a6d3b;
+}
+.dashboard h1 {
+  font-family: Georgia, 'Times New Roman', serif; font-weight: 400;
+  font-size: clamp(2rem, 1.5rem + 2.2vw, 2.9rem); line-height: 1.1;
+  margin: 0 0 0.6rem; color: #1c1a17;
+}
+.dashboard-intro { line-height: 1.65; max-width: 62em; color: #55524d; margin: 0 0 1.75rem; }
 .dashboard a:focus-visible {
   outline: 3px solid #0b3d5c; outline-offset: 2px; border-radius: 4px;
 }
+
+/* Resumen de seguimiento: cifras grandes, etiquetas en versales. */
+.dashboard-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+  margin: 0 0 2rem;
+}
+.dashboard-stat {
+  background: #fff; border: 1px solid #e9e2d6; border-radius: 14px;
+  padding: 1rem 1.1rem; box-shadow: 0 1px 4px rgb(28 26 23 / 0.05);
+}
+.dashboard-stat-number {
+  display: block; font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem; line-height: 1.1; color: #1c1a17;
+}
+.dashboard-stat-label {
+  display: block; margin-top: 0.25rem; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: #8a8378;
+}
+
+/* Tabla en tarjeta blanca, cabecera fija en versales. */
+.demo-table-wrap {
+  overflow-x: auto; background: #fff; border: 1px solid #e9e2d6;
+  border-radius: 16px; box-shadow: 0 2px 12px rgb(28 26 23 / 0.06);
+}
 .dashboard table { width: 100%; border-collapse: collapse; }
-.dashboard th, .dashboard td { text-align: left; padding: 0.65rem 0.5rem; border-bottom: 1px solid #ddd; line-height: 1.45; }
+/* Plantilla y variante son datos internos: más pequeños y discretos,
+ * para que la empresa respire en la tabla. */
+.demo-table td:nth-child(3), .demo-table td:nth-child(4) {
+  font-size: 0.88rem; color: #55524d;
+}
+.dashboard th {
+  text-align: left; padding: 0.85rem 0.9rem; font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: #8a8378;
+  border-bottom: 1px solid #ece5d8; background: #fdfbf8; white-space: nowrap;
+}
+.dashboard td {
+  text-align: left; padding: 0.8rem 0.75rem; border-bottom: 1px solid #f0ebe1;
+  line-height: 1.45; vertical-align: middle; overflow-wrap: break-word;
+}
+.dashboard tbody tr:last-child td { border-bottom: 0; }
 .dashboard tbody tr { transition: background 0.15s ease; }
-.dashboard tbody tr:hover { background: #f4f7f8; }
-.demo-table-wrap { overflow-x: auto; }
-.demo-table a { font-weight: 700; white-space: nowrap; }
+.dashboard tbody tr:hover { background: #faf6ef; }
+.demo-table-business { font-weight: 650; color: #1c1a17; }
+.demo-table-link {
+  display: inline-block; padding: 0.45rem 0.9rem; border: 1px solid #1c1a17;
+  border-radius: 999px; font-weight: 650; font-size: 0.88rem; color: #1c1a17;
+  text-decoration: none; white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.demo-table-link:hover { background: #1c1a17; color: #fff; }
+
+/* Píldoras de estado (también en las tarjetas de móvil). Sin nowrap:
+ * la de seguimiento es larga y con nowrap reventaba la tabla en
+ * escritorio y las tarjetas en móvil (overflow horizontal). */
+.pill {
+  display: inline-block; padding: 0.28rem 0.65rem; border-radius: 999px;
+  font-size: 0.82rem; font-weight: 650; line-height: 1.35;
+}
+.pill-ok { background: #e6f2e8; color: #1e6b34; }
+.pill-sent { background: #e9eef3; color: #234b63; }
+.pill-bounced { background: #fdecea; color: #a93226; }
+.pill-replied { background: #e6f2e8; color: #1e6b34; }
+.pill-neutral { background: #f0ede8; color: #6b655c; }
 
 /* Tarjetas del índice (solo móvil: la tabla con scroll horizontal queda
  * relegada a >=768 px; en móvil cada demo es una tarjeta táctil). */
@@ -44,19 +117,26 @@ main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 @media (max-width: 767px) {
   .demo-table-wrap { display: none; }
   .demo-cards {
-    display: grid; gap: 1rem; list-style: none; margin: 1.5rem 0 0; padding: 0;
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem;
+    list-style: none; margin: 1.5rem 0 0; padding: 0;
   }
+  .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
 }
 .demo-card {
-  background: #fff; border: 1px solid #dfe4e7; border-radius: 12px;
-  padding: 1.1rem 1.2rem 1.2rem; box-shadow: 0 2px 10px rgb(0 0 0 / 0.06);
+  min-width: 0;
+  background: #fff; border: 1px solid #e9e2d6; border-radius: 16px;
+  padding: 1.2rem 1.25rem 1.25rem; box-shadow: 0 2px 12px rgb(28 26 23 / 0.06);
 }
-.demo-card h2 { font-size: 1.15rem; line-height: 1.3; margin: 0 0 0.35rem; }
-.demo-card-meta { color: #5b6470; font-size: 0.92rem; line-height: 1.5; margin: 0 0 0.5rem; }
-.demo-card-status { font-size: 0.9rem; font-weight: 600; line-height: 1.5; margin: 0 0 1rem; }
+.demo-card h2 {
+  font-family: Georgia, 'Times New Roman', serif; font-weight: 400;
+  font-size: 1.3rem; line-height: 1.25; margin: 0 0 0.35rem; color: #1c1a17;
+}
+.demo-card-meta { color: #8a8378; font-size: 0.9rem; line-height: 1.5; margin: 0 0 0.75rem; }
+.demo-card-status { display: flex; flex-wrap: wrap; gap: 0.4rem; line-height: 1.5; margin: 0 0 0.6rem; }
+.demo-card-outreach { font-size: 0.9rem; line-height: 1.6; margin: 0 0 1rem; color: #55524d; }
 .demo-card-link {
   display: flex; align-items: center; justify-content: center; min-height: 48px;
-  background: #1a2b33; color: #fff; border-radius: 10px; font-weight: 700;
+  background: #1c1a17; color: #fff; border-radius: 999px; font-weight: 700;
   text-decoration: none; transition: background 0.18s ease, transform 0.18s ease;
 }
 .demo-card-link:hover { background: #0b3d5c; transform: translateY(-1px); }

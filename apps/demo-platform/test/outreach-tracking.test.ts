@@ -58,6 +58,16 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     expect(html).toContain('Seguimiento');
   });
 
+  it('desbloqueado: el índice muestra el resumen y las píldoras de estado', () => {
+    const html = renderPath('/', true);
+    expect(html).toContain('Esperando respuesta');
+    expect(html).toContain('Rebotes');
+    expect(html).toContain('Respuestas');
+    expect(html).toContain('pill-sent');
+    expect(html).toContain('pill-bounced');
+    expect(html).toContain('pill-ok');
+  });
+
   it('bloqueado: el índice no muestra ningún seguimiento', () => {
     const html = renderPath('/', false);
     expect(html).not.toContain('Oferta enviada');

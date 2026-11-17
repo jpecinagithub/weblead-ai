@@ -14,7 +14,7 @@
  * aquí (p. ej. 'replied' / 'interested' / 'declined'). Este fichero
  * es la única fuente del seguimiento que muestra el índice privado.
  */
-export type OutreachStatus = 'sent' | 'bounced';
+export type OutreachStatus = 'sent' | 'bounced' | 'replied';
 
 export type OutreachEntry = {
   status: OutreachStatus;
@@ -48,5 +48,17 @@ export function outreachLabel(slug: string): string {
   if (entry.status === 'bounced') {
     return `Rebotado · ${entry.date} — ${entry.note ?? 'sin motivo'}`;
   }
+  if (entry.status === 'replied') {
+    return `Respondió · ${entry.date}`;
+  }
   return `Oferta enviada · ${entry.date}`;
+}
+
+/** Clase de la píldora de estado en el índice (diseño del panel). */
+export function outreachClass(slug: string): string {
+  const entry = OUTREACH[slug];
+  if (!entry) return 'pill-neutral';
+  if (entry.status === 'bounced') return 'pill-bounced';
+  if (entry.status === 'replied') return 'pill-replied';
+  return 'pill-sent';
 }
