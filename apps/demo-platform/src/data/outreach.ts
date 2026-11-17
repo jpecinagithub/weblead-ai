@@ -23,8 +23,12 @@
  *   Gmail devolvió "Address not found": el buzón no existe. La demo
  *   se mantiene en la plataforma salvo que Jon diga lo contrario.
  *
+ * Cuarta tanda (2026-11-17): 10 demos nuevas pendientes de contacto.
+ * La oferta aún no se ha enviado (se decidirá después); todavía no
+ * hay ningún email enviado para ninguna de ellas.
+ *
  * Totales de la plataforma: 25 enviadas esperando respuesta,
- * 2 rebotes, 0 respuestas.
+ * 2 rebotes, 10 pendientes de contacto, 0 respuestas.
  */
 export type OutreachStatus = 'sent' | 'bounced' | 'replied' | 'pending';
 
@@ -73,6 +77,17 @@ export const OUTREACH: Record<string, OutreachEntry> = {
     date: '17 nov 2026',
     note: 'dirección no encontrada',
   },
+  // Cuarta tanda (2026-11-17): 10 pendientes de contacto, oferta aún sin enviar.
+  'centro-de-estudios-soria': { status: 'pending', date: '17 nov 2026' },
+  'clinica-dental-mercedes-moreno-torcal-soria': { status: 'pending', date: '17 nov 2026' },
+  'talleres-sivi-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
+  'taller-mecanico-adolfo-meson-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
+  'talleres-gonviauto-hnos-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
+  'auto-neumaticos-el-valle-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
+  'calefaccion-y-fontaneria-mile-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
+  'cerrajeria-albarran-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
+  'cerrajeria-chupi-arenas-de-san-pedro': { status: 'pending', date: '17 nov 2026' },
+  'don-llaves-cuenca': { status: 'pending', date: '17 nov 2026' },
 };
 
 /** Etiqueta que muestra el índice privado para cada proyecto. */

@@ -129,7 +129,6 @@ export function auditWebsiteContent(
   const copyFields: [string, string][] = [
     ['hero.subtitle', content.hero.subtitle],
     ...content.about.paragraphs.map((p, i): [string, string] => [`about[${i}]`, p]),
-    ...content.trust.items.map((t, i): [string, string] => [`trust[${i}]`, t]),
   ];
   for (const [field, text] of copyFields) {
     const violations = validateNoInventedClaims(text);

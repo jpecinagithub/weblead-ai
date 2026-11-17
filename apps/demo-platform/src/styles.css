@@ -281,37 +281,6 @@ main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
   border-bottom: 3px solid var(--accent); display: inline-block;
 }
 
-/* Trust: 4 verified-data cards (2x2 from 640 px) + stat strip below.
- * Antes los distintivos (reseñas / año) vivían dentro de la rejilla y
- * dejaban huecos (4-5 ítems en 3 columnas); ahora la rejilla es siempre
- * 2x2 y los distintivos van en su propia fila. */
-.trust-grid {
-  list-style: none; margin: 1.5rem 0 0; padding: 0;
-  display: grid; grid-template-columns: 1fr; gap: 1rem;
-}
-@media (min-width: 640px) {
-  .trust-grid { grid-template-columns: repeat(2, 1fr); }
-}
-.trust-card {
-  background: var(--surface); border: 1px solid rgb(0 0 0 / 0.08);
-  border-left: 5px solid var(--accent); border-radius: 10px;
-  padding: 1.1rem 1.2rem; line-height: 1.55;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-.trust-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgb(0 0 0 / 0.1); }
-.trust-stats { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
-.trust-stat {
-  flex: 0 1 420px; background: var(--surface); border: 1px solid rgb(0 0 0 / 0.08);
-  border-left: 5px solid var(--accent); border-radius: 10px;
-  padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.15rem;
-  justify-content: center; box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
-}
-.review-rating { font-family: var(--font-heading); font-size: clamp(1.7rem, 1.5rem + 0.8vw, 2.1rem); font-weight: 700; color: var(--primary); line-height: 1.1; }
-.review-count { font-weight: 700; color: var(--accent); }
-.founded-year { font-family: var(--font-heading); font-size: clamp(1.7rem, 1.5rem + 0.8vw, 2.1rem); font-weight: 700; color: var(--primary); line-height: 1.1; }
-.founded-label { font-weight: 600; color: var(--muted); font-size: 0.9rem; }
-
 /* Services / how-it-works. */
 .services-list { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.6rem; }
 .services-list li {
@@ -406,7 +375,12 @@ main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
   .contact-row { grid-template-columns: 1fr; gap: 0.15rem; }
 }
 .contact-label { font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; color: #cfd8dc; }
-.contact-value { color: #fff; font-weight: 700; font-size: 1.1rem; }
+.contact-value { color: #fff; font-weight: 700; font-size: 1.1rem; overflow-wrap: anywhere; }
+/* 4ª tanda 2026-11-17 (Mile): el email largo (36 caracteres) se salía
+ * de la tarjeta en móvil y se cortaba la última letra — sin romper el
+ * documento (el texto desborda su caja sin ensancharlo, por eso la
+ * auditoría de overflow no lo cazaba). Con anywhere el enlace parte
+ * dentro de la tarjeta; los valores cortos no cambian. */
 .maps-link { display: block; margin-top: 0.25rem; color: #ffd9a0; font-weight: 600; }
 .contact-note { margin: 1.25rem 0 0; padding-top: 1rem; border-top: 1px solid rgb(255 255 255 / 0.25); color: #e8eef0; }
 

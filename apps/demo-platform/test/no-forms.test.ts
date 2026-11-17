@@ -38,8 +38,8 @@ function htmlName(name: string): string {
 }
 
 describe('demo-platform: no forms in any rendered demo (rediseño 2026-11-17)', () => {
-  it('renders 27 demos', () => {
-    expect(GENERATED_DEMOS).toHaveLength(27);
+  it('renders 37 demos (4ª tanda 2026-11-17: 27 + 10 nuevas)', () => {
+    expect(GENERATED_DEMOS).toHaveLength(37);
   });
 
   for (const demo of GENERATED_DEMOS) {

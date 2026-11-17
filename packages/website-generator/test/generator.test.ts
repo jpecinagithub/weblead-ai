@@ -106,9 +106,13 @@ describe('generator: real dossier data, nothing invented', () => {
     expect(a.brand.heroLayout).toBe(b.brand.heroLayout);
     expect(a.brand.variantId).toMatch(/^fontaneria-climatizacion-v[012]$/);
     expect(['banner', 'split', 'card']).toContain(a.brand.heroLayout);
-    // Variant accent overrides the sector default; the logo uses it.
+    // Variant accent overrides the sector default; the logo initials are
+    // white for contrast on the dark primary background (4ª tanda
+    // 2026-11-17: accent-coloured initials were unreadable there), so the
+    // URI must carry the white text fill, not the accent hex.
     expect(a.brand.palette.accent).not.toBe('#c67a2e');
-    expect(a.brand.logoSvgDataUri).toContain(`%23${a.brand.palette.accent.slice(1)}`);
+    expect(decodeURIComponent(a.brand.logoSvgDataUri)).toContain('fill="#fff"');
+    expect(a.brand.logoSvgDataUri).not.toContain(`%23${a.brand.palette.accent.slice(1)}`);
     const hair = buildWebsiteContent(BEGONA_INPUT);
     expect(hair.brand.variantId).toMatch(/^peluqueria-barberia-v[012]$/);
     expect(hair.brand.variantId).not.toBe(a.brand.variantId);
@@ -211,15 +215,53 @@ describe('forbidden-claims validation (LLM drafts included)', () => {
     expect(sanitizeActivitySignal('Abierto de 9 a 20.')).toBe('');
   });
 
-  it('emits no trust item with a forbidden claim, even from the dossier signal', () => {
-    const c = buildWebsiteContent({
+  it('emits no trust section at all (4ª tanda: sección eliminada)', () => {
+    // El generador ya no produce `trust` y el contenido serializado no
+    // contiene ni la sección ni el código de actividad en inglés: el
+    // párrafo "La empresa" dice "Su actividad está verificada" sin el
+    // "(CONFIRMED, ...)" que llevaba antes.
+    const c = buildWebsiteContent(FERRER_INPUT);
+    expect('trust' in c).toBe(false);
+    const serialized = JSON.stringify(c);
+    for (const banned of [
+      'Datos verificados',
+      'Fuentes del expediente',
+      'Señal de actividad',
+      'Actividad verificada',
+      'CONFIRMED',
+    ]) {
+      expect(serialized).not.toContain(banned);
+    }
+    expect(c.about.paragraphs[0]).toContain('Su actividad está verificada');
+    expect(c.about.paragraphs[0]).toContain('(consultado 2026-11-16)');
+    // Ni siquiera una señal hostil del expediente reintroduce la sección:
+    // la señal solo alimenta `verified` (reseñas/año), que es dato, no
+    // sección — y tampoco se pinta ya como tal.
+    const hostile = buildWebsiteContent({
       ...FERRER_INPUT,
       activitySignal:
         "Ficha activa con horarios; última evidencia dura 2017-2018 (oferta Colectivia, Carné Joven).",
     });
-    for (const item of c.trust.items) expect(validateNoInventedClaims(item)).toEqual([]);
-    expect(c.trust.items.some((i) => i.includes('2017-2018'))).toBe(true);
-    expect(c.trust.items.some((i) => /horario/i.test(i))).toBe(false);
+    expect('trust' in hostile).toBe(false);
+    expect(JSON.stringify(hostile)).not.toContain('CONFIRMED');
+    expect(JSON.stringify(hostile)).not.toContain('Datos verificados');
+    // La señal del expediente sigue alimentando `verified` (año).
+    expect(c.verified.foundedYear).toBe(1994);
+  });
+
+  it('pins an explicit variantId instead of the hash pick (4ª tanda)', () => {
+    const pinned = buildWebsiteContent(
+      FERRER_INPUT,
+      'fontaneria-climatizacion',
+      null,
+      'fontaneria-climatizacion-v3',
+    );
+    expect(pinned.brand.variantId).toBe('fontaneria-climatizacion-v3');
+    // Sin pin, el hash manda (Ferrer cae en v2 con 4 variantes).
+    expect(buildWebsiteContent(FERRER_INPUT).brand.variantId).toBe('fontaneria-climatizacion-v2');
+    expect(() =>
+      buildWebsiteContent(FERRER_INPUT, 'fontaneria-climatizacion', null, 'fontaneria-climatizacion-v9'),
+    ).toThrow(/Unknown variant/);
   });
 
   it('throws for an unknown sector (no generic fallback template)', () => {
@@ -391,12 +433,15 @@ describe('generator: tercera tanda — fuera de Logroño, sin teléfono/direcci�
     expect(buildWebsiteContent(BEGONA_INPUT).howItWorks).toBeNull();
   });
 
-  it('new logo motifs render as data-URI SVGs carrying the accent', () => {
+  it('new logo motifs render as data-URI SVGs with white initials', () => {
     const motifs: LogoMotif[] = ['wrench', 'cross', 'bolt', 'key', 'leaf'];
     const uris = motifs.map((m) => buildLogoSvg('FP', '#0b3d5c', '#9a5b14', m));
     for (const uri of uris) {
       expect(uri.startsWith('data:image/svg+xml')).toBe(true);
-      expect(uri).toContain('%239a5b14');
+      // White initials on the dark primary: the accent hex must NOT be
+      // the text fill (4ª tanda 2026-11-17: dark-on-dark was unreadable).
+      expect(decodeURIComponent(uri)).toContain('fill="#fff">FP</text>');
+      expect(uri).not.toContain('%239a5b14');
       expect(decodeURIComponent(uri)).toContain('FP');
     }
     expect(new Set(uris).size).toBe(motifs.length);

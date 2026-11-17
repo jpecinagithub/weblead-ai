@@ -8,13 +8,16 @@ import {
   variantForSlug,
 } from '../src/index.js';
 
-describe('website-templates (Fase D + 2ª/3ª tanda: eight real sector templates, not one generic)', () => {
-  it('ships exactly the eight sector templates', () => {
+describe('website-templates (Fase D + 2ª/3ª/4ª tanda: eleven real sector templates, not one generic)', () => {
+  it('ships exactly the eleven sector templates', () => {
     expect(TEMPLATES.map((t) => t.id).sort()).toEqual([
+      'academia-formacion',
       'cerrajeria',
+      'clinica-dental',
       'electricista',
       'fontaneria-climatizacion',
       'jardineria',
+      'neumaticos',
       'oficios-hogar',
       'peluqueria-barberia',
       'salud-fisioterapia',
@@ -30,7 +33,7 @@ describe('website-templates (Fase D + 2ª/3ª tanda: eight real sector templates
     expect(plumbing.palette.primary).not.toBe(hair.palette.primary);
     expect(plumbing.palette.accent).not.toBe(hair.palette.accent);
     expect(plumbing.fontHeading).not.toBe(hair.fontHeading);
-    // Plumbing leads with contact/trust and a how-it-works section; hair
+    // Plumbing leads with a how-it-works section; hair
     // leads with the gallery. Different layout, not a colour swap.
     expect(plumbing.sections).toContain('howItWorks');
     expect(hair.sections).not.toContain('howItWorks');
@@ -129,11 +132,13 @@ describe('website-templates (Fase D + 2ª/3ª tanda: eight real sector templates
     }
   });
 
-  it('each template ships 3 curated variants with distinct accents and hero layouts', () => {
+  it('each template ships at least 3 curated variants with distinct accents and hero layouts', () => {
     for (const t of TEMPLATES) {
-      expect(t.variants).toHaveLength(3);
+      // 4ª tanda: taller/fontanería ganan v3, cerrajería v3/v4 — 3 es el
+      // mínimo, no el número exacto. Las 3 nuevas nacen con 3.
+      expect(t.variants.length).toBeGreaterThanOrEqual(3);
       const accents = t.variants.map((v) => v.accent);
-      expect(new Set(accents).size).toBe(3);
+      expect(new Set(accents).size).toBe(t.variants.length);
       const layouts = t.variants.map((v) => v.heroLayout);
       expect(new Set(layouts).size).toBeGreaterThanOrEqual(2);
       expect(t.variants.map((v) => v.id)).toEqual(

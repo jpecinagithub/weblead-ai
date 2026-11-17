@@ -30,6 +30,17 @@
  *   generator extracts them verbatim into `verified` for display. Nothing
  *   is parsed into a claim the signal does not state; when the signal has
  *   no such figures, `verified` stays null.
+ * - 4ª tanda (2026-11-17, orden de Jon): la sección 'trust' se ELIMINA
+ *   de todas las demos — ni actividad, ni web propia, ni fuentes, ni
+ *   señal — y el
+ *   código de actividad en inglés (CONFIRMED/...) desaparece también del
+ *   párrafo "La empresa", que ya dice "Su actividad está verificada" sin
+ *   el código. El generador ya no emite `trust` (el campo desaparece del
+ *   tipo) y `buildWebsiteContent` acepta un `variantId` explícito para
+ *   fijar la variante de una demo (la regeneración de la 4ª tanda lo usa
+ *   para que las 27 selladas conserven su variante pese al rebarajado
+ *   del hash por las variantes nuevas); sin él, la variante sigue siendo
+ *   el hash determinista del slug.
  * - Every image is an Unsplash License stock photo from the template,
  *   visually verified 2026-11-16, with source URL + licence recorded.
  * - The conceptual logo is an own SVG (initials + sector motif), never a
@@ -142,7 +153,6 @@ export type GeneratedWebsiteContent = {
     sitemapEntries: string[];
   };
   hero: { kicker: string; title: string; subtitle: string; ctaLabel: string };
-  trust: { items: string[] };
   services: { items: string[]; pendingConfirmation: boolean; note: string };
   about: { heading: string; paragraphs: string[] };
   gallery: { images: GeneratedImage[] };
@@ -184,15 +194,19 @@ export function validateNoInventedClaims(text: string): string[] {
 }
 
 /**
- * Sanitizes a free-text activity signal for display as a trust item.
+ * Sanitizes a free-text activity signal.
  *
  * The signal is verified source text from the Fase A dossier, but it can
  * contain a word the forbidden-claims list treats as a claim (e.g. Nuria:
  * "Ficha activa con horarios" trips the 'horario' pattern, although no
- * opening hours are stated). The generator must not emit trust items that
- * fail the same validation applied to LLM drafts, so only the sentences
- * free of forbidden claims are kept, in order, verbatim. Returns '' when
- * nothing survives (the caller then omits the trust item).
+ * opening hours are stated). Only the sentences free of forbidden claims
+ * are kept, in order, verbatim. Returns '' when nothing survives.
+ *
+ * Retained as a tested utility (4ª tanda 2026-11-17): since the "Datos
+ * verificados" section was removed, no generated copy displays the
+ * signal anymore and nothing calls this — the review/founded-year facts
+ * it used to guard now come from `extractReviewSummary` /
+ * `extractFoundedYear` instead.
  */
 export function sanitizeActivitySignal(signal: string): string {
   const sentences = signal
@@ -411,6 +425,14 @@ export function mapsHrefFor(address: string | null): string | null {
 }
 
 export function buildLogoSvg(initials: string, primary: string, accent: string, motif: LogoMotif): string {
+  // Las iniciales van en BLANCO, no en el acento: el acento es un tono
+  // oscuro pensado para texto sobre fondo claro, y sobre el fondo
+  // `primary` (también oscuro) quedaba ilegible — en las capturas de la
+  // 4ª tanda 2026-11-17 las iniciales no se distinguían en ninguna demo.
+  // El acento sigue vivo en el resto de la demo (filete del encabezado,
+  // titulares, botones); aquí solo se usa el glifo blanco sobre primary.
+  // `accent` se conserva en la firma por estabilidad de la API.
+  void accent;
   const glyph =
     motif === 'pipe'
       ? '<path d="M14 6h20v6H20v22a4 4 0 0 1-8 0V12H6z" fill="#fff" opacity="0.9"/>'
@@ -430,7 +452,7 @@ export function buildLogoSvg(initials: string, primary: string, accent: string, 
   const svg =
     `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60" viewBox="0 0 120 60">` +
     `<rect width="120" height="60" rx="10" fill="${primary}"/>${glyph}` +
-    `<text x="66" y="38" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="${accent}">${initials}</text></svg>`;
+    `<text x="66" y="38" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#fff">${initials}</text></svg>`;
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
@@ -462,6 +484,15 @@ export function buildWebsiteContent(
   input: GeneratorBusinessInput,
   templateId?: string,
   llmDraft?: LlmDraft | null,
+  /**
+   * Explicit variant pin (4ª tanda 2026-11-17): when given, the demo
+   * renders exactly this variant of the template instead of the hash
+   * pick — used by the regen script to keep the 27 sealed demos on
+   * their current variant after new variants reshuffle the hash.
+   * Must be one of the template's variant ids; anything else throws.
+   * When omitted, the variant is the deterministic hash of the slug.
+   */
+  variantId?: string,
 ): GeneratedWebsiteContent {
   const template =
     (templateId ? getTemplate(templateId) : undefined) ??
@@ -470,7 +501,12 @@ export function buildWebsiteContent(
     throw new Error(`No website template for sector "${input.sector}" (templateId "${templateId ?? ''}").`);
   }
   const initials = extractInitials(input.name);
-  const variant = variantForSlug(template, input.slug);
+  const variant = variantId
+    ? (template.variants.find((v) => v.id === variantId) ??
+      (() => {
+        throw new Error(`Unknown variant "${variantId}" for template "${template.id}".`);
+      })())
+    : variantForSlug(template, input.slug);
   const palette = { ...template.palette, accent: variant.accent };
   const logoSvgDataUri = buildLogoSvg(initials, template.palette.primary, variant.accent, template.logoMotif);
   const firstPhone = firstPhoneNumber(input.phone);
@@ -491,7 +527,7 @@ export function buildWebsiteContent(
     input.province.toLowerCase() !== input.municipality.toLowerCase() ? ` (${input.province})` : '';
   const deterministicAbout =
     `${input.name} es una empresa de ${sector} en ${input.municipality}${provinceSuffix}. ` +
-    `Su actividad está verificada en el expediente de WebLead AI (${input.activity}, consultado ${input.consultedAt}) ` +
+    `Su actividad está verificada en el expediente de WebLead AI (consultado ${input.consultedAt}) ` +
     `${input.hasOwnWebsite ? 'y tiene web propia.' : 'y no tiene web propia.'} Esta página es una propuesta conceptual de cómo podría presentarse en internet: ` +
     `los datos de contacto son los verificados en el expediente y nada más está afirmado.`;
 
@@ -528,16 +564,10 @@ export function buildWebsiteContent(
     }
   }
 
-  const trustItems = [
-    `Actividad verificada: ${input.activity} (expediente consultado ${input.consultedAt})`,
-    input.hasOwnWebsite ? 'Con web propia (verificado)' : 'Sin web propia (verificado caso a caso)',
-    `Fuentes del expediente: ${input.sources.length > 0 ? input.sources.join(' + ') : 'sin fuentes registradas'}`,
-  ];
-  if (input.activitySignal) {
-    const cleanSignal = sanitizeActivitySignal(input.activitySignal);
-    if (cleanSignal) trustItems.push(`Señal de actividad: ${cleanSignal}`);
-  }
-
+  // 4ª tanda 2026-11-17 (orden de Jon): la sección 'trust'
+  // ya no existe — no se generan trustItems (ni actividad, ni web
+  // propia, ni fuentes, ni señal). `sanitizeActivitySignal` sigue
+  // exportada y probada como utilidad, pero nada la llama ya.
   const servicesPending = input.services.length === 0;
   const images: GeneratedImage[] = template.photos.map((p) => ({
     url: p.url,
@@ -595,7 +625,6 @@ export function buildWebsiteContent(
       subtitle,
       ctaLabel: input.phone ? `Llamar al ${input.phone}` : 'Ver contacto',
     },
-    trust: { items: trustItems },
     services: {
       items: [...input.services],
       pendingConfirmation: servicesPending,

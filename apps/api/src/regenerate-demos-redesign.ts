@@ -128,14 +128,14 @@ for (const demo of GENERATED_DEMOS) {
   if (content.contact.address !== old.contact.address) throw new Error(`Address changed for ${lead.name}.`);
   if (content.contact.phone !== old.contact.phone) throw new Error(`Phone changed for ${lead.name}.`);
   if ((content.contact.email ?? null) !== (old.contact.email ?? null)) throw new Error(`Email changed for ${lead.name}.`);
-  // Same scope as the auditor (auditWebsiteContent): hero subtitle, about
-  // paragraphs and trust items. Template FAQ is static vetted copy where
+  // Same scope as the auditor (auditWebsiteContent): hero subtitle and about
+  // paragraphs. (La sección 'trust' se eliminó en la 4ª tanda
+  // 2026-11-17: ya no hay trust items que validar.) Template FAQ is static vetted copy where
   // "horarios" only appears negated ("no publica horarios"); it is covered
   // by the templates test with narrower patterns, not by this guard.
   const copyFields = [
     content.hero.subtitle,
     ...content.about.paragraphs,
-    ...content.trust.items,
   ];
   for (const text of copyFields) {
     const violations = validateNoInventedClaims(text);

@@ -166,9 +166,13 @@ function DemoSite({ demo }: { demo: GeneratedDemo }) {
     setSeo(content.seo.title, content.seo.description);
   }, [content]);
 
-  const sections = template?.sections ?? ['hero', 'trust', 'services', 'about', 'gallery', 'faq', 'contact'];
-  const reviews = content.verified.reviews;
-  const foundedYear = content.verified.foundedYear;
+  const sections = template?.sections ?? ['hero', 'services', 'about', 'gallery', 'faq', 'contact'];
+  // 4ª tanda 2026-11-17 (orden de Jon): la sección 'trust'
+  // se eliminó de todas las demos — ni el render (antes aquí)
+  // ni los distintivos de reseñas/año de constitución que vivían dentro
+  // de ella. Los datos siguen en `content.verified` por si Jon quiere
+  // darles otro sitio más adelante; de momento no se pintan en ningún
+  // sitio.
 
   return (
     <div className="demo-site" style={vars}>
@@ -187,41 +191,6 @@ function DemoSite({ demo }: { demo: GeneratedDemo }) {
           switch (section) {
             case 'hero':
               return <Hero key="hero" content={content} />;
-            case 'trust':
-              return (
-                <section key="trust" className="demo-trust" aria-label="Datos verificados">
-                  <h2>Datos verificados</h2>
-                  <p className="section-intro">
-                    Todo lo que ves en esta página procede del expediente verificado de la empresa.
-                    Lo que no está verificado no se publica.
-                  </p>
-                  <ul className="trust-grid">
-                    {content.trust.items.map((item) => (
-                      <li key={item} className="trust-card">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  {reviews || foundedYear ? (
-                    <div className="trust-stats" aria-label="Distintivos verificados">
-                      {reviews ? (
-                        <div className="trust-stat trust-reviews">
-                          <span className="review-rating">{reviews.rating} / 5</span>
-                          <span className="review-count">
-                            {reviews.count} {reviews.count === 1 ? 'reseña' : 'reseñas'} verificadas
-                          </span>
-                        </div>
-                      ) : null}
-                      {foundedYear ? (
-                        <div className="trust-stat trust-founded">
-                          <span className="founded-year">{foundedYear}</span>
-                          <span className="founded-label">Año de constitución (verificado)</span>
-                        </div>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </section>
-              );
             case 'services':
               return (
                 <section key="services" className="demo-services" aria-label="Servicios">

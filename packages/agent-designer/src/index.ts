@@ -53,7 +53,7 @@ export type DesignWebsiteOptions = {
   llmDraft?: LlmDraft | null;
   /** Real LLM consumption for this generation, when a call happened. */
   llmUsage?: DesignerLlmUsage | null;
-  /** Recorded activity signal text (Fase A), shown as a trust item. */
+  /** Recorded activity signal text (Fase A): feeds the `verified` review/founded-year extraction. */
   activitySignal?: string | null;
 };
 

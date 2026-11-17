@@ -2,15 +2,30 @@
  * Website templates — Fase D + rediseño 2026-11-17 (sin formularios) +
  * 2ª tanda 2026-11-17 (oficios del hogar: pintura y carpintería) +
  * 3ª tanda 2026-11-17 (taller mecánico, fisioterapia, electricista,
- * cerrajería, jardinería; empresas de Zamora/Ávila/Cuenca/Soria).
+ * cerrajería, jardinería; empresas de Zamora/Ávila/Cuenca/Soria) +
+ * 4ª tanda 2026-11-17 (academia/formación, clínica dental, neumáticos;
+ * las 10 sin nota del archivo: Soria capital, Arenas de San Pedro y
+ * Cuenca capital). Orden de Jon para la 4ª tanda: acabado de estilo
+ * superior — cada plantilla nueva trae héroe, tipografía y ritmo de
+ * secciones propios, y las reutilizadas (taller, fontanería,
+ * cerrajería) ganan variantes nuevas (v3/v4) para que las 10 no
+ * parezcan clones de las 27 anteriores. Las variantes nuevas
+ * rebarajan el hash djb2 (módulo = nº de variantes): varias demos
+ * selladas de las 27 cambian de variante al regenerar (ver informe
+ * de la tanda); la regeneración de la 4ª tanda ya re-verifica todo.
+ * También por orden de Jon: desde la 4ª tanda NINGUNA plantilla
+ * incluye la sección "trust": ni actividad, ni web propia, ni
+ * fuentes, ni señal. La retirada de esa sección de las 27 demos actuales (y
+ * de las plantillas viejas) la hace el trabajador de regenerado en
+ * App.tsx / generador, no aquí.
  *
- * Eight REAL, differentiated sector templates — not one generic template with
+ * Eleven REAL, differentiated sector templates — not one generic template with
  * different colours. Each one carries its own layout order, palette,
  * typography, hero framing, sector FAQ (answers never assert an unverified
  * fact: they always deflect to the verified phone) and stock-photo set.
  *
  * Rediseño 2026-11-17 (orden de Jon): las demos eran "muy sencillas y
- * repetitivas". Cada plantilla define ahora 3 VARIANTES (accent + hero
+ * repetitivas". Cada plantilla define ahora 3+ VARIANTES (accent + hero
  * layout) y el generador asigna una por negocio de forma determinista
  * (hash del slug): mismo negocio → misma variante; negocios distintos del
  * mismo sector → variantes distintas en general. La variación es con
@@ -45,7 +60,10 @@ export type TemplateId =
   | 'salud-fisioterapia'
   | 'electricista'
   | 'cerrajeria'
-  | 'jardineria';
+  | 'jardineria'
+  | 'academia-formacion'
+  | 'clinica-dental'
+  | 'neumaticos';
 
 export type BrandPalette = {
   /** Page background. */
@@ -106,7 +124,6 @@ export type WebsiteTemplate = {
   /** Section order for this template (layout differs per sector). */
   sections: readonly (
     | 'hero'
-    | 'trust'
     | 'services'
     | 'about'
     | 'gallery'
@@ -335,13 +352,108 @@ const JARDINERIA_PHOTOS: TemplateStockPhoto[] = [
   },
 ];
 
+/**
+ * Academia y formación (4ª tanda 2026-11-17: CENTRO DE ESTUDIOS, Soria).
+ * Fotos Unsplash License, verificadas visualmente el 2026-11-17
+ * (clase con profesor y alumnos, estudiantes con portátiles, apuntes
+ * escritos a mano) y servidas en local desde
+ * apps/demo-platform/public/images/.
+ */
+const ACADEMIA_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/academia-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&q=80',
+    caption: 'Clase con profesor y alumnos (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/academia-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80',
+    caption: 'Estudiantes trabajando con portátiles (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/academia-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80',
+    caption: 'Apuntes escritos a mano (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Clínica dental (4ª tanda 2026-11-17: CLÍNICA DENTAL MERCEDES MORENO
+ * TORCAL, Soria). Plantilla PROPIA, no reutilización de
+ * salud-fisioterapia: la estructura (cita, primera visita, sin "Cómo
+ * trabajamos") encajaría, pero sus fotos son de ejercicio/yoga/masaje,
+ * imposibles para una clínica dental. Fotos Unsplash License,
+ * verificadas visualmente el 2026-11-17 (consulta dental moderna,
+ * dentista mostrando una radiografía, revisión de radiografías 3D) y
+ * servidas en local desde apps/demo-platform/public/images/.
+ */
+const DENTAL_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/clinica-dental-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1200&q=80',
+    caption: 'Consulta dental moderna con sillón y equipo (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/clinica-dental-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1200&q=80',
+    caption: 'Dentista mostrando una radiografía a una paciente (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/clinica-dental-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1200&q=80',
+    caption: 'Revisión de radiografías dentales en 3D (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
+/**
+ * Neumáticos y taller (4ª tanda 2026-11-17: AUTO-NEUMÁTICOS EL VALLE,
+ * Arenas de San Pedro). Plantilla PROPIA, no variante de
+ * taller-mecanico: el negocio se presenta como neumáticos primero y
+ * taller después (su nombre lo dice), y el héroe de taller-mecanico es
+ * un motor; una tienda de neumáticos necesita pila de neumáticos de
+ * héroe y FAQ propia (cambio y revisión de neumáticos). Fotos
+ * Unsplash License, verificadas visualmente el 2026-11-17 (pila de
+ * neumáticos, mecánico en el taller, conduciendo al atardecer) y
+ * servidas en local desde apps/demo-platform/public/images/. Las dos
+ * fotos de galería son genéricas de taller/carretera, no de cambio de
+ * rueda: la búsqueda de una foto de cambio de rueda en Unsplash no dio
+ * un ID verificable (búsqueda web bloqueada, napi vacío); no se
+ * inventó ninguna.
+ */
+const NEUMATICOS_PHOTOS: TemplateStockPhoto[] = [
+  {
+    url: '/images/neumaticos-hero.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=1200&q=80',
+    caption: 'Pila de neumáticos en el taller (imagen de archivo, no es el local)',
+    placement: 'hero',
+  },
+  {
+    url: '/images/neumaticos-gallery-1.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=1200&q=80',
+    caption: 'Mecánico trabajando en el taller (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+  {
+    url: '/images/neumaticos-gallery-2.jpg',
+    sourceUrl: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1200&q=80',
+    caption: 'Conduciendo al atardecer (imagen de archivo, no es el local)',
+    placement: 'gallery',
+  },
+];
+
 export const TEMPLATES: WebsiteTemplate[] = [
   {
     id: 'fontaneria-climatizacion',
     name: 'Fontanería y climatización',
     description:
-      'Plantilla sectorial para fontanería/climatización: hero técnico con foto de instalación, bloque de contacto directo arriba (teléfono y WhatsApp), sección "Cómo trabajamos" en 3 pasos y FAQ de averías e instalaciones. Paleta azul petróleo + cobre. Rediseño 2026-11-17: 3 variantes (cobre/banner, teja partida, acero/tarjeta) y contacto sin formulario.',
-    sectors: ['fontanería/climatización', 'fontaneria/climatizacion'],
+      'Plantilla sectorial para fontanería/climatización: hero técnico con foto de instalación, bloque de contacto directo arriba (teléfono y WhatsApp), sección "Cómo trabajamos" en 3 pasos y FAQ de averías e instalaciones. Paleta azul petróleo + cobre. Rediseño 2026-11-17: 3 variantes (cobre/banner, teja partida, acero/tarjeta) y contacto sin formulario. 4ª tanda: +v3, 4 variantes en total.',
+    sectors: ['fontanería/climatización', 'fontaneria/climatizacion', 'fontanería + calefacción'],
     palette: {
       background: '#f4f6f5',
       surface: '#ffffff',
@@ -353,7 +465,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "'Arial Narrow', 'Helvetica Neue', Arial, sans-serif",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'trust', 'services', 'howItWorks', 'about', 'gallery', 'faq', 'contact'],
+    sections: ['hero', 'services', 'howItWorks', 'about', 'gallery', 'faq', 'contact'],
     heroKicker: 'Fontanería y climatización en Logroño',
     faq: [
       {
@@ -378,13 +490,17 @@ export const TEMPLATES: WebsiteTemplate[] = [
       { id: 'fontaneria-climatizacion-v0', accent: '#9a5b14', heroLayout: 'banner' },
       { id: 'fontaneria-climatizacion-v1', accent: '#14655a', heroLayout: 'split' },
       { id: 'fontaneria-climatizacion-v2', accent: '#1f567e', heroLayout: 'card' },
+      // 4ª tanda: v3 (teja partida) para que la tanda no recicle solo
+      // v0–v2. Con 4 variantes el hash djb2 rebaraja las 6 demos
+      // existentes de fontanería (ver informe de la tanda).
+      { id: 'fontaneria-climatizacion-v3', accent: '#9a3412', heroLayout: 'split' },
     ],
   },
   {
     id: 'peluqueria-barberia',
     name: 'Peluquería y barbería',
     description:
-      'Plantilla sectorial para peluquería/barbería: hero cálido con foto de interior, galería protagonista, sección "La experiencia" antes que los servicios y FAQ de cita y servicios. Paleta carbón + dorado con tipografía serif de escaparate. Rediseño 2026-11-17: 3 variantes (dorado/tarjeta, burdeos/partida, oliva/banner) y contacto sin formulario.',
+      'Plantilla sectorial para peluquería/barbería: hero cálido con foto de interior, galería protagonista, sección "La experiencia" antes que los servicios y FAQ de cita y servicios. Paleta carbón + dorado con tipografía serif de escaparate. Rediseño 2026-11-17: 3 variantes (dorado/tarjeta, burdeos/partida, oliva/banner) y contacto sin formulario. 4ª tanda: al caer la sección "trust", "La empresa" pasa antes que los servicios (el orden galería → empresa → servicios la distingue de academia).',
     sectors: ['peluquería/barbería', 'peluqueria/barberia'],
     palette: {
       background: '#faf6f0',
@@ -397,7 +513,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "Georgia, 'Times New Roman', serif",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'gallery', 'trust', 'services', 'about', 'faq', 'contact'],
+    sections: ['hero', 'gallery', 'about', 'services', 'faq', 'contact'],
     heroKicker: 'Peluquería en Logroño',
     faq: [
       {
@@ -441,7 +557,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "'Palatino Linotype', Palatino, Georgia, serif",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'trust', 'gallery', 'services', 'howItWorks', 'about', 'faq', 'contact'],
+    sections: ['hero', 'gallery', 'services', 'howItWorks', 'about', 'faq', 'contact'],
     heroKicker: 'Oficios y servicios del hogar en Logroño',
     faq: [
       {
@@ -472,12 +588,13 @@ export const TEMPLATES: WebsiteTemplate[] = [
     id: 'taller-mecanico',
     name: 'Taller mecánico',
     description:
-      'Plantilla sectorial para taller mecánico (3ª tanda 2026-11-17: mecánica general, chapa y pintura, vehículos + maquinaria agrícola, reparación/servicio y electricidad): hero de trabajo con foto de motor, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de revisiones y presupuestos. Paleta acero + ámbar. 3 variantes (ámbar/banner, teja partida, pizarra/tarjeta) y contacto sin formulario.',
+      'Plantilla sectorial para taller mecánico (3ª tanda 2026-11-17: mecánica general, chapa y pintura, vehículos + maquinaria agrícola, reparación/servicio y electricidad): hero de trabajo con foto de motor, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de revisiones y presupuestos. Paleta acero + ámbar. 4 variantes (ámbar/banner, teja partida, pizarra/tarjeta + v3, 4ª tanda) y contacto sin formulario.',
     sectors: [
       'mecánica general',
       'chapa y pintura',
       'taller vehículos + maquinaria agrícola husqvarna',
       'reparación servicio / electricidad',
+      'taller mecánico',
     ],
     palette: {
       background: '#eef0f1',
@@ -490,7 +607,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "'Trebuchet MS', 'Segoe UI', sans-serif",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'services', 'trust', 'howItWorks', 'gallery', 'about', 'faq', 'contact'],
+    sections: ['hero', 'services', 'howItWorks', 'gallery', 'about', 'faq', 'contact'],
     heroKicker: 'Taller mecánico',
     faq: [
       {
@@ -515,6 +632,13 @@ export const TEMPLATES: WebsiteTemplate[] = [
       { id: 'taller-mecanico-v0', accent: '#92400e', heroLayout: 'banner' },
       { id: 'taller-mecanico-v1', accent: '#0f766e', heroLayout: 'split' },
       { id: 'taller-mecanico-v2', accent: '#334155', heroLayout: 'card' },
+      // 4ª tanda: v3 (ámbar oscuro/banner). Con 4 variantes las 3
+      // demos nuevas de taller (Sivi, Mesón, Gonviauto) caen en v0, v1
+      // y v2 — distintas entre sí; con 5 variantes caían las 3 en v3
+      // (comprobado con el hash djb2 sobre los slugs previstos). Con 4
+      // variantes el hash rebaraja 4 de las 5 demos existentes de
+      // taller (ver informe de la tanda).
+      { id: 'taller-mecanico-v3', accent: '#78350f', heroLayout: 'banner' },
     ],
   },
   {
@@ -539,7 +663,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "'Gill Sans', 'Gill Sans MT', Calibri, sans-serif",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'trust', 'about', 'services', 'gallery', 'faq', 'contact'],
+    sections: ['hero', 'about', 'services', 'gallery', 'faq', 'contact'],
     heroKicker: 'Fisioterapia y salud',
     faq: [
       {
@@ -583,7 +707,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'trust', 'howItWorks', 'services', 'gallery', 'about', 'faq', 'contact'],
+    sections: ['hero', 'howItWorks', 'services', 'gallery', 'about', 'faq', 'contact'],
     heroKicker: 'Electricidad y placas solares',
     faq: [
       {
@@ -614,8 +738,8 @@ export const TEMPLATES: WebsiteTemplate[] = [
     id: 'cerrajeria',
     name: 'Cerrajería y herrería',
     description:
-      'Plantilla sectorial para cerrajería y herrería (3ª tanda 2026-11-17): hero de oficio con foto de llaves, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de aperturas y copias de llaves. Paleta bronce oscuro + teja. 3 variantes (teja/banner, grafito/partida, bronce/tarjeta) y contacto sin formulario.',
-    sectors: ['cerrajería/herrería'],
+      'Plantilla sectorial para cerrajería y herrería (3ª tanda 2026-11-17): hero de oficio con foto de llaves, bloque de contacto directo arriba, sección "Cómo trabajamos" en 3 pasos y FAQ de aperturas y copias de llaves. Paleta bronce oscuro + teja. 5 variantes (teja/banner, grafito/partida, bronce/tarjeta + v3/v4, 4ª tanda) y contacto sin formulario. 4ª tanda: al caer la sección "trust", la galería sube antes de "Cómo trabajamos" (el orden servicios → galería → pasos la distingue del taller).',
+    sectors: ['cerrajería/herrería', 'cerrajería/aluminio', 'cerrajería/escultura', 'cerrajería'],
     palette: {
       background: '#f3f1ec',
       surface: '#fffefa',
@@ -627,7 +751,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "'Courier New', Courier, monospace",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'services', 'howItWorks', 'trust', 'gallery', 'about', 'faq', 'contact'],
+    sections: ['hero', 'services', 'gallery', 'howItWorks', 'about', 'faq', 'contact'],
     heroKicker: 'Cerrajería y herrería',
     faq: [
       {
@@ -652,13 +776,20 @@ export const TEMPLATES: WebsiteTemplate[] = [
       { id: 'cerrajeria-v0', accent: '#7c2d12', heroLayout: 'banner' },
       { id: 'cerrajeria-v1', accent: '#44403c', heroLayout: 'split' },
       { id: 'cerrajeria-v2', accent: '#713f12', heroLayout: 'card' },
+      // 4ª tanda: v3 (grafito partida) y v4 (rojo oscuro/tarjeta). Con
+      // 4 variantes las 3 demos nuevas de cerrajería caían dos en v2;
+      // con 5 caen en v4, v2 y v0 — distintas entre sí. Heralu, la
+      // única demo existente de cerrajería, pasa de v1 a v4 al
+      // regenerar (ver informe de la tanda).
+      { id: 'cerrajeria-v3', accent: '#292524', heroLayout: 'split' },
+      { id: 'cerrajeria-v4', accent: '#7f1d1d', heroLayout: 'card' },
     ],
   },
   {
     id: 'jardineria',
     name: 'Jardinería y paisajismo',
     description:
-      'Plantilla sectorial para jardinería y paisajismo (3ª tanda 2026-11-17): hero verde con foto de jardín, galería protagonista, sección "Cómo trabajamos" en 3 pasos y FAQ de presupuestos y trabajos. Paleta verde hoja + ocre. 3 variantes (lima/partida, verde/banner, ocre/tarjeta) y contacto sin formulario.',
+      'Plantilla sectorial para jardinería y paisajismo (3ª tanda 2026-11-17): hero verde con foto de jardín, galería protagonista, sección "Cómo trabajamos" en 3 pasos y FAQ de presupuestos y trabajos. Paleta verde hoja + ocre. 3 variantes (lima/partida, verde/banner, ocre/tarjeta) y contacto sin formulario. 4ª tanda: al caer la sección "trust", "La empresa" pasa antes de "Cómo trabajamos" (el orden galería → servicios → empresa → pasos la distingue de oficios-hogar).',
     sectors: ['jardinería/paisajismo'],
     palette: {
       background: '#f1f6ee',
@@ -671,7 +802,7 @@ export const TEMPLATES: WebsiteTemplate[] = [
     },
     fontHeading: "'Century Gothic', Futura, 'Trebuchet MS', sans-serif",
     fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-    sections: ['hero', 'gallery', 'services', 'howItWorks', 'trust', 'about', 'faq', 'contact'],
+    sections: ['hero', 'gallery', 'services', 'about', 'howItWorks', 'faq', 'contact'],
     heroKicker: 'Jardinería y paisajismo',
     faq: [
       {
@@ -696,6 +827,144 @@ export const TEMPLATES: WebsiteTemplate[] = [
       { id: 'jardineria-v0', accent: '#3f6212', heroLayout: 'split' },
       { id: 'jardineria-v1', accent: '#166534', heroLayout: 'banner' },
       { id: 'jardineria-v2', accent: '#854d0e', heroLayout: 'card' },
+    ],
+  },
+  {
+    id: 'academia-formacion',
+    name: 'Academia y formación',
+    description:
+      'Plantilla sectorial para academia y centro de formación (4ª tanda 2026-11-17: CENTRO DE ESTUDIOS, Soria): héroe de aula con foto de clase, GALERÍA SEGUNDA (la formación se ve antes que se describe), servicios después, sin "Cómo trabajamos" y SIN sección "trust" (orden de Jon para la 4ª tanda). Tipografía serif académica (Georgia/Book Antiqua) sobre papel cálido, paleta azul marino + burdeos. 3 variantes (burdeos/banner, verde/split, pizarra malva/tarjeta) y contacto sin formulario.',
+    sectors: ['academia/centro formación', 'academia', 'centro de formación', 'centro formación'],
+    palette: {
+      background: '#f5f2ea',
+      surface: '#fffefb',
+      primary: '#1e3a5f',
+      primaryDark: '#142842',
+      accent: '#7a1f2b',
+      text: '#232a35',
+      muted: '#5d6874',
+    },
+    fontHeading: "Georgia, 'Book Antiqua', Palatino, serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'gallery', 'services', 'about', 'faq', 'contact'],
+    heroKicker: 'Academia y formación',
+    faq: [
+      {
+        question: '¿Cómo me apunto a un curso?',
+        answer:
+          'Para saber qué cursos hay y cómo apuntarte, llama al teléfono de contacto de esta web: te lo explican directamente. Esta demo no publica listas de cursos no contrastadas.',
+      },
+      {
+        question: '¿Qué cursos ofrecen?',
+        answer:
+          'Los cursos concretos solo se publican cuando están confirmados por la empresa. Si la lista de esta demo aparece como pendiente de confirmar, es porque aún no se ha contrastado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Las clases son presenciales?',
+        answer:
+          'Para saber cómo son las clases y dónde se imparten, llama al teléfono de contacto de esta web: te lo explican directamente.',
+      },
+    ],
+    photos: ACADEMIA_PHOTOS,
+    // Sin glifo de libro en el juego de motivos compartido (el
+    // generador está congelado para el trabajador de regenerado): la
+    // llave es el emblema abstracto más neutro de los existentes.
+    logoMotif: 'key',
+    variants: [
+      { id: 'academia-formacion-v0', accent: '#7a1f2b', heroLayout: 'banner' },
+      { id: 'academia-formacion-v1', accent: '#1e4d3a', heroLayout: 'split' },
+      { id: 'academia-formacion-v2', accent: '#4a3f6b', heroLayout: 'card' },
+    ],
+  },
+  {
+    id: 'clinica-dental',
+    name: 'Clínica dental',
+    description:
+      'Plantilla sectorial para clínica dental (4ª tanda 2026-11-17: CLÍNICA DENTAL MERCEDES MORENO TORCAL, Soria): héroe clínico con foto de consulta moderna, LA CONSULTA ANTES QUE LOS SERVICIOS (about antes que services y gallery), sin "Cómo trabajamos" y SIN sección "trust" (orden de Jon para la 4ª tanda). Tipografía limpia sin serifa (Avenir Next), paleta azul clínico + teja. 3 variantes (teja/banner, azul/split, cian/tarjeta) y contacto sin formulario.',
+    sectors: ['clínica dental', 'clinica dental', 'odontología', 'dentista'],
+    palette: {
+      background: '#eef4f6',
+      surface: '#fefffe',
+      primary: '#0e4a6b',
+      primaryDark: '#093550',
+      accent: '#115e59',
+      text: '#1d2f38',
+      muted: '#54707c',
+    },
+    fontHeading: "'Avenir Next', Avenir, 'Segoe UI', sans-serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'about', 'gallery', 'services', 'faq', 'contact'],
+    heroKicker: 'Clínica dental',
+    faq: [
+      {
+        question: '¿Hace falta pedir cita?',
+        answer:
+          'Para saber si hace falta cita previa y qué huecos hay, llama al teléfono de contacto de esta web. Esta demo no publica un sistema de reservas: no se ha contrastado ninguno.',
+      },
+      {
+        question: '¿Atienden a niños?',
+        answer:
+          'Para saber si atienden a niños y a partir de qué edad, llama al teléfono de contacto de esta web: te lo explican directamente.',
+      },
+      {
+        question: '¿Qué debo llevar a la primera visita?',
+        answer:
+          'Para saber qué debes llevar a una primera visita, llama al teléfono de contacto de esta web: te lo explican directamente.',
+      },
+    ],
+    photos: DENTAL_PHOTOS,
+    logoMotif: 'cross',
+    variants: [
+      { id: 'clinica-dental-v0', accent: '#115e59', heroLayout: 'banner' },
+      { id: 'clinica-dental-v1', accent: '#1d4ed8', heroLayout: 'split' },
+      { id: 'clinica-dental-v2', accent: '#0e7490', heroLayout: 'card' },
+    ],
+  },
+  {
+    id: 'neumaticos',
+    name: 'Neumáticos y taller',
+    description:
+      'Plantilla sectorial para neumáticos y taller (4ª tanda 2026-11-17: AUTO-NEUMÁTICOS EL VALLE, Arenas de San Pedro): héroe de pila de neumáticos, servicios pronto (ritmo de taller), galería en medio, sin "Cómo trabajamos" (el generador solo lo emite para las plantillas de su lista, y esta es nueva) y SIN sección "trust" (orden de Jon para la 4ª tanda). Tipografía industrial rotunda (Arial Black/Franklin Gothic), paleta carbón + naranja quemado. 3 variantes (naranja/banner, pizarra/split, ámbar/tarjeta) y contacto sin formulario.',
+    sectors: ['neumáticos + taller', 'neumaticos + taller', 'neumáticos', 'neumaticos', 'taller de neumáticos'],
+    palette: {
+      background: '#f0efed',
+      surface: '#fffdfb',
+      primary: '#23272b',
+      primaryDark: '#14171a',
+      accent: '#9a3412',
+      text: '#26221f',
+      muted: '#64605a',
+    },
+    fontHeading: "'Arial Black', 'Franklin Gothic Medium', Arial, sans-serif",
+    fontBody: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    sections: ['hero', 'services', 'gallery', 'about', 'faq', 'contact'],
+    heroKicker: 'Neumáticos y taller',
+    faq: [
+      {
+        question: '¿Cambian neumáticos?',
+        answer:
+          'Los trabajos concretos solo se publican cuando están confirmados por la empresa. Si la lista de esta demo aparece como pendiente de confirmar, es porque aún no se ha contrastado: pregúntalo por teléfono.',
+      },
+      {
+        question: '¿Puedo pedir presupuesto?',
+        answer:
+          'Pide presupuesto por teléfono: llama al número de contacto de esta web y te confirman si pueden hacerlo y qué información necesitan. El contacto es directo con la empresa.',
+      },
+      {
+        question: '¿Revisan el estado de mis neumáticos?',
+        answer:
+          'Para saber si pueden revisar tus neumáticos, llama al teléfono de contacto de esta web: te confirman directamente qué pueden decirte.',
+      },
+    ],
+    photos: NEUMATICOS_PHOTOS,
+    // Sin glifo de rueda en el juego de motivos compartido (el
+    // generador está congelado para el trabajador de regenerado): la
+    // llave inglesa es el emblema de taller, como en taller-mecanico.
+    logoMotif: 'wrench',
+    variants: [
+      { id: 'neumaticos-v0', accent: '#9a3412', heroLayout: 'banner' },
+      { id: 'neumaticos-v1', accent: '#1f2937', heroLayout: 'split' },
+      { id: 'neumaticos-v2', accent: '#854d0e', heroLayout: 'card' },
     ],
   },
 ];

@@ -40,7 +40,7 @@
  * - every lead has a verified email and score >= 70 (new rule);
  * - slugs unique across the 27;
  * - every rebuilt fact (name/address/phone/email) equals the dossier;
- * - validateNoInventedClaims clean on subtitle, about, trust and FAQ
+ * - validateNoInventedClaims clean on subtitle, about and FAQ
  *   answers. NOTE on FAQ: the template answers end with the disclaimer
  *   "Esta demo no publica horarios ni ..." — the validator is a
  *   substring regex, so the word "horarios" trips its 'horario' label
@@ -153,7 +153,6 @@ function checkCopy(
   const copyFields = [
     content.hero.subtitle,
     ...content.about.paragraphs,
-    ...content.trust.items,
   ];
   for (const text of copyFields) {
     const violations = validateNoInventedClaims(text);

@@ -160,7 +160,6 @@ for (const lead of leads) {
   const copyFields = [
     content.hero.subtitle,
     ...content.about.paragraphs,
-    ...content.trust.items,
   ];
   for (const text of copyFields) {
     const violations = validateNoInventedClaims(text);
