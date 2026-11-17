@@ -9,6 +9,10 @@
 > enlace a la demo correspondiente en
 > `https://weblead-demos.vercel.app/demos/{slug}` (verificadas en vivo).
 >
+> **Clave de las demos (2026-11-17):** la plataforma está protegida
+> con la clave **`demo2026`**. Cada email incluye la línea con la
+> clave, porque sin ella el destinatario no puede ver su demo.
+>
 > **Solo 2 de los 10 leads tienen email verificado en el expediente**
 > (Ferrer e Hidrorioja). Los otros 8 NO tienen email: su texto está
 > preparado, pero NO se envía hasta conseguir su dirección de contacto
@@ -26,6 +30,9 @@ Asunto: `Su web corporativa por 50 €: les he preparado una muestra`
 > quedaría su web corporativa:
 >
 > {URL_DEMO}
+>
+> La demo está protegida con la clave **demo2026**: al abrir el enlace,
+> la página pide esa clave para ver la web.
 >
 > Si les gusta, puedo implementarla como su web por **50 €**, que
 > incluye el desarrollo de la página web, un subdominio corporativo

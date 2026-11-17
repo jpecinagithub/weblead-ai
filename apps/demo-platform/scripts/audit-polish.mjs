@@ -39,6 +39,11 @@ async function auditPage(browser, path, label) {
   const entry = { page: label, path, overflow: {}, consoleErrors: [], httpErrors: [], brokenImages: [], forms: 0, loadMs: {} };
   for (const w of WIDTHS) {
     const page = await browser.newPage({ viewport: { width: w, height: 800 } });
+    // Puerta de clave (2026-11-17): desbloquear antes de navegar para
+    // auditar el contenido; la puerta en sí se prueba con tests unitarios.
+    await page.addInitScript(() => {
+      sessionStorage.setItem('weblead-demos-unlocked', '1');
+    });
     const cerr = [], herr = [];
     page.on('console', (m) => { if (m.type() === 'error') cerr.push(m.text().slice(0, 200)); });
     page.on('pageerror', (e) => cerr.push(String(e).slice(0, 200)));
@@ -70,6 +75,9 @@ async function auditPage(browser, path, label) {
   }
   // 768 fullPage shot too (index + demos)
   const p768 = await browser.newPage({ viewport: { width: 768, height: 800 } });
+  await p768.addInitScript(() => {
+    sessionStorage.setItem('weblead-demos-unlocked', '1');
+  });
   await p768.goto(BASE + path, { waitUntil: 'networkidle', timeout: 30000 });
   await p768.waitForTimeout(400);
   await p768.screenshot({ path: join(OUT, `${label}-tablet768.png`), fullPage: true });

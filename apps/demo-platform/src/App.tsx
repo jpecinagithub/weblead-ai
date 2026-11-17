@@ -3,6 +3,7 @@ import { DEMO_NOTICE } from '@weblead/agent-designer';
 import { getTemplate } from '@weblead/website-templates';
 import type { GeneratedWebsiteContent } from '@weblead/website-generator';
 import { GENERATED_DEMOS, type GeneratedDemo } from './data/generated-demos.js';
+import PasswordGate from './PasswordGate.js';
 
 /** Slug from the path: /demos/{slug}. No router dep. */
 function slugFromPath(pathname: string): string | null {
@@ -375,7 +376,7 @@ function Dashboard() {
   );
 }
 
-export default function App() {
+function AppContent() {
   const [slug, setSlug] = useState<string | null>(() => slugFromPath(window.location.pathname));
 
   useEffect(() => {
@@ -399,4 +400,16 @@ export default function App() {
     );
   }
   return <DemoSite demo={demo} />;
+}
+
+/**
+ * Toda la plataforma (índice + demos) queda detrás de la puerta de
+ * clave: sin desbloquear no se renderiza ningún contenido de las demos.
+ */
+export default function App() {
+  return (
+    <PasswordGate>
+      <AppContent />
+    </PasswordGate>
+  );
 }

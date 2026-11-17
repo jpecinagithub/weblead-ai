@@ -4,6 +4,7 @@ import { renderToString } from 'react-dom/server';
 import App from '../src/App.js';
 import { GENERATED_DEMOS } from '../src/data/generated-demos.js';
 import { DEMO_NOTICE } from '@weblead/agent-designer';
+import { STORAGE_KEY } from '../src/password-gate.js';
 
 /**
  * No-forms render test (rediseño 2026-11-17, orden de Jon).
@@ -13,10 +14,38 @@ import { DEMO_NOTICE } from '@weblead/agent-designer';
  * a form, while keeping the direct contact channels (tel:, mailto: when the
  * dossier has an email, Google Maps link) and the mandatory demo notice.
  * The live-browser Playwright audit checks the same in a real Chromium.
+ *
+ * Puerta de clave (2026-11-17): las demos se renderizan con la puerta
+ * desbloqueada (sessionStorage), porque sin desbloquear no se ve el
+ * contenido de ninguna demo. La puerta en sí se prueba en
+ * password-gate.test.ts. El único formulario de la plataforma es el
+ * campo de la clave; aquí se comprueba que las demos no tienen ninguno.
  */
+function makeSessionStorage(unlocked: boolean) {
+  const store = new Map<string, string>(
+    unlocked ? [[STORAGE_KEY, '1']] : [],
+  );
+  return {
+    getItem: (key: string) => store.get(key) ?? null,
+    setItem: (key: string, value: string) => {
+      store.set(key, value);
+    },
+    removeItem: (key: string) => {
+      store.delete(key);
+    },
+    clear: () => store.clear(),
+    key: (index: number) => [...store.keys()][index] ?? null,
+    get length() {
+      return store.size;
+    },
+  };
+}
+
 function renderPath(pathname: string): string {
   (globalThis as unknown as { window: unknown }).window = {
     location: { pathname },
+    // Puerta desbloqueada: se prueba el contenido de la demo, no la puerta.
+    sessionStorage: makeSessionStorage(true),
     addEventListener: () => {},
     removeEventListener: () => {},
   };
