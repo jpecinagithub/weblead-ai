@@ -1786,8 +1786,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/taller-mecanico-refoyo-s-zamora"
   },
   {
@@ -1944,8 +1944,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/fisioavanza-zamora-zamora"
   },
   {
@@ -2108,8 +2108,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/taller-chapa-y-pintura-valentin-mym-c-b-avila"
   },
   {
@@ -2272,8 +2272,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/magneto-electricidad-mota-del-cuervo"
   },
   {
@@ -2430,8 +2430,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/fisio-maff-zamora"
   },
   {
@@ -2594,8 +2594,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/grinan-bueno-talleres-iniesta"
   },
   {
@@ -2758,8 +2758,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/dalon-taller-mecanico-avila"
   },
   {
@@ -2916,8 +2916,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/fisiofyr-zamora"
   },
   {
@@ -3080,8 +3080,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/tallares-avilagri-el-barco-de-avila"
   },
   {
@@ -3235,8 +3235,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/aura-fisioterapia-y-feldenkrais-soria"
   },
   {
@@ -3396,8 +3396,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/i-e-raul-c-v-canete"
   },
   {
@@ -3560,8 +3560,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/fontaneria-talayuelas-talayuelas"
   },
   {
@@ -3721,8 +3721,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/carpinteria-ebanisteria-francisco-toranzo-villaralbo"
   },
   {
@@ -3882,8 +3882,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/heralu-hermanos-alvarez-urones-villaralbo"
   },
   {
@@ -4037,8 +4037,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/fontaneria-pelayo-villaralbo"
   },
   {
@@ -4198,8 +4198,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/jardineria-raul-hernandez-laperal-villaralbo"
   },
   {
@@ -4353,8 +4353,8 @@ export const GENERATED_DEMOS: GeneratedDemo[] = [
         "rejections": []
       }
     },
-    "businessState": "PREVIEW_READY",
-    "auditStatus": null,
+    "businessState": "APPROVED",
+    "auditStatus": "PASSED (playwright)",
     "demoUrl": "/demos/peluqueria-madi-s-villaralbo"
   }
 ];

@@ -24,10 +24,11 @@ Fuente: `workspace/user/files/investigacion_leads_completa.xlsx`, 43 filas en
 
 ## Las 17 demos nuevas
 
-Base: https://weblead-demos.vercel.app/demos/&lt;slug&gt;. Todas con
-`businessState` PREVIEW_READY y `auditStatus` null (pendiente de auditoría
-Playwright, ver abajo). Sin borrador LLM (`llm.used = false`, copia
-determinista). Sector saneado con `displaySector` (sin "24h"/"urgencias").
+Base: https://weblead-demos.vercel.app/demos/&lt;slug&gt;. Las 17 nuevas
+quedan **APPROVED** con `auditStatus` "PASSED (playwright)" tras la
+auditoría Playwright 2026-11-17 (17/17 PASSED 100/100/100/100, ver
+abajo). Sin borrador LLM (`llm.used = false`, copia determinista).
+Sector saneado con `displaySector` (sin "24h"/"urgencias").
 
 | Empresa | Slug | Plantilla | Score | Datos que faltaban (omitidos) |
 |---|---|---|---|---|
@@ -156,11 +157,86 @@ y `pnpm test` (suite completa) en verde.
 
 ## Auditoría
 
-**Pendiente.** La auditoría Playwright de las 17 demos nuevas (y la
-re-auditoría de las 10, si procede) la hace otro trabajador después de
-esta regeneración. Las 17 nuevas quedan en PREVIEW_READY con
-`auditStatus` null hasta que la auditoría las marque APPROVED /
-"PASSED (playwright)".
+**APROBADA 2026-11-17.** Script `apps/api/src/audit-tercera-tanda.ts`
+(`pnpm --filter @weblead/api audit:tercera-tanda`, registrado en
+`apps/api/package.json`): contenido puro contra el expediente
+(`docs/tercera-tanda-17-leads.json` `build_now`, services `[]`,
+activity `CONFIRMED`, slug con `slugify`) + Playwright en vivo contra
+el preview local (`http://localhost:5174`), con expectativas de
+contacto por expediente (`{ tel: !!lead.phone, maps: !!lead.address }`:
+solo Grinan y Aura esperan enlace a Maps; Pelayo no espera `tel:`).
+Capturas en `docs/tercera-tanda-17-leads/screenshots/`.
+
+**Resultado: 17/17 PASSED 100/100/100/100** (empresarial / visual /
+técnica / contenido), 0 hallazgos en la pasada final. Cargas
+escritorio/móvil ~0,9–1,1 s en todas.
+
+| Demo | Empresarial | Visual | Técnica | Contenido | Carga escritorio / móvil |
+|---|---|---|---|---|---|
+| taller-mecanico-refoyo-s-zamora | 100 | 100 | 100 | 100 | 1051 / 915 ms |
+| fisioavanza-zamora-zamora | 100 | 100 | 100 | 100 | 1049 / 989 ms |
+| taller-chapa-y-pintura-valentin-mym-c-b-avila | 100 | 100 | 100 | 100 | 929 / 935 ms |
+| magneto-electricidad-mota-del-cuervo | 100 | 100 | 100 | 100 | 989 / 947 ms |
+| fisio-maff-zamora | 100 | 100 | 100 | 100 | 1001 / 1028 ms |
+| grinan-bueno-talleres-iniesta | 100 | 100 | 100 | 100 | 964 / 944 ms |
+| dalon-taller-mecanico-avila | 100 | 100 | 100 | 100 | 987 / 930 ms |
+| fisiofyr-zamora | 100 | 100 | 100 | 100 | 1032 / 930 ms |
+| tallares-avilagri-el-barco-de-avila | 100 | 100 | 100 | 100 | 1118 / 863 ms |
+| aura-fisioterapia-y-feldenkrais-soria | 100 | 100 | 100 | 100 | 1032 / 934 ms |
+| i-e-raul-c-v-canete | 100 | 100 | 100 | 100 | 1006 / 946 ms |
+| fontaneria-talayuelas-talayuelas | 100 | 100 | 100 | 100 | 1013 / 1027 ms |
+| carpinteria-ebanisteria-francisco-toranzo-villaralbo | 100 | 100 | 100 | 100 | 967 / 942 ms |
+| heralu-hermanos-alvarez-urones-villaralbo | 100 | 100 | 100 | 100 | 944 / 925 ms |
+| fontaneria-pelayo-villaralbo | 100 | 100 | 100 | 100 | 928 / 920 ms |
+| jardineria-raul-hernandez-laperal-villaralbo | 100 | 100 | 100 | 100 | 1131 / 1058 ms |
+| peluqueria-madi-s-villaralbo | 100 | 100 | 100 | 100 | 1114 / 949 ms |
+
+Hallazgos y corrección:
+
+1. **Grinan, 1ª pasada: visual 90** — `[MINOR/VISUAL] Desbordamiento
+   horizontal en móvil (390 px)`. Causa real: la píldora
+   `.demo-header-sector` llevaba `white-space: nowrap` y el sector de
+   Grinan ("Taller vehículos + maquinaria agrícola HUSQVARNA") mide
+   471 px. Corregido en `apps/demo-platform/src/styles.css`: en
+   `≤639px` la píldora puede partirse en dos líneas
+   (`white-space: normal; text-align: center`). Verificado con sonda
+   Playwright (scrollWidth 487 → 390) y en la 2ª pasada de la auditoría
+   (Grinan 100/100/100/100, y la auditoría de pulido da overflow 0 en
+   360 px en las 28 páginas).
+2. **Grinan `tel:` verificado en vivo:** los dos enlaces `tel:` de la
+   demo apuntan a `tel:+34967490235` (solo el primer número); el texto
+   visible conserva los dos números ("967 49 02 35 / 646 00 00 00") y
+   WhatsApp también usa solo el primero. Enlace a Maps presente con la
+   dirección del expediente.
+3. **Pelayo verificado en vivo:** cero enlaces `tel:` y `mailto:
+   pelayofontaneria@hotmail.com` presente; sin botón "Llamar".
+
+Auditoría de diseño/responsive (`apps/demo-platform/scripts/
+audit-polish.mjs`, `docs/tercera-tanda-17-leads/polish/`, tag `after`):
+índice + 27 demos, viewports 360/768/1280 — **overflow 0, 0
+formularios, 0 imágenes rotas, 0 errores de consola, 0 errores HTTP en
+las 28 páginas**; cargas 1,1–1,5 s.
+
+Revisión visual de capturas (miradas una a una): escritorio de
+Refoyo's (taller-mecanico), Fisioavanza (salud-fisioterapia), Magneto
+(electricista), Heralu (cerrajeria), Jardinería Raúl (jardineria),
+Grinan y Pelayo; móvil de Grinan, Pelayo y Magneto. Todas correctas:
+héroe y galería acordes al oficio, sin overflow, contacto visible.
+Observación menor (no bloqueante, no se toca sin decisión): el pie del
+bloque de contacto de Pelayo dice "Contacto directo con la empresa por
+teléfono o email" aunque Pelayo no tiene teléfono; es el texto genérico
+de la plantilla, común a todas las demos.
+
+Sellado: las 17 pasan a `businessState` APPROVED y `auditStatus`
+"PASSED (playwright)" con `scripts/seal-tercera-tanda.mjs` (parsea el
+array JSON y lo reescribe; comprueba que las 10 de Logroño siguen
+APPROVED / "PASSED (playwright)" y que las 17 estaban PREVIEW_READY +
+null antes de sellar; no se usó sed). Tras el sellado, `git diff` de
+`generated-demos.ts` muestra solo los 34 cambios de estado. Las 10 de
+Logroño no se tocaron ni se re-auditaron.
+
+Verificación final tras el sellado: `pnpm build` OK, `pnpm typecheck`
+OK, `pnpm test`: **15 ficheros, 258 tests, todos en verde**.
 
 ## Commit
 

@@ -1,0 +1,510 @@
+{
+  "tag": "after",
+  "base": "http://localhost:5174",
+  "results": [
+    {
+      "page": "index",
+      "path": "/",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1454,
+        "768": 1267,
+        "1280": 1268
+      }
+    },
+    {
+      "page": "santiago-ferrer-fontaneria-en-general-sl",
+      "path": "/demos/santiago-ferrer-fontaneria-en-general-sl-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1411,
+        "768": 1339,
+        "1280": 1369
+      }
+    },
+    {
+      "page": "hidrorioja-sc",
+      "path": "/demos/hidrorioja-sc-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1270,
+        "768": 1355,
+        "1280": 1345
+      }
+    },
+    {
+      "page": "moises-munoz-s-l",
+      "path": "/demos/moises-munoz-s-l-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1365,
+        "768": 1337,
+        "1280": 1338
+      }
+    },
+    {
+      "page": "atesa-aire-y-temperatura-s-l",
+      "path": "/demos/atesa-aire-y-temperatura-s-l-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1260,
+        "768": 1263,
+        "1280": 1249
+      }
+    },
+    {
+      "page": "mishea-peluqueros",
+      "path": "/demos/mishea-peluqueros-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1362,
+        "768": 1379,
+        "1280": 1413
+      }
+    },
+    {
+      "page": "la-guarida-111",
+      "path": "/demos/la-guarida-111-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1410,
+        "768": 1349,
+        "1280": 1259
+      }
+    },
+    {
+      "page": "charles-barbershop",
+      "path": "/demos/charles-barbershop-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1338,
+        "768": 1397,
+        "1280": 1250
+      }
+    },
+    {
+      "page": "peluqueria-e-style",
+      "path": "/demos/peluqueria-e-style-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1322,
+        "768": 1333,
+        "1280": 1318
+      }
+    },
+    {
+      "page": "pintor",
+      "path": "/demos/pintor-logrono-roberto-decoracion-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1424,
+        "768": 1341,
+        "1280": 1437
+      }
+    },
+    {
+      "page": "carpinteria-sergio-martinez",
+      "path": "/demos/carpinteria-sergio-martinez-logrono",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1134,
+        "768": 1356,
+        "1280": 1369
+      }
+    },
+    {
+      "page": "taller-mecanico-refoyo-s-zamora",
+      "path": "/demos/taller-mecanico-refoyo-s-zamora",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1348,
+        "768": 1333,
+        "1280": 1322
+      }
+    },
+    {
+      "page": "fisioavanza-zamora-zamora",
+      "path": "/demos/fisioavanza-zamora-zamora",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1321,
+        "768": 1342,
+        "1280": 1341
+      }
+    },
+    {
+      "page": "taller-chapa-y-pintura-valentin-mym-c-b-avila",
+      "path": "/demos/taller-chapa-y-pintura-valentin-mym-c-b-avila",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1338,
+        "768": 1314,
+        "1280": 1253
+      }
+    },
+    {
+      "page": "magneto-electricidad-mota-del-cuervo",
+      "path": "/demos/magneto-electricidad-mota-del-cuervo",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1333,
+        "768": 1337,
+        "1280": 1349
+      }
+    },
+    {
+      "page": "fisio-maff-zamora",
+      "path": "/demos/fisio-maff-zamora",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1408,
+        "768": 1405,
+        "1280": 1345
+      }
+    },
+    {
+      "page": "grinan-bueno-talleres-iniesta",
+      "path": "/demos/grinan-bueno-talleres-iniesta",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1333,
+        "768": 1339,
+        "1280": 1313
+      }
+    },
+    {
+      "page": "dalon-taller-mecanico-avila",
+      "path": "/demos/dalon-taller-mecanico-avila",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1335,
+        "768": 1325,
+        "1280": 1360
+      }
+    },
+    {
+      "page": "fisiofyr-zamora",
+      "path": "/demos/fisiofyr-zamora",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1419,
+        "768": 1398,
+        "1280": 1351
+      }
+    },
+    {
+      "page": "tallares-avilagri-el-barco-de-avila",
+      "path": "/demos/tallares-avilagri-el-barco-de-avila",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1259,
+        "768": 1400,
+        "1280": 1330
+      }
+    },
+    {
+      "page": "aura-fisioterapia-y-feldenkrais-soria",
+      "path": "/demos/aura-fisioterapia-y-feldenkrais-soria",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1532,
+        "768": 1343,
+        "1280": 1338
+      }
+    },
+    {
+      "page": "i-e-raul-c-v-canete",
+      "path": "/demos/i-e-raul-c-v-canete",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1418,
+        "768": 1340,
+        "1280": 1333
+      }
+    },
+    {
+      "page": "fontaneria-talayuelas-talayuelas",
+      "path": "/demos/fontaneria-talayuelas-talayuelas",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1335,
+        "768": 1416,
+        "1280": 1276
+      }
+    },
+    {
+      "page": "carpinteria-ebanisteria-francisco-toranzo-villaralbo",
+      "path": "/demos/carpinteria-ebanisteria-francisco-toranzo-villaralbo",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1361,
+        "768": 1419,
+        "1280": 1327
+      }
+    },
+    {
+      "page": "heralu-hermanos-alvarez-urones-villaralbo",
+      "path": "/demos/heralu-hermanos-alvarez-urones-villaralbo",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1317,
+        "768": 1349,
+        "1280": 1337
+      }
+    },
+    {
+      "page": "fontaneria-pelayo-villaralbo",
+      "path": "/demos/fontaneria-pelayo-villaralbo",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1331,
+        "768": 1337,
+        "1280": 1329
+      }
+    },
+    {
+      "page": "jardineria-raul-hernandez-laperal-villaralbo",
+      "path": "/demos/jardineria-raul-hernandez-laperal-villaralbo",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1344,
+        "768": 1335,
+        "1280": 1351
+      }
+    },
+    {
+      "page": "peluqueria-madi-s-villaralbo",
+      "path": "/demos/peluqueria-madi-s-villaralbo",
+      "overflow": {
+        "360": 0,
+        "768": 0,
+        "1280": 0
+      },
+      "consoleErrors": [],
+      "httpErrors": [],
+      "brokenImages": [],
+      "forms": 0,
+      "loadMs": {
+        "360": 1385,
+        "768": 1335,
+        "1280": 1252
+      }
+    }
+  ]
+}

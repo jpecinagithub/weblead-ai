@@ -37,6 +37,7 @@
     "regenerate:segunda-tanda": "tsx src/regenerate-demos-segunda-tanda.ts",
     "regenerate:tercera-tanda": "tsx src/regenerate-demos-tercera-tanda.ts",
     "audit:segunda-tanda": "tsx src/audit-segunda-tanda.ts",
+    "audit:tercera-tanda": "tsx src/audit-tercera-tanda.ts",
     "sync:redesign": "tsx src/sync-redesign-to-db.ts",
     "audit:redesign": "tsx src/audit-redesign.ts",
     "export:demos": "tsx src/export-demos.ts"

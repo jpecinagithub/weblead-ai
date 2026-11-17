@@ -179,7 +179,10 @@ main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
   white-space: nowrap;
 }
 @media (max-width: 639px) {
-  .demo-header-sector { margin-left: 0; }
+  /* Grinan (3ª tanda): su sector "Taller vehículos + maquinaria agrícola
+     HUSQVARNA" mide 471 px en una píldora nowrap y desbordaba la ventana
+     de 390 px. En móvil la píldora puede partirse en dos líneas. */
+  .demo-header-sector { margin-left: 0; white-space: normal; text-align: center; }
 }
 
 /* Hero: three layouts (banner | split | card) per business variant. */
