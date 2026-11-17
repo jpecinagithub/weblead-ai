@@ -20,6 +20,11 @@
 > sin clave (cualquiera con el enlace la ve). La clave **`demo2026`**
 > solo protege la página de entrada, que solo la ve Jon: tras la
 > clave se ve el listado completo de proyectos con su enlace.
+>
+> **Email abierto (Jon, 2026-11-17 12:51):** el cierre del modelo
+> deja la conversación abierta para que responder sea fácil: basta
+> con responder a este mismo correo; Jon se encarga de todo. Sin
+> compromiso y con dudas y cambios bienvenidos por el mismo hilo.
 
 ## Modelo de email (igual para los 10, con nombre y enlace propios)
 
@@ -33,13 +38,14 @@ Asunto: `Su web corporativa por 50 €: les he preparado una muestra`
 >
 > {URL_DEMO}
 >
-> Si les gusta, puedo implementarla como su web por **50 €**, que
+> Si les gusta, puedo dejarla como su web por **50 €**, que
 > incluye el desarrollo de la página web, un subdominio corporativo
 > y el alojamiento en servidor web durante 365 días.
 >
-> Es solo una propuesta, sin compromiso: si no les interesa, la retiro
-> sin problema. Si quieren verla como su web, respóndanme a este email
-> y lo ponemos en marcha.
+> Es solo una propuesta, sin compromiso. Si les interesa, no tienen
+> que hacer nada más: basta con responder a este mismo correo y me
+> encargo de todo. Y si quieren algún cambio en la web o tienen
+> cualquier duda, me lo dicen por aquí y lo vemos juntos.
 >
 > Un saludo,
 > Jon Peciña
