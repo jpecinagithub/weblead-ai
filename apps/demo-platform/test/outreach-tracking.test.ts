@@ -9,11 +9,12 @@ import { lock, markUnlocked } from '../src/password-gate.js';
 /**
  * Seguimiento de la primera tanda de contactos (orden de Jon
  * 2026-11-17): el índice privado muestra, por proyecto, el estado
- * del email de oferta (50 €) enviado el 17 nov 2026. 9 ofertas
- * enviadas sin respuesta y 1 rebote (Pintor Roberto, dirección no
- * encontrada). Tercera tanda (2026-11-17): 17 demos nuevas en
- * 'pending' (pendiente de contacto, sin email enviado todavía).
- * El seguimiento solo se ve tras la clave, nunca en
+ * del email de oferta enviado el 17 nov 2026. Primera tanda (50 €):
+ * 9 ofertas enviadas sin respuesta y 1 rebote (Pintor Roberto,
+ * dirección no encontrada). Tercera tanda (75 €, 2026-11-17):
+ * 16 ofertas enviadas sin respuesta y 1 rebote (Peluquería Madi's,
+ * dirección no encontrada). Totales: 25 enviadas, 2 rebotes,
+ * 0 respuestas. El seguimiento solo se ve tras la clave, nunca en
  * las demos públicas.
  */
 function renderPath(pathname: string, unlocked: boolean): string {
@@ -38,28 +39,31 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     }
   });
 
-  it('9 ofertas enviadas, 1 rebote (Roberto) y 17 pendientes (tercera tanda)', () => {
+  it('25 ofertas enviadas, 2 rebotes (Roberto y Madi\'s) y 0 pendientes', () => {
     const statuses = Object.values(OUTREACH).map((entry) => entry.status);
-    expect(statuses.filter((s) => s === 'sent')).toHaveLength(9);
-    expect(statuses.filter((s) => s === 'bounced')).toHaveLength(1);
-    expect(statuses.filter((s) => s === 'pending')).toHaveLength(17);
+    expect(statuses.filter((s) => s === 'sent')).toHaveLength(25);
+    expect(statuses.filter((s) => s === 'bounced')).toHaveLength(2);
+    expect(statuses.filter((s) => s === 'pending')).toHaveLength(0);
     expect(
       OUTREACH['pintor-logrono-roberto-decoracion-logrono'],
     ).toMatchObject({ status: 'bounced', note: 'dirección no encontrada' });
-    expect(outreachLabel('pintor-logrono-roberto-decoracion-logrono')).toContain(
+    expect(
+      OUTREACH['peluqueria-madi-s-villaralbo'],
+    ).toMatchObject({ status: 'bounced', note: 'dirección no encontrada' });
+    expect(outreachLabel('peluqueria-madi-s-villaralbo')).toContain(
       'Rebotado',
     );
     expect(outreachLabel('moises-munoz-s-l-logrono')).toContain('Oferta enviada');
-    expect(outreachLabel('fontaneria-pelayo-villaralbo')).toBe('Pendiente de contacto');
+    expect(outreachLabel('fontaneria-pelayo-villaralbo')).toContain('Oferta enviada');
   });
 
   it('desbloqueado: el índice muestra el seguimiento de los 27', () => {
     const html = renderPath('/', true);
     // Cada etiqueta se pinta dos veces: fila de la tabla + tarjeta.
-    expect(count(html, 'Oferta enviada')).toBe(18);
-    expect(count(html, 'Rebotado')).toBe(2);
-    expect(count(html, 'Pendiente de contacto')).toBe(34);
-    expect(count(html, 'dirección no encontrada')).toBe(2);
+    expect(count(html, 'Oferta enviada')).toBe(50);
+    expect(count(html, 'Rebotado')).toBe(4);
+    expect(count(html, 'Pendiente de contacto')).toBe(0);
+    expect(count(html, 'dirección no encontrada')).toBe(4);
     expect(html).toContain('Seguimiento');
   });
 
@@ -70,8 +74,10 @@ describe('demo-platform: seguimiento de contactos en el índice privado', () => 
     expect(html).toContain('Respuestas');
     expect(html).toContain('pill-sent');
     expect(html).toContain('pill-bounced');
-    expect(html).toContain('pill-neutral');
     expect(html).toContain('pill-ok');
+    // Sin 'pill-neutral': ya no queda ningún proyecto pendiente de
+    // contacto (25 enviados + 2 rebotados). La clase sigue existiendo
+    // en CSS y outreachClass la devuelve para futuros pendientes.
   });
 
   it('bloqueado: el índice no muestra ningún seguimiento', () => {
