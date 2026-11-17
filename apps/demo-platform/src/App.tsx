@@ -308,11 +308,11 @@ function DemoSite({ demo }: { demo: GeneratedDemo }) {
 }
 
 /**
- * Página de entrada de la plataforma (orden de Jon 2026-11-17): NO hay
- * índice de demos. Cada demo solo se abre con su enlace directo
- * (/demos/{slug}) tras introducir la clave; aquí no se muestra ningún
- * nombre de empresa ni ningún enlace a demos, para que nadie vea todos
- * los proyectos que tenemos funcionando.
+ * Página de entrada de la plataforma (orden de Jon 2026-11-17): el
+ * listado completo de proyectos en activo, con la información de cada
+ * proyecto y el enlace a su página. SOLO lo ve quien tiene la clave
+ * (Jon): la puerta de clave envuelve esta página. Sin la clave no se
+ * ve nada del listado.
  */
 function Dashboard() {
   useEffect(() => {
@@ -323,10 +323,59 @@ function Dashboard() {
       <div className="notice">{DEMO_NOTICE}</div>
       <h1>WebLead AI — Plataforma de demos</h1>
       <p>
-        Las webs de prueba de esta plataforma se abren solo con el enlace
-        directo que te enviamos por email, tras introducir la clave. Aquí
-        no hay un listado de demos.
+        Demos generadas por el Designer de WebLead AI a partir del expediente verificado de cada
+        empresa. Ninguna es la web oficial de la empresa: son propuestas conceptuales pendientes de
+        autorización.
       </p>
+      <div className="demo-table-wrap">
+        <table className="demo-table">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Sector</th>
+              <th>Plantilla</th>
+              <th>Variante</th>
+              <th>Estado</th>
+              <th>Auditoría</th>
+              <th>Demo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {GENERATED_DEMOS.map((demo) => (
+              <tr key={demo.content.businessSlug}>
+                <td>{demo.content.businessName}</td>
+                <td>{demo.content.sector}</td>
+                <td>{demo.content.templateId}</td>
+                <td>{demo.content.brand.variantId}</td>
+                <td>{demo.businessState}</td>
+                <td>{demo.auditStatus ?? 'pendiente'}</td>
+                <td>
+                  <a href={demo.demoUrl}>Ver demo</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul className="demo-cards">
+        {GENERATED_DEMOS.map((demo) => (
+          <li key={demo.content.businessSlug} className="demo-card">
+            <h2>{demo.content.businessName}</h2>
+            <p className="demo-card-meta">
+              {demo.content.sector} · {demo.content.templateId} · {demo.content.brand.variantId}
+            </p>
+            <p className="demo-card-status">
+              {demo.businessState} · Auditoría: {demo.auditStatus ?? 'pendiente'}
+            </p>
+            <a className="demo-card-link" href={demo.demoUrl}>
+              Ver demo →
+            </a>
+          </li>
+        ))}
+      </ul>
+      {GENERATED_DEMOS.length === 0 ? (
+        <p>No hay demos generadas todavía. Genera una con POST /api/websites/generate.</p>
+      ) : null}
     </main>
   );
 }

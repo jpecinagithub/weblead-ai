@@ -97,13 +97,13 @@ describe('demo-platform: puerta de clave (orden de Jon 2026-11-17)', () => {
     });
   }
 
-  it('desbloqueada: el índice NO lista ninguna demo (orden de Jon 2026-11-17)', () => {
+  it('desbloqueada: el índice muestra las 10 demos con su enlace', () => {
     const html = renderPath('/', true);
     expect(html).not.toContain('Clave de acceso');
-    expect(html).toContain('no hay un listado de demos');
     for (const demo of GENERATED_DEMOS) {
-      expect(html).not.toContain(demo.content.businessName);
+      expect(html).toContain(demo.content.businessName);
+      expect(html).toContain(`href="${demo.demoUrl}"`);
     }
-    expect(html).not.toContain('Ver demo');
+    expect(html).toContain('Ver demo');
   });
 });

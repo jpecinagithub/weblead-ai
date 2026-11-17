@@ -18,8 +18,8 @@
 >
 > **Demos públicas:** cada demo se abre directamente con su enlace,
 > sin clave (cualquiera con el enlace la ve). La clave **`demo2026`**
-> solo protege la página de entrada, que solo la ve Jon y no lista
-> ninguna demo: cada proyecto solo se abre con su enlace directo.
+> solo protege la página de entrada, que solo la ve Jon: tras la
+> clave se ve el listado completo de proyectos con su enlace.
 
 ## Modelo de email (igual para los 10, con nombre y enlace propios)
 

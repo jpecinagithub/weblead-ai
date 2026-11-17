@@ -26,12 +26,12 @@
 - La clave se pide SIEMPRE al abrir la página de entrada (orden de
   Jon 2026-11-17). Al recargar, la puerta vuelve a pedir la clave.
   No hay persistencia en `sessionStorage`, `localStorage` ni cookies.
-- **No hay índice de demos** (orden de Jon 2026-11-17): la página de
-  entrada, tras la clave, no lista ninguna empresa ni enlaza a
-  ninguna demo, para que nadie vea todos los proyectos que tenemos
-  funcionando. Cada demo solo se abre con su enlace directo
-  (`/demos/{slug}`) y las demos tampoco enlazan de vuelta a la
-  plataforma.
+- **El índice lista todos los proyectos en activo** (orden de Jon
+  2026-11-17): tras la clave, la página de entrada muestra la
+  información de cada proyecto y el enlace a su página
+  (`/demos/{slug}`). Ese listado solo lo ve quien tiene la clave
+  (Jon); sin la clave no se ve nada de él. Cada demo, por su parte,
+  se abre directamente con su enlace y no pide clave.
 - El único formulario de toda la plataforma es este campo de clave.
   Los formularios de contacto siguen prohibidos y no existen.
 
